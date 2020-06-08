@@ -1,0 +1,10 @@
+.board {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+    width: min-content;
+    border-top: 2px solid #636b74;
+    border-left: 2px solid #636b74;
+
+    margin: 100px;
+}

@@ -1,0 +1,37 @@
+$cell-size: 60px;
+
+.cell {
+    width: $cell-size;
+    height: $cell-size;
+    border: 1px solid #636b74;
+    border-top: none;
+    border-left: none;
+    color: #27343b;
+    background: transparent;
+    overflow: hidden;
+    outline: none;
+    padding: 0;
+
+    &--filled {
+        font-size: 32px;
+    }
+
+    &:focus {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:not(.cell--filled) {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-template-rows: auto auto auto;
+    }
+
+    &__pencil {
+        font-size: 12px;
+        color: #9ea5ad;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: $cell-size / 3 - 1;
+    }
+}

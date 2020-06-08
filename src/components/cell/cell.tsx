@@ -4,7 +4,7 @@ import './cell.scss';
 
 interface CellProps {
     value?: number;
-    possibilities?: number[];
+    pencils?: number[];
     given: boolean;
 
     selected?: boolean;
@@ -14,7 +14,7 @@ interface CellProps {
 
 const Cell = ({
     value,
-    possibilities,
+    pencils,
     given,
     selected,
     onClick,
@@ -24,8 +24,8 @@ const Cell = ({
         className={cx(
             'cell',
             given && 'cell--given',
-            value && 'cell-filled',
-            selected && 'cell-selected'
+            value && 'cell--filled',
+            selected && 'cell--selected'
         )}
         onClick={onClick}
         onKeyUp={onKeyUp}
@@ -36,8 +36,8 @@ const Cell = ({
             new Array(9)
                 .fill(0)
                 .map((_, i) => (
-                    <span className={`cell__pencil pencil-${i}`}>
-                        {possibilities?.includes(i) ? i : ''}
+                    <span className={`cell__pencil pencil-${i + 1}`}>
+                        {pencils?.includes(i + 1) ? i + 1 : ''}
                     </span>
                 ))
         )}

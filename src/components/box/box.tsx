@@ -5,6 +5,6 @@ interface BoxProps {
     children: React.ReactNode;
 }
 
-const Box = ({ children }: BoxProps) => <div className="box" />;
+const Box = ({ children }: BoxProps) => <div className="box">{children}</div>;
 
 export default Box;

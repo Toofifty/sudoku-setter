@@ -1,5 +1,6 @@
 import React from 'react';
+import Board from '../components/board';
 
-const Main = () => <div>Hello world!</div>;
+const Main = () => <Board />;
 
 export default Main;

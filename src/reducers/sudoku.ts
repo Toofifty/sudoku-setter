@@ -1,7 +1,7 @@
-import { Cell, Position } from '../types';
+import { ICell, Position } from '../types';
 
 interface SudokuState {
-    board: Cell[];
+    board: ICell[];
 }
 
 const defaultState = (): SudokuState => ({
