@@ -7,6 +7,7 @@ import { solveGroups } from './solve-groups';
 import { column, getValue, row, box, isFilled } from './helper';
 import { solveNarrowCells } from './solve-narrow-cells';
 import { encode } from '../url';
+import { solveRestrictedBox } from './solve-restricted-box';
 
 const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -30,10 +31,13 @@ export const useSudokuReducer = () => {
             const pencils =
                 isFilled(cell) && cell.given
                     ? []
-                    : NUMS.filter((n) => !breaksSudoku(prev, pos, n));
+                    : (!isFilled(cell) ? cell.pencils : NUMS).filter(
+                          (n) => !breaksSudoku(prev, pos, n)
+                      );
 
             return {
                 ...cell,
+                index: i,
                 pencils,
                 initialPencils: isFilled(cell) ? pencils : cell.pencils,
             };
@@ -44,6 +48,8 @@ export const useSudokuReducer = () => {
 
         // pair/triple/quad solver
         intermediate = solveGroups(intermediate);
+
+        intermediate = solveRestrictedBox(intermediate);
 
         // check for changes
         intermediate = intermediate.map((cell) => {

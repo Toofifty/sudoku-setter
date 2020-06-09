@@ -4,14 +4,14 @@ import { row, column, box, getPencils, isFilled } from './helper';
 import { getCellAt } from '../sudoku';
 
 export const solveNarrowCells = (inter: InterCell[]): InterCell[] =>
-    inter.map((cell, i) => {
+    inter.map((cell, i, board) => {
         const pos = getCellAt(i);
         if (isFilled(cell) && cell.given) return cell;
 
         let pencils = [...cell.pencils];
 
         for (let n of cell.pencils) {
-            if (isOnlyPlaceFor(inter, pos, n)) {
+            if (isOnlyPlaceFor(board, pos, n)) {
                 pencils = [n];
                 break;
             }

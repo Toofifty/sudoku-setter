@@ -11,7 +11,7 @@ Solvers
 -   [x] Pairs
     -   [x] Exclusive (others can't be in the group)
     -   [x] Inclusive (x numbers must be in the group)
--   [ ] Restricted in box (i.e. Pencilled in column/row in another box)
+-   [x] Restricted in box (i.e. Pencilled in column/row in another box)
 -   [ ] Triples (exclusive/inclusive)
 -   [ ] X wing
 -   [ ] Y wing
@@ -32,3 +32,7 @@ Pair tester http://localhost:3001/#{%22givens%22:%220000050102007905000060010000
 -   5/6 "exclusive" row pair in r8 c2/8 - puts 8 into r8 c4
 -   2/7 "inclusive" box pair in r1/3 c9
 -   3/8 "inclusive" row/box pair in r9 c7/9
+
+Narrow cell after pair http://localhost:3001/#{%22givens%22:%22000792008000860105000300000000000070702080309040000000000008200608071000200639000%22}
+
+-   4/5 pair in r7 c4/5 - forces 4 into r9 c3

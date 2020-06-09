@@ -3,4 +3,5 @@ export type InterCell = {
     given: boolean;
     pencils: number[];
     initialPencils: number[];
+    index: number;
 };
