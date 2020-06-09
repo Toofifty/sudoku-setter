@@ -4,12 +4,9 @@ import useSelector from '../../hooks/use-selector';
 import { getCellAt } from '../sudoku';
 import { InterCell } from './types';
 import { solveGroups } from './solve-groups';
-import { column, getValue, row, box, isFilled, getPencils } from './helper';
+import { column, getValue, row, box, isFilled } from './helper';
 import { solveNarrowCells } from './solve-narrow-cells';
-
-let doLog = false;
-
-const log = (...m: any) => doLog && console.log(...m);
+import { encode } from '../url';
 
 const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -42,11 +39,11 @@ export const useSudokuReducer = () => {
             };
         });
 
-        // pair/triple/quad solver
-        intermediate = solveGroups(intermediate);
-
         // narrow cell solver (only valid position in row/col/box)
         intermediate = solveNarrowCells(intermediate);
+
+        // pair/triple/quad solver
+        intermediate = solveGroups(intermediate);
 
         // check for changes
         intermediate = intermediate.map((cell) => {
@@ -115,6 +112,7 @@ export const useSudokuReducer = () => {
             }
 
             setBoard(updatedBoard);
+            window.location.hash = encode(board);
         });
     };
 };

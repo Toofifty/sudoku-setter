@@ -9,12 +9,13 @@ export const solveNarrowCells = (inter: InterCell[]): InterCell[] =>
         if (isFilled(cell) && cell.given) return cell;
 
         let pencils = [...cell.pencils];
-        cell.pencils.forEach((n) => {
+
+        for (let n of cell.pencils) {
             if (isOnlyPlaceFor(inter, pos, n)) {
                 pencils = [n];
-                return false;
+                break;
             }
-        });
+        }
 
         return { ...cell, pencils };
     });

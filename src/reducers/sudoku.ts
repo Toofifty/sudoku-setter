@@ -76,12 +76,20 @@ const setShouldReduce = (
     shouldReduce: SetShouldReduce['payload']
 ) => ({ ...state, shouldReduce });
 
+type Reset = {
+    type: 'reset';
+    payload: undefined;
+};
+
+const reset = (state: SudokuState) => defaultState();
+
 export type SudokuAction =
     | SetValue
     | SetPencils
     | SetShouldReduce
     | SetBoard
-    | ClearValue;
+    | ClearValue
+    | Reset;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -95,6 +103,8 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setBoard(state, action.payload);
         case 'clear-value':
             return clearValue(state, action.payload);
+        case 'reset':
+            return reset(state);
         default:
             return state;
     }
