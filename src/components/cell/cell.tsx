@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
 import './cell.scss';
+import { Position } from '../../types';
 
 interface CellProps {
     value?: number;
     pencils?: number[];
     given: boolean;
 
+    focus?: boolean;
+    onFocus?: () => void;
     selected?: boolean;
     onClick: (e: React.MouseEvent) => void;
-    onKeyUp: (e: React.KeyboardEvent) => void;
+    onKeyDown: (e: React.KeyboardEvent) => void;
+    num?: number;
+    pos?: Position;
 }
 
 const Cell = ({
@@ -18,30 +23,48 @@ const Cell = ({
     given,
     selected,
     onClick,
-    onKeyUp,
-}: CellProps) => (
-    <button
-        className={cx(
-            'cell',
-            given && 'cell--given',
-            value && 'cell--filled',
-            selected && 'cell--selected'
-        )}
-        onClick={onClick}
-        onKeyUp={onKeyUp}
-    >
-        {value ? (
-            <span className="cell__value">{value}</span>
-        ) : (
-            new Array(9)
-                .fill(0)
-                .map((_, i) => (
-                    <span className={`cell__pencil pencil-${i + 1}`}>
-                        {pencils?.includes(i + 1) ? i + 1 : ''}
+    onKeyDown,
+    num,
+    pos,
+    focus,
+    onFocus,
+}: CellProps) => {
+    const btn = useRef<HTMLButtonElement>(undefined!);
+
+    useEffect(() => {
+        if (focus) {
+            btn.current.focus();
+        }
+    }, [focus]);
+
+    return (
+        <button
+            ref={btn}
+            className={cx(
+                'cell',
+                given && 'cell--given',
+                value && 'cell--filled',
+                selected && 'cell--selected'
+            )}
+            onClick={onClick}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
+        >
+            {value ? (
+                <span className="cell__value">{value}</span>
+            ) : (
+                new Array(9).fill(0).map((_, i) => (
+                    <span className={`cell__pencil pencil-${i + 1}`} key={i}>
+                        {pencils?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
                     </span>
                 ))
-        )}
-    </button>
-);
+            )}
+            {num !== undefined && <span className="cell__num">{num}</span>}
+            {pos !== undefined && (
+                <span className="cell__pos">{`{${pos.x}, ${pos.y}}`}</span>
+            )}
+        </button>
+    );
+};
 
 export default Cell;

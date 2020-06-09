@@ -2,6 +2,7 @@ import { ICell, Position } from '../types';
 
 interface SudokuState {
     board: ICell[];
+    shouldReduce: boolean;
 }
 
 const defaultState = (): SudokuState => ({
@@ -9,6 +10,7 @@ const defaultState = (): SudokuState => ({
         pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         given: false,
     }),
+    shouldReduce: false,
 });
 
 const posToIndex = (pos: Position) => pos.x + pos.y * 9;
@@ -24,7 +26,21 @@ const setValue = (
 ) => {
     const board = [...state.board];
     board[posToIndex(cell)] = { value, given: given ?? false };
-    return { ...state, board };
+    return { ...state, shouldReduce: true, board };
+};
+
+type ClearValue = {
+    type: 'clear-value';
+    payload: Position;
+};
+
+const clearValue = (state: SudokuState, pos: Position) => {
+    const board = [...state.board];
+    board[posToIndex(pos)] = {
+        pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        given: false,
+    };
+    return { ...state, board, shouldReduce: true };
 };
 
 type SetPencils = {
@@ -41,7 +57,31 @@ const setPencils = (
     return { ...state, board };
 };
 
-export type SudokuAction = SetValue | SetPencils;
+type SetBoard = {
+    type: 'set-board';
+    payload: ICell[];
+};
+
+const setBoard = (state: SudokuState, board: SetBoard['payload']) => {
+    return { ...state, board };
+};
+
+type SetShouldReduce = {
+    type: 'set-should-reduce';
+    payload: boolean;
+};
+
+const setShouldReduce = (
+    state: SudokuState,
+    shouldReduce: SetShouldReduce['payload']
+) => ({ ...state, shouldReduce });
+
+export type SudokuAction =
+    | SetValue
+    | SetPencils
+    | SetShouldReduce
+    | SetBoard
+    | ClearValue;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -49,6 +89,12 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setValue(state, action.payload);
         case 'set-pencils':
             return setPencils(state, action.payload);
+        case 'set-should-reduce':
+            return setShouldReduce(state, action.payload);
+        case 'set-board':
+            return setBoard(state, action.payload);
+        case 'clear-value':
+            return clearValue(state, action.payload);
         default:
             return state;
     }

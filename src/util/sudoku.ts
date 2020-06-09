@@ -1,8 +1,8 @@
 import { Position } from '../types';
 
 export const getBox = (cell: Position): Position => ({
-    x: cell.x % 3,
-    y: cell.y % 3,
+    x: Math.floor(cell.x / 3),
+    y: Math.floor(cell.y / 3),
 });
 
 export const getBoxIndex = (cell: Position): number => {
