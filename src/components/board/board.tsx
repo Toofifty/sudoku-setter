@@ -7,6 +7,7 @@ import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
 import { useSudokuReducer } from '../../util/reduce';
+import { row, column, box } from '../../util/reduce/helper';
 
 const Board = () => {
     const board = useSelector((state) => state.sudoku.board);
@@ -17,6 +18,7 @@ const Board = () => {
     const sudokuReduce = useSudokuReducer();
 
     const [focused, _setFocused] = useState<number | null>(null);
+    const [selected, setSelected] = useState<number[]>([]);
 
     const setFocused = (index: number) => {
         if (index >= 0 && index < 81) _setFocused(index);
@@ -30,6 +32,17 @@ const Board = () => {
             }, 0);
         }
     }, [shouldReduce, setShouldReduce, sudokuReduce]);
+
+    useEffect(() => {
+        const onClick = (e: MouseEvent) => {
+            if (!e.ctrlKey && !e.metaKey) setSelected([]);
+        };
+        window.addEventListener('mousedown', onClick);
+
+        return () => {
+            window.removeEventListener('mousedown', onClick);
+        };
+    }, []);
 
     const boxes = board.reduce(
         (boxes, cell, i) => {
@@ -48,6 +61,21 @@ const Board = () => {
         }[][]
     );
 
+    const highlightedRow =
+        focused !== null && selected.length === 1
+            ? row(board, getCellAt(focused))
+            : [];
+
+    const highlightedColumn =
+        focused !== null && selected.length === 1
+            ? column(board, getCellAt(focused))
+            : [];
+
+    const highlightedBox =
+        focused !== null && selected.length === 1
+            ? box(board, getCellAt(focused))
+            : [];
+
     return (
         <div className="board">
             {boxes.map((box, i) => (
@@ -58,8 +86,22 @@ const Board = () => {
                             {...cell}
                             num={index}
                             focus={focused === index}
-                            onFocus={() => setFocused(index)}
+                            selected={selected.includes(index)}
+                            highlighted={
+                                highlightedRow.includes(cell) ||
+                                highlightedColumn.includes(cell) ||
+                                highlightedBox.includes(cell)
+                            }
+                            onFocus={() => {
+                                setFocused(index);
+                                setSelected([...selected, index]);
+                            }}
                             onClick={() => {}}
+                            onMouseEnter={({ buttons }) => {
+                                if (buttons) {
+                                    setSelected([...selected, index]);
+                                }
+                            }}
                             onKeyDown={({ key }) => {
                                 const n = Number(key);
                                 if (!isNaN(n) && n > 0 && n < 10) {

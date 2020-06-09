@@ -2,6 +2,7 @@ $cell-size: 90px;
 $cell-pad: 6px;
 
 .cell {
+    $b: &;
     width: $cell-size;
     height: $cell-size;
     border: 1px solid #636b74;
@@ -11,7 +12,7 @@ $cell-pad: 6px;
     overflow: hidden;
     outline: none;
     padding: 0;
-    color: #41c6f1;
+    color: #0e7eaf;
     padding: 6px;
     position: relative;
 
@@ -19,8 +20,33 @@ $cell-pad: 6px;
         font-size: 48px;
     }
 
+    &--highlighted {
+        background: #f4f5f7;
+    }
+
+    &--selected {
+        background: #fdaeb7;
+
+        #{$b}__pencil {
+            color: #27343b;
+        }
+    }
+
     &:focus {
-        background: #f9ecf8;
+        background: #fdaeb7;
+        position: relative;
+
+        &::before {
+            content: '';
+            border: 2px solid #ee6d7a;
+            border-radius: 4px;
+            width: 90%;
+            height: 90%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     &--given {
@@ -34,7 +60,7 @@ $cell-pad: 6px;
     }
 
     &__pencil {
-        font-size: 12px;
+        font-size: 16px;
         color: #9ea5ad;
         display: flex;
         align-items: center;

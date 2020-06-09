@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import cx from 'classnames';
 import './cell.scss';
 import { Position } from '../../types';
@@ -10,6 +10,8 @@ interface CellProps {
 
     focus?: boolean;
     onFocus?: () => void;
+    onMouseEnter?: (e: React.MouseEvent) => void;
+    highlighted?: boolean;
     selected?: boolean;
     onClick: (e: React.MouseEvent) => void;
     onKeyDown: (e: React.KeyboardEvent) => void;
@@ -27,7 +29,9 @@ const Cell = ({
     num,
     pos,
     focus,
+    highlighted,
     onFocus,
+    onMouseEnter,
 }: CellProps) => {
     const btn = useRef<HTMLButtonElement>(undefined!);
 
@@ -44,11 +48,13 @@ const Cell = ({
                 'cell',
                 given && 'cell--given',
                 value && 'cell--filled',
-                selected && 'cell--selected'
+                selected && 'cell--selected',
+                highlighted && 'cell--highlighted'
             )}
             onClick={onClick}
             onKeyDown={onKeyDown}
             onFocus={onFocus}
+            onMouseEnter={onMouseEnter}
         >
             {value ? (
                 <span className="cell__value">{value}</span>
