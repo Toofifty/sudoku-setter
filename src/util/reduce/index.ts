@@ -1,20 +1,16 @@
-import { ICell, FilledCell, Position } from '../types';
-import useAction from '../hooks/use-action';
-import useSelector from '../hooks/use-selector';
-import { getCellAt, getBoxIndex } from './sudoku';
+import { ICell, FilledCell, Position } from '../../types';
+import useAction from '../../hooks/use-action';
+import useSelector from '../../hooks/use-selector';
+import { getCellAt, getBoxIndex } from '../sudoku';
+import { InterCell } from './types';
+import { solveGroups } from './solveGroups';
+import { column, getValue, row, box, isFilled, getPencils } from './helper';
 
 let doLog = false;
 
 const log = (...m: any) => doLog && console.log(...m);
 
 const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-type InterCell = {
-    value?: number;
-    given: boolean;
-    pencils: number[];
-    initialPencils: number[];
-};
 
 export const useSudokuReducer = () => {
     const board = useSelector((state) => state.sudoku.board);
@@ -40,6 +36,8 @@ export const useSudokuReducer = () => {
             };
         });
 
+        intermediate = solveGroups(intermediate);
+
         // other logic in second pass
         intermediate = intermediate.map((cell, i) => {
             const pos = getCellAt(i);
@@ -63,6 +61,9 @@ export const useSudokuReducer = () => {
             ) {
                 // filled value is still correct
                 return cell;
+            }
+
+            if (pencils.length === 0 && isFilled(cell)) {
             }
 
             if (
@@ -113,80 +114,34 @@ export const useSudokuReducer = () => {
     };
 };
 
-const except = (arr: number[], n: number) => arr.filter((a) => a !== n);
-
-const getValue = (cell: ICell) => {
-    if (isFilled(cell)) return cell.value;
-    return 0;
-};
-
-const getPencils = (cell: ICell) => {
-    if (isFilled(cell)) return [];
-    return cell.pencils;
-};
-
-const getIndex = (_: any, i: number) => i;
-
 const breaksSudoku = (board: ICell[], pos: Position, n: number) =>
     inColumn(board, pos, n) || inRow(board, pos, n) || inBox(board, pos, n);
 
-const inColumn = (board: ICell[], pos: Position, n: number) => {
-    return board
-        .filter((_, i) => i % 9 === pos.x)
-        .map(getValue)
-        .includes(n);
-};
+const inColumn = (board: ICell[], pos: Position, n: number) =>
+    column(board, pos).map(getValue).includes(n);
 
-const inRow = (board: ICell[], pos: Position, n: number) => {
-    return board
-        .slice(pos.y * 9, (pos.y + 1) * 9)
-        .map(getValue)
-        .includes(n);
-};
+const inRow = (board: ICell[], pos: Position, n: number) =>
+    row(board, pos).map(getValue).includes(n);
 
-const inBox = (board: ICell[], pos: Position, n: number) => {
-    const boxIndex = getBoxIndex(pos);
-    return board
-        .filter((_, i) => boxIndex === getBoxIndex(getCellAt(i)))
-        .map(getValue)
-        .includes(n);
-};
+const inBox = (board: ICell[], pos: Position, n: number) =>
+    box(board, pos).map(getValue).includes(n);
 
 const isOnlyPlaceFor = (board: ICell[], pos: Position, n: number) =>
     isOnlyPlaceInColumnFor(board, pos, n) ||
     isOnlyPlaceInRowFor(board, pos, n) ||
     isOnlyPlaceInBoxFor(board, pos, n);
 
-const isOnlyPlaceInRowFor = (board: ICell[], pos: Position, n: number) => {
-    // if nothing else in the row includes the number,
-    // then it must be here
-    return board
-        .slice(pos.y * 9, (pos.y + 1) * 9)
-        .filter((_, i) => i !== pos.x) // filter out self
+const isOnlyPlaceInRowFor = (board: ICell[], pos: Position, n: number) =>
+    row(board, pos)
         .map(getPencils)
         .every((pencils) => !pencils.includes(n));
-};
 
-const isOnlyPlaceInColumnFor = (board: ICell[], pos: Position, n: number) => {
-    // if nothing else in the column includes the number,
-    // then it must be here
-    return board
-        .filter((_, i) => i % 9 === pos.x)
-        .filter((_, i) => i !== pos.y) // filter out self
+const isOnlyPlaceInColumnFor = (board: ICell[], pos: Position, n: number) =>
+    column(board, pos)
         .map(getPencils)
         .every((pencils) => !pencils.includes(n));
-};
 
-const isOnlyPlaceInBoxFor = (board: ICell[], pos: Position, n: number) => {
-    // if nothing else in the column includes the number,
-    // then it must be here
-    const boxIndex = getBoxIndex(pos);
-    return board
-        .filter((_, i) => boxIndex === getBoxIndex(getCellAt(i)))
-        .filter((_, i) => i !== pos.x + pos.y * 3) // filter out self
+const isOnlyPlaceInBoxFor = (board: ICell[], pos: Position, n: number) =>
+    box(board, pos)
         .map(getPencils)
         .every((pencils) => !pencils.includes(n));
-};
-
-const isFilled = (cell: any): cell is FilledCell =>
-    cell.value && cell.value > 0;
