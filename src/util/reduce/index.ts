@@ -1,10 +1,11 @@
-import { ICell, FilledCell, Position } from '../../types';
+import { ICell, Position } from '../../types';
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
-import { getCellAt, getBoxIndex } from '../sudoku';
+import { getCellAt } from '../sudoku';
 import { InterCell } from './types';
-import { solveGroups } from './solveGroups';
+import { solveGroups } from './solve-groups';
 import { column, getValue, row, box, isFilled, getPencils } from './helper';
+import { solveNarrowCells } from './solve-narrow-cells';
 
 let doLog = false;
 
@@ -17,10 +18,15 @@ export const useSudokuReducer = () => {
     const setBoard = useAction('set-board');
 
     const reduce = (prev: ICell[]) => {
-        console.log('reducing...');
         let hasChanged = false;
         console.time('reduce');
+
         // update pencil marks in first pass
+        // then all information is pushed through
+        // to other passes
+
+        // regular sudoku solver
+        // (naked singles)
         let intermediate: InterCell[] = prev.map((cell, i) => {
             const pos = getCellAt(i);
 
@@ -36,48 +42,47 @@ export const useSudokuReducer = () => {
             };
         });
 
+        // pair/triple/quad solver
         intermediate = solveGroups(intermediate);
 
-        // other logic in second pass
-        intermediate = intermediate.map((cell, i) => {
-            const pos = getCellAt(i);
-            doLog = i === 8;
-            if (isFilled(cell) && cell.given) return cell;
+        // narrow cell solver (only valid position in row/col/box)
+        intermediate = solveNarrowCells(intermediate);
 
-            const op = isFilled(cell) ? [] : cell.pencils;
-
-            let pencils = [...op];
-            op.forEach((n) => {
-                if (isOnlyPlaceFor(intermediate, pos, n)) {
-                    pencils = [n];
-                    return false;
-                }
-            });
+        // check for changes
+        intermediate = intermediate.map((cell) => {
+            if (
+                JSON.stringify(cell.pencils) ===
+                JSON.stringify(cell.initialPencils)
+            ) {
+                // no change in pencil marks - avoid
+                // toggling
+                return cell;
+            }
 
             if (
-                pencils.length === 1 &&
+                cell.pencils.length === 1 &&
                 isFilled(cell) &&
-                cell.value === pencils[0]
+                cell.value === cell.pencils[0]
             ) {
                 // filled value is still correct
                 return cell;
             }
 
-            if (pencils.length === 0 && isFilled(cell)) {
-            }
-
             if (
-                JSON.stringify(pencils) === JSON.stringify(cell.initialPencils)
+                JSON.stringify(cell.pencils) ===
+                JSON.stringify(cell.initialPencils)
             ) {
+                // no change in pencil marks - avoid
+                // toggling
                 return cell;
             }
 
             hasChanged = true;
 
-            if (pencils.length === 1) {
+            if (cell.pencils.length === 1) {
                 return {
                     ...cell,
-                    value: pencils[0],
+                    value: cell.pencils[0],
                     given: false,
                 };
             }
@@ -85,7 +90,7 @@ export const useSudokuReducer = () => {
                 ...cell,
                 value: undefined,
                 given: false,
-                pencils,
+                pencils: cell.pencils,
             };
         });
 
@@ -125,23 +130,3 @@ const inRow = (board: ICell[], pos: Position, n: number) =>
 
 const inBox = (board: ICell[], pos: Position, n: number) =>
     box(board, pos).map(getValue).includes(n);
-
-const isOnlyPlaceFor = (board: ICell[], pos: Position, n: number) =>
-    isOnlyPlaceInColumnFor(board, pos, n) ||
-    isOnlyPlaceInRowFor(board, pos, n) ||
-    isOnlyPlaceInBoxFor(board, pos, n);
-
-const isOnlyPlaceInRowFor = (board: ICell[], pos: Position, n: number) =>
-    row(board, pos)
-        .map(getPencils)
-        .every((pencils) => !pencils.includes(n));
-
-const isOnlyPlaceInColumnFor = (board: ICell[], pos: Position, n: number) =>
-    column(board, pos)
-        .map(getPencils)
-        .every((pencils) => !pencils.includes(n));
-
-const isOnlyPlaceInBoxFor = (board: ICell[], pos: Position, n: number) =>
-    box(board, pos)
-        .map(getPencils)
-        .every((pencils) => !pencils.includes(n));
