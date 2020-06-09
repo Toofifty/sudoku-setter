@@ -114,12 +114,16 @@ const Board = () => {
                                 }
                                 if (key === 'ArrowUp') {
                                     setFocused(index - 9);
+                                    setSelected([index - 9]);
                                 } else if (key === 'ArrowDown') {
                                     setFocused(index + 9);
+                                    setSelected([index + 9]);
                                 } else if (key === 'ArrowLeft') {
                                     setFocused(index - 1);
+                                    setSelected([index - 1]);
                                 } else if (key === 'ArrowRight') {
                                     setFocused(index + 1);
+                                    setSelected([index + 1]);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
                                     clearValue(pos);
