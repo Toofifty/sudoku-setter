@@ -2,11 +2,15 @@ import { ICell } from '../../types';
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
 import { InterCell } from './types';
-import { solveGroups } from './solve-groups';
 import { isFilled } from './helper';
 import { encode } from '../url';
-import { solveRestrictedBox } from './solve-restricted-box';
-import { solveNakedSingles, solveHiddenSingles } from './solvers';
+import {
+    solveNakedSingles,
+    solveHiddenSingles,
+    solveHiddenPairs,
+    solveNakedPairs,
+    solveLockedCandidates,
+} from './solvers';
 
 const defaultInterCell: InterCell = {
     value: undefined,
@@ -33,12 +37,11 @@ export const useSudokuReducer = () => {
 
         intermediate = intermediate
             .map(solveNakedSingles(true))
-            .map(solveHiddenSingles);
-
-        // pair/triple/quad solver
-        intermediate = solveGroups(intermediate);
-
-        intermediate = solveRestrictedBox(intermediate);
+            .map(solveHiddenSingles)
+            .map(solveNakedPairs)
+            .map(solveHiddenPairs)
+            .map(solveLockedCandidates)
+            .map(solveNakedSingles(false));
 
         // check for changes
         intermediate = intermediate.map((cell) => {
@@ -102,7 +105,7 @@ export const useSudokuReducer = () => {
             let { updatedBoard, hasChanged } = reduce(board);
 
             let tries = 0;
-            while (hasChanged && ++tries < 10) {
+            while (hasChanged && ++tries < 1) {
                 ({ updatedBoard, hasChanged } = reduce(updatedBoard));
             }
 
