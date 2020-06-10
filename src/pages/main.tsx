@@ -13,7 +13,7 @@ const Main = () => {
     const setHideSolution = useAction('set-hide-solution');
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
     const setPlaceOnClick = useAction('set-place-on-click');
-    const setBoard = useAction('set-board');
+    const setSudoku = useAction('set-sudoku');
     const setShouldReduce = useAction('set-should-reduce');
     const _reset = useAction('reset');
 
@@ -24,12 +24,13 @@ const Main = () => {
 
     useEffect(() => {
         if (!hasLoadedFromHash && window.location.hash) {
-            const data = decode(window.location.hash.slice(1));
-            setBoard(data.board);
-            setShouldReduce(true);
+            setSudoku({
+                ...decode(window.location.hash.slice(1)),
+                shouldReduce: true,
+            });
         }
         setHasLoadedFromHash(true);
-    }, [hasLoadedFromHash, setBoard, setShouldReduce]);
+    }, [hasLoadedFromHash, setSudoku, setShouldReduce]);
 
     return (
         <div style={{ margin: 100 }}>

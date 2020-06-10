@@ -6,6 +6,7 @@ import useRightClick from '../../hooks/use-right-click';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { capture } from 'utils';
+import Thermo from 'components/thermo';
 
 interface CellProps {
     value?: number;
@@ -42,7 +43,10 @@ const Cell = ({
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
+    const thermos = useSelector((state) => state.sudoku.thermos);
     const setValue = useAction('set-value');
+    const createThermo = useAction('create-thermo');
+    const deleteThermo = useAction('delete-thermo');
     const btn = useRef<HTMLButtonElement>(undefined!);
 
     useEffect(() => {
@@ -73,10 +77,15 @@ const Cell = ({
                         className="divider"
                         data-content={`Selection (${selection.length})`}
                     />
-                    {selection.length < 9 && (
+                    {selection.length <= 9 && (
                         <>
                             <li className="menu-item">
-                                <a href="#0">Selection to thermo</a>
+                                <button
+                                    className="btn-fake-link"
+                                    onClick={() => createThermo(selection)}
+                                >
+                                    Selection to thermo
+                                </button>
                             </li>
                             <li className="menu-item">
                                 <a href="#0">Selection to killer cage</a>
@@ -85,6 +94,19 @@ const Cell = ({
                     )}
                     <li className="menu-item">
                         <a href="#0">Set colour</a>
+                    </li>
+                </>
+            )}
+            {thermos?.some((thermo) => thermo.includes(num)) && (
+                <>
+                    <li className="divider" data-content="Thermos" />
+                    <li className="menu-item">
+                        <button
+                            className="btn-fake-link"
+                            onClick={() => deleteThermo(num)}
+                        >
+                            Delete thermo
+                        </button>
                     </li>
                 </>
             )}
@@ -108,6 +130,7 @@ const Cell = ({
             onFocus={onFocus}
             onMouseEnter={onMouseEnter}
         >
+            <Thermo index={num} />
             {(!hideSolution || given) &&
                 (value ? (
                     <span className="cell__value">{value}</span>

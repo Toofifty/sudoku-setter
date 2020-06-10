@@ -16,6 +16,8 @@ $cell-pad: 6px;
     padding: 6px;
     position: relative;
 
+    z-index: 0;
+
     &--filled {
         font-size: 48px;
     }
@@ -58,6 +60,10 @@ $cell-pad: 6px;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr;
+    }
+
+    &__value {
+        z-index: 1;
     }
 
     &__mark {

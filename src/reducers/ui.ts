@@ -1,5 +1,5 @@
 interface UIState {
-    context?: React.ReactNode;
+    context?: () => React.ReactNode;
     debugMode: boolean;
     hideSolution: boolean;
     placeOnClick: boolean;
@@ -11,9 +11,9 @@ const defaultState = (): UIState => ({
     placeOnClick: false,
 });
 
-type OpenContext = { type: 'open-context'; payload: React.ReactNode };
+type OpenContext = { type: 'open-context'; payload: () => React.ReactNode };
 
-const openContext = (state: UIState, context: React.ReactNode) => ({
+const openContext = (state: UIState, context: () => React.ReactNode) => ({
     ...state,
     context,
 });

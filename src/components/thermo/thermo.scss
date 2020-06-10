@@ -1,0 +1,94 @@
+@mixin fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+$color: #ced3da;
+$thickness: 12px;
+$straight-line-len: 63%;
+
+.thermo {
+    @include fill;
+    z-index: -1;
+
+    pointer-events: none;
+
+    &__bulb::before {
+        @include fill;
+
+        content: '';
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 75%;
+        height: 75%;
+
+        border-radius: 100%;
+
+        background: $color;
+    }
+
+    &__line {
+        @include fill;
+
+        &--b::before {
+            position: absolute;
+            content: '';
+            height: $straight-line-len;
+            width: 0px;
+            transform: translateX(-50%);
+            left: 50%;
+            bottom: 0;
+            border: $thickness solid $color;
+            border-top-left-radius: $thickness;
+            border-top-right-radius: $thickness;
+            background: $color;
+        }
+
+        &--t::before {
+            position: absolute;
+            content: '';
+            height: $straight-line-len;
+            width: 0px;
+            transform: translateX(-50%);
+            left: 50%;
+            top: 0;
+            border: $thickness solid $color;
+            border-bottom-left-radius: $thickness;
+            border-bottom-right-radius: $thickness;
+            background: $color;
+        }
+
+        &--l::before {
+            position: absolute;
+            content: '';
+            height: 0px;
+            width: $straight-line-len;
+            transform: translateY(-50%);
+            top: 50%;
+            left: 0;
+            border: $thickness solid $color;
+            border-top-right-radius: $thickness;
+            border-bottom-right-radius: $thickness;
+            background: $color;
+        }
+
+        &--r::before {
+            position: absolute;
+            content: '';
+            height: 0px;
+            width: $straight-line-len;
+            transform: translateY(-50%);
+            top: 50%;
+            right: 0;
+            border: $thickness solid $color;
+            border-top-left-radius: $thickness;
+            border-bottom-left-radius: $thickness;
+            background: $color;
+        }
+    }
+}

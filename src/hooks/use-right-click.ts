@@ -7,7 +7,7 @@ const useRightClick = (contextElement: React.ReactNode) => {
     return (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        openContext(contextElement);
+        openContext(() => contextElement);
         return false;
     };
 };

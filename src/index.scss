@@ -17,3 +17,27 @@ code {
     align-items: center;
     justify-content: center;
 }
+
+// spectre's btn-link doesn't match the
+// link styles - so use this instead
+.btn-fake-link {
+    border-radius: 0.1rem;
+    padding: 0.2rem 0.4rem;
+    border: none;
+    background: none;
+    margin: 0 -0.4rem;
+    display: block;
+    color: inherit;
+
+    width: calc(100% + 0.8rem);
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    &:focus,
+    &:hover,
+    &:active {
+        background: #f1f1fc;
+        color: #5755d9;
+    }
+}

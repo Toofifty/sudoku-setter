@@ -87,13 +87,41 @@ type Reset = {
 
 const reset = (state: SudokuState) => defaultState();
 
+type CreateThermo = { type: 'create-thermo'; payload: number[] };
+
+const createThermo = (state: SudokuState, thermo: number[]) => ({
+    ...state,
+    thermos: [...(state.thermos ?? []), thermo],
+    shouldReduce: true,
+});
+
+type DeleteThermo = { type: 'delete-thermo'; payload: number };
+
+const deleteThermo = (state: SudokuState, cellIndex: number) => ({
+    ...state,
+    thermos: (state.thermos ?? []).filter(
+        (thermo) => !thermo.includes(cellIndex)
+    ),
+    shouldReduce: true,
+});
+
+type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
+
+const setSudoku = (state: SudokuState, sudoku: Partial<SudokuState>) => ({
+    ...state,
+    ...sudoku,
+});
+
 export type SudokuAction =
     | SetValue
     | SetMarks
     | SetShouldReduce
     | SetBoard
     | ClearValue
-    | Reset;
+    | Reset
+    | CreateThermo
+    | SetSudoku
+    | DeleteThermo;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -109,6 +137,12 @@ export default (state = defaultState(), action: SudokuAction) => {
             return clearValue(state, action.payload);
         case 'reset':
             return reset(state);
+        case 'create-thermo':
+            return createThermo(state, action.payload);
+        case 'set-sudoku':
+            return setSudoku(state, action.payload);
+        case 'delete-thermo':
+            return deleteThermo(state, action.payload);
         default:
             return state;
     }

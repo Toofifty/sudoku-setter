@@ -19,7 +19,7 @@ export const encode = ({ board, thermos }: SudokuState) => {
             .join(''),
     };
     if (thermos) {
-        data.thermos = thermos.map((thermo) => thermo.join('')).join(',');
+        data.thermos = thermos.map((thermo) => thermo.join(',')).join(';');
     }
     return JSON.stringify(data);
 };
@@ -45,8 +45,8 @@ export const decode = (b64: string): DecodedData => {
 
     if (thermos) {
         decoded.thermos = thermos
-            .split(',')
-            .map((thermo) => thermo.split('').map(Number));
+            .split(';')
+            .map((thermo) => thermo.split(',').map(Number));
     }
 
     return decoded;

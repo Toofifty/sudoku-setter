@@ -24,7 +24,7 @@ const Context = () => {
     }, []);
 
     useEffect(() => {
-        const close = () => closeContext();
+        const close = () => setTimeout(closeContext, 100);
         if (content) {
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
             window.addEventListener('mousedown', close);
@@ -45,7 +45,7 @@ const Context = () => {
             className={cx('context menu', content && 'context--visible')}
             style={style}
         >
-            {content}
+            {content?.()}
         </ul>
     );
 };
