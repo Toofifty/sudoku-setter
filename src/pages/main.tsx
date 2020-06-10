@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Board from '../components/board';
 import useAction from '../hooks/use-action';
 import { decode } from '../util/url';
+import Context from '../components/context';
 
 const Main = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -29,6 +30,7 @@ const Main = () => {
             <button className="btn" onClick={() => reset()}>
                 Reset
             </button>
+            <Context />
         </div>
     );
 };

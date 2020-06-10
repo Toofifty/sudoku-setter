@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
 import './cell.scss';
 import { Position } from '../../types';
+import useRightClick from '../../hooks/use-right-click';
 
 interface CellProps {
     value?: number;
@@ -13,7 +14,8 @@ interface CellProps {
     onMouseEnter?: (e: React.MouseEvent) => void;
     highlighted?: boolean;
     selected?: boolean;
-    onClick: (e: React.MouseEvent) => void;
+    selection: number[];
+    onMouseDown: (e: React.MouseEvent) => void;
     onKeyDown: (e: React.KeyboardEvent) => void;
     num?: number;
     pos?: Position;
@@ -24,7 +26,8 @@ const Cell = ({
     pencils,
     given,
     selected,
-    onClick,
+    selection,
+    onMouseDown,
     onKeyDown,
     num,
     pos,
@@ -41,6 +44,46 @@ const Cell = ({
         }
     }, [focus]);
 
+    const onRightClick = useRightClick(
+        <>
+            {pos ? (
+                <li
+                    className="divider"
+                    data-content={`Cell r${pos.y + 1}c${pos.x + 1}`}
+                />
+            ) : (
+                <li className="divider" data-content="Cell" />
+            )}
+            <li className="menu-item">
+                <a href="#">Begin thermo here</a>
+            </li>
+            <li className="menu-item">
+                <a href="#">Set colour</a>
+            </li>
+            {selection.length > 1 && (
+                <>
+                    <li
+                        className="divider"
+                        data-content={`Selection (${selection.length})`}
+                    />
+                    {selection.length < 9 && (
+                        <>
+                            <li className="menu-item">
+                                <a href="#">Selection to thermo</a>
+                            </li>
+                            <li className="menu-item">
+                                <a href="#">Selection to killer box</a>
+                            </li>
+                        </>
+                    )}
+                    <li className="menu-item">
+                        <a href="#">Set colour</a>
+                    </li>
+                </>
+            )}
+        </>
+    );
+
     return (
         <button
             ref={btn}
@@ -49,9 +92,11 @@ const Cell = ({
                 given && 'cell--given',
                 value && 'cell--filled',
                 (selected || focus) && 'cell--selected',
+                focus && 'cell--focused',
                 highlighted && 'cell--highlighted'
             )}
-            onClick={onClick}
+            onMouseDown={onMouseDown}
+            onContextMenu={onRightClick}
             onKeyDown={onKeyDown}
             onFocus={onFocus}
             onMouseEnter={onMouseEnter}
@@ -66,9 +111,6 @@ const Cell = ({
                 ))
             )}
             {num !== undefined && <span className="cell__num">{num}</span>}
-            {pos !== undefined && (
-                <span className="cell__pos">{`{${pos.x}, ${pos.y}}`}</span>
-            )}
         </button>
     );
 };

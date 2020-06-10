@@ -5,14 +5,14 @@ $cell-pad: 6px;
     $b: &;
     width: $cell-size;
     height: $cell-size;
-    border: 1px solid #636b74;
+    border: 2px solid #bcc3ce;
     border-top: none;
     border-left: none;
     background: transparent;
     overflow: hidden;
     outline: none;
     padding: 0;
-    color: #0e7eaf;
+    color: #5755d9;
     padding: 6px;
     position: relative;
 
@@ -21,27 +21,27 @@ $cell-pad: 6px;
     }
 
     &--highlighted {
-        background: #f4f5f7;
+        background: #f7f8f9;
     }
 
     &--selected {
-        background: #fdaeb7;
+        background: #f1f1fc;
 
         #{$b}__pencil {
-            color: #27343b;
+            color: #5755d9;
         }
     }
 
-    &:focus {
-        background: #fdaeb7;
+    &--focused {
+        background: #f1f1fc;
         position: relative;
 
         &::before {
             content: '';
-            border: 2px solid #ee6d7a;
+            border: 2px solid #5755d9;
             border-radius: 4px;
-            width: 90%;
-            height: 90%;
+            width: 95%;
+            height: 95%;
             position: absolute;
             left: 50%;
             top: 50%;
@@ -71,8 +71,10 @@ $cell-pad: 6px;
     &__num {
         position: absolute;
         right: 0;
-        bottom: 0;
-        font-size: 14px;
+        bottom: -2px;
+        font-size: 10px;
+        padding-left: 1px;
+        background: #f1f1fc;
     }
 
     &__pos {

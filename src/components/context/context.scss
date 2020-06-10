@@ -1,0 +1,16 @@
+.context {
+    width: min-content;
+    min-width: 200px;
+
+    position: fixed;
+    left: var(--x, -10000px);
+    top: var(--y, -10000px);
+
+    opacity: 0;
+    transition: 0s;
+
+    &--visible {
+        opacity: 1;
+        transition: opacity 0.25s;
+    }
+}

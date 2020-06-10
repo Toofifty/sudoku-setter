@@ -21,7 +21,10 @@ const Board = () => {
     const [selected, setSelected] = useState<number[]>([]);
 
     const setFocused = (index: number) => {
-        if (index >= 0 && index < 81) _setFocused(index);
+        if (index >= 0 && index < 81) {
+            _setFocused(index);
+            if (!selected.includes(index)) setSelected([...selected, index]);
+        }
     };
 
     useEffect(() => {
@@ -35,7 +38,7 @@ const Board = () => {
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (!e.ctrlKey && !e.metaKey) setSelected([]);
+            if (!e.ctrlKey && !e.metaKey && e.button !== 2) setSelected([]);
         };
         window.addEventListener('mousedown', onClick);
 
@@ -79,27 +82,37 @@ const Board = () => {
                             key={i}
                             {...cell}
                             num={index}
+                            pos={pos}
                             focus={focused === index}
                             selected={selected.includes(index)}
+                            selection={selected}
                             highlighted={
                                 highlightedRow.includes(cell) ||
                                 highlightedColumn.includes(cell) ||
                                 highlightedBox.includes(cell)
                             }
-                            onFocus={() => {
-                                setFocused(index);
-                                setSelected([...selected, index]);
-                            }}
-                            onClick={() => {}}
-                            onMouseEnter={({ buttons }) => {
-                                if (buttons) {
-                                    setSelected([
-                                        ...selected.filter((i) => i !== index),
-                                        index,
-                                    ]);
+                            onMouseDown={(e) => {
+                                console.log(e.button);
+                                if (e.button === 0) {
+                                    setFocused(index);
+                                }
+                                if (
+                                    e.button === 2 &&
+                                    !selected.includes(index)
+                                ) {
+                                    setFocused(index);
+                                    setSelected([]);
                                 }
                             }}
-                            onKeyDown={({ key }) => {
+                            onMouseEnter={({ buttons }) => {
+                                if (
+                                    buttons === 1 &&
+                                    !selected.includes(index)
+                                ) {
+                                    setSelected([...selected, index]);
+                                }
+                            }}
+                            onKeyDown={({ key, shiftKey }) => {
                                 const n = Number(key);
                                 if (!isNaN(n) && n > 0 && n < 10) {
                                     setValue({
@@ -111,16 +124,16 @@ const Board = () => {
                                 }
                                 if (key === 'ArrowUp') {
                                     setFocused(index - 9);
-                                    setSelected([index - 9]);
+                                    if (!shiftKey) setSelected([index - 9]);
                                 } else if (key === 'ArrowDown') {
                                     setFocused(index + 9);
-                                    setSelected([index + 9]);
+                                    if (!shiftKey) setSelected([index + 9]);
                                 } else if (key === 'ArrowLeft') {
                                     setFocused(index - 1);
-                                    setSelected([index - 1]);
+                                    if (!shiftKey) setSelected([index - 1]);
                                 } else if (key === 'ArrowRight') {
                                     setFocused(index + 1);
-                                    setSelected([index + 1]);
+                                    if (!shiftKey) setSelected([index + 1]);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
                                     clearValue(pos);
