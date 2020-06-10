@@ -27,7 +27,7 @@ $cell-pad: 6px;
     &--selected {
         background: #f1f1fc;
 
-        #{$b}__pencil {
+        #{$b}__mark {
             color: #5755d9;
         }
     }
@@ -60,7 +60,7 @@ $cell-pad: 6px;
         grid-template-rows: 1fr 1fr 1fr;
     }
 
-    &__pencil {
+    &__mark {
         background: none;
         padding: 0;
         $border: 2px;

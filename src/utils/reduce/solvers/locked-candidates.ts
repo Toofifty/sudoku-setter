@@ -16,23 +16,19 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
     const boxRow = range(currentBox.x * 3, (currentBox.x + 1) * 3);
     const boxColumn = range(currentBox.y * 3, (currentBox.y + 1) * 3);
 
-    for (let n of cell.pencils) {
-        // short circuit if digit already pencilled
+    for (let n of cell.marks) {
+        // short circuit if digit already markled
         // previously in box
         const alreadyTested = cells
             .filter((_, j) => j < ownIndex)
-            .some((other) => !isFilled(other) && other.pencils.includes(n));
+            .some((other) => !isFilled(other) && other.marks.includes(n));
         if (alreadyTested) continue;
 
-        // get all positions of the digit pencilled
+        // get all positions of the digit markled
         // in the box
         const digitIndices = cells
             .map((other, j) => {
-                if (
-                    j < ownIndex ||
-                    isFilled(other) ||
-                    !other.pencils.includes(n)
-                )
+                if (j < ownIndex || isFilled(other) || !other.marks.includes(n))
                     return null;
                 return j;
             })
@@ -56,12 +52,12 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
                 'in box',
                 JSON.stringify(currentBox)
             );
-            // remove pencil marks from rest of row
+            // remove marks from rest of row
             row(board, pos, false)
                 .filter((_, j) => !boxRow.includes(j))
                 .forEach((other) => {
                     if (!isFilled(other)) {
-                        other.pencils = other.pencils.filter((m) => m !== n);
+                        other.marks = other.marks.filter((m) => m !== n);
                     }
                 });
         } else {
@@ -80,14 +76,12 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
                     'in box',
                     JSON.stringify(currentBox)
                 );
-                // remove pencil marks from rest of row
+                // remove marks from rest of row
                 column(board, pos, false)
                     .filter((_, j) => !boxColumn.includes(j))
                     .forEach((other) => {
                         if (!isFilled(other)) {
-                            other.pencils = other.pencils.filter(
-                                (m) => m !== n
-                            );
+                            other.marks = other.marks.filter((m) => m !== n);
                         }
                     });
             }

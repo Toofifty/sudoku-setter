@@ -1,6 +1,6 @@
 import { CellSolver } from './types';
 import { getCellAt } from '../../sudoku';
-import { isFilled, row, column, box, getPencils } from '../helper';
+import { isFilled, row, column, box, getMarks } from '../helper';
 
 export const solveHiddenSingles: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
@@ -8,11 +8,9 @@ export const solveHiddenSingles: CellSolver = (cell, i, board) => {
 
     const cellSets = [row(board, pos), column(board, pos), box(board, pos)];
 
-    for (let n of cell.pencils) {
+    for (let n of cell.marks) {
         for (let cells of cellSets) {
-            if (
-                cells.map(getPencils).every((pencils) => !pencils.includes(n))
-            ) {
+            if (cells.map(getMarks).every((marks) => !marks.includes(n))) {
                 const k = cellSets.indexOf(cells);
                 if (cell.value !== n) {
                     console.log(
@@ -22,7 +20,7 @@ export const solveHiddenSingles: CellSolver = (cell, i, board) => {
                         i
                     );
                 }
-                return { ...cell, pencils: [n] };
+                return { ...cell, marks: [n] };
             }
         }
     }

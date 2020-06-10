@@ -2,7 +2,7 @@ import { ICell, Position } from '../types';
 import { isFilled } from 'utils/reduce/helper';
 
 const emptyCell = () => ({
-    pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     given: false,
 });
 
@@ -49,17 +49,14 @@ const clearValue = (state: SudokuState, pos: Position) => {
     return { ...state, board, shouldReduce: true };
 };
 
-type SetPencils = {
-    type: 'set-pencils';
-    payload: { cell: Position; pencils: number[] };
+type SetMarks = {
+    type: 'set-marks';
+    payload: { cell: Position; marks: number[] };
 };
 
-const setPencils = (
-    state: SudokuState,
-    { cell, pencils }: SetPencils['payload']
-) => {
+const setMarks = (state: SudokuState, { cell, marks }: SetMarks['payload']) => {
     const board = [...state.board];
-    board[posToIndex(cell)] = { pencils, given: false };
+    board[posToIndex(cell)] = { marks, given: false };
     return { ...state, board };
 };
 
@@ -91,7 +88,7 @@ const reset = (state: SudokuState) => defaultState();
 
 export type SudokuAction =
     | SetValue
-    | SetPencils
+    | SetMarks
     | SetShouldReduce
     | SetBoard
     | ClearValue
@@ -101,8 +98,8 @@ export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
         case 'set-value':
             return setValue(state, action.payload);
-        case 'set-pencils':
-            return setPencils(state, action.payload);
+        case 'set-marks':
+            return setMarks(state, action.payload);
         case 'set-should-reduce':
             return setShouldReduce(state, action.payload);
         case 'set-board':

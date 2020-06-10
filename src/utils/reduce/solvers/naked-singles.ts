@@ -13,22 +13,22 @@ export const solveNakedSingles = (setInitial = false): CellSolver => (
 ) => {
     const pos = getCellAt(i);
 
-    const pencils =
+    const marks =
         isFilled(cell) && cell.given
             ? []
-            : (!isFilled(cell) ? cell.pencils : NUMS).filter(
+            : (!isFilled(cell) ? cell.marks : NUMS).filter(
                   (n) => !breaksSudoku(board, pos, n)
               );
 
     return {
         ...cell,
         index: i,
-        pencils,
-        initialPencils: setInitial
+        marks,
+        initialMarks: setInitial
             ? isFilled(cell)
-                ? pencils
-                : cell.pencils
-            : cell.initialPencils,
+                ? marks
+                : cell.marks
+            : cell.initialMarks,
     };
 };
 

@@ -9,7 +9,7 @@ import { capture } from 'utils';
 
 interface CellProps {
     value?: number;
-    pencils?: number[];
+    marks?: number[];
     given: boolean;
 
     focus?: boolean;
@@ -26,7 +26,7 @@ interface CellProps {
 
 const Cell = ({
     value,
-    pencils,
+    marks,
     given,
     selected,
     selection,
@@ -115,10 +115,10 @@ const Cell = ({
                     new Array(9).fill(0).map((_, i) => (
                         <span
                             className={cx(
-                                `cell__pencil pencil-${i + 1}`,
+                                `cell__mark mark-${i + 1}`,
                                 placeOnClick &&
-                                    pencils?.includes(i + 1) &&
-                                    'cell__pencil--can-click'
+                                    marks?.includes(i + 1) &&
+                                    'cell__mark--can-click'
                             )}
                             key={i}
                             onClick={
@@ -133,7 +133,7 @@ const Cell = ({
                                     : undefined
                             }
                         >
-                            {pencils?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
+                            {marks?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
                         </span>
                     ))
                 ))}

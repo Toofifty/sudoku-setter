@@ -1,14 +1,14 @@
 import { CellSolver } from './types';
 import { getCellAt } from '../../sudoku';
-import { isFilled, row, column, box, getPencils } from '../helper';
+import { isFilled, row, column, box, getMarks } from '../helper';
 
 export const solveNakedPairs: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
 
     if (isFilled(cell)) return cell;
 
-    if (cell.pencils.length === 2) {
-        // n boxes have only the same n digits pencilled in -
+    if (cell.marks.length === 2) {
+        // n boxes have only the same n digits markled in -
         // in this case, remove them from the other cells
         // (rows/columns/boxes)
         [
@@ -21,12 +21,11 @@ export const solveNakedPairs: CellSolver = (cell, i, board) => {
             const hasPair = cells
                 .filter((_, j) => j > ownIndex)
                 .some((other, j) => {
-                    const pencils = getPencils(other);
+                    const marks = getMarks(other);
                     return (
                         !isFilled(other) &&
-                        pencils.length === 2 &&
-                        JSON.stringify(cell.pencils) ===
-                            JSON.stringify(pencils) &&
+                        marks.length === 2 &&
+                        JSON.stringify(cell.marks) === JSON.stringify(marks) &&
                         (matchIndex = j + ownIndex + 1)
                     );
                 });
@@ -38,8 +37,8 @@ export const solveNakedPairs: CellSolver = (cell, i, board) => {
                         matchIndex !== j &&
                         j !== ownIndex
                     ) {
-                        other.pencils = other.pencils.filter(
-                            (n) => !cell.pencils.includes(n)
+                        other.marks = other.marks.filter(
+                            (n) => !cell.marks.includes(n)
                         );
                     }
                 });

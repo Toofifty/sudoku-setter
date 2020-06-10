@@ -25,7 +25,7 @@ export const decode = (b64: string): DecodedData => {
         const v = Number(sv);
         if (v === 0) {
             return {
-                pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
                 given: false,
             };
         }

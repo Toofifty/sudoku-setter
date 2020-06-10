@@ -3,11 +3,11 @@ export type FilledCell = {
     given: boolean;
 };
 
-export type PencilledCell = {
-    pencils: number[];
+export type MarkedCell = {
+    marks: number[];
     given: boolean;
 };
 
-export type ICell = FilledCell | PencilledCell;
+export type ICell = FilledCell | MarkedCell;
 
 export type Position = { x: number; y: number };

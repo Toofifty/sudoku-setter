@@ -15,8 +15,8 @@ import {
 const defaultInterCell: InterCell = {
     value: undefined,
     index: 0,
-    initialPencils: [],
-    pencils: [],
+    initialMarks: [],
+    marks: [],
     given: false,
 };
 
@@ -48,38 +48,36 @@ export const useSudokuReducer = () => {
         // check for changes
         intermediate = intermediate.map((cell) => {
             if (
-                JSON.stringify(cell.pencils) ===
-                JSON.stringify(cell.initialPencils)
+                JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)
             ) {
-                // no change in pencil marks - avoid
+                // no change in marks - avoid
                 // toggling
                 return cell;
             }
 
             if (
-                cell.pencils.length === 1 &&
+                cell.marks.length === 1 &&
                 isFilled(cell) &&
-                cell.value === cell.pencils[0]
+                cell.value === cell.marks[0]
             ) {
                 // filled value is still correct
                 return cell;
             }
 
             if (
-                JSON.stringify(cell.pencils) ===
-                JSON.stringify(cell.initialPencils)
+                JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)
             ) {
-                // no change in pencil marks - avoid
+                // no change in marks - avoid
                 // toggling
                 return cell;
             }
 
             hasChanged = true;
 
-            if (cell.pencils.length === 1) {
+            if (cell.marks.length === 1) {
                 return {
                     ...cell,
-                    value: cell.pencils[0],
+                    value: cell.marks[0],
                     given: false,
                 };
             }
@@ -87,7 +85,7 @@ export const useSudokuReducer = () => {
                 ...cell,
                 value: undefined,
                 given: false,
-                pencils: cell.pencils,
+                marks: cell.marks,
             };
         });
 
@@ -96,7 +94,7 @@ export const useSudokuReducer = () => {
             updatedBoard: intermediate.map((cell) =>
                 isFilled(cell)
                     ? { value: cell.value, given: cell.given }
-                    : { pencils: cell.pencils, given: false }
+                    : { marks: cell.marks, given: false }
             ),
             hasChanged,
         };

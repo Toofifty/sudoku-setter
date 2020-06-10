@@ -1,14 +1,14 @@
 import { CellSolver } from './types';
 import { getCellAt } from '../../sudoku';
-import { isFilled, row, column, box, getPencils } from '../helper';
-import { PencilledCell } from '../../../types';
+import { isFilled, row, column, box, getMarks } from '../helper';
+import { MarkedCell } from '../../../types';
 
 export const solveHiddenPairs: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
 
     if (isFilled(cell)) return cell;
 
-    // n boxes have only the same n digits pencilled in -
+    // n boxes have only the same n digits markled in -
     // in this case, remove them from the other cells
     // (rows/columns/boxes)
     [
@@ -20,12 +20,12 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
 
         let matchIndex = 0;
         let matchingDigits: number[] = [];
-        for (let n of cell.pencils) {
+        for (let n of cell.marks) {
             // if anything previous has the digit,
             // skip straight away
             const alreadyTested = cells
                 .filter((_, j) => j < ownIndex)
-                .some((other) => !isFilled(other) && other.pencils.includes(n));
+                .some((other) => !isFilled(other) && other.marks.includes(n));
             if (alreadyTested) continue;
 
             const hasMatch =
@@ -35,21 +35,21 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
                         // eslint-disable-next-line no-loop-func
                         (other, j) =>
                             !isFilled(other) &&
-                            getPencils(other).includes(n) &&
+                            getMarks(other).includes(n) &&
                             (matchIndex = j + ownIndex + 1)
                     ).length === 1;
 
             if (hasMatch) {
-                // check if a larger pencil mark
+                // check if a larger mark
                 // is also constrained
-                for (let m of cell.pencils.filter((m) => m > n)) {
+                for (let m of cell.marks.filter((m) => m > n)) {
                     // if anything previous has the digit,
                     // skip straight away
                     const alreadyTested = cells
                         .filter((_, j) => j < ownIndex)
                         .some(
                             (other) =>
-                                !isFilled(other) && other.pencils.includes(m)
+                                !isFilled(other) && other.marks.includes(m)
                         );
                     if (alreadyTested) continue;
 
@@ -60,7 +60,7 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
                             .filter(
                                 (other, j) =>
                                     !isFilled(other) &&
-                                    getPencils(other).includes(m) &&
+                                    getMarks(other).includes(m) &&
                                     (matchIndex2 = j + ownIndex + 1)
                             ).length === 1;
 
@@ -75,8 +75,8 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
         }
 
         if (matchingDigits.length > 0) {
-            cell.pencils = [...matchingDigits];
-            (cells[matchIndex] as PencilledCell).pencils = [...matchingDigits];
+            cell.marks = [...matchingDigits];
+            (cells[matchIndex] as MarkedCell).marks = [...matchingDigits];
         }
     });
 

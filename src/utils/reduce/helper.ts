@@ -26,9 +26,9 @@ export const getValue = (cell: ICell) => {
     return 0;
 };
 
-export const getPencils = (cell: ICell) => {
+export const getMarks = (cell: ICell) => {
     if (isFilled(cell)) return [];
-    return cell.pencils;
+    return cell.marks;
 };
 
 export const getIndex = (_: any, i: number) => i;
