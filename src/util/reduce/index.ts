@@ -1,15 +1,20 @@
-import { ICell, Position } from '../../types';
+import { ICell } from '../../types';
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
-import { getCellAt } from '../sudoku';
 import { InterCell } from './types';
 import { solveGroups } from './solve-groups';
-import { column, getValue, row, box, isFilled } from './helper';
-import { solveNarrowCells } from './solve-narrow-cells';
+import { isFilled } from './helper';
 import { encode } from '../url';
 import { solveRestrictedBox } from './solve-restricted-box';
+import { solveNakedSingles, solveHiddenSingles } from './solvers';
 
-const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const defaultInterCell: InterCell = {
+    value: undefined,
+    index: 0,
+    initialPencils: [],
+    pencils: [],
+    given: false,
+};
 
 export const useSudokuReducer = () => {
     const board = useSelector((state) => state.sudoku.board);
@@ -19,32 +24,16 @@ export const useSudokuReducer = () => {
         let hasChanged = false;
         console.time('reduce');
 
-        // update pencil marks in first pass
-        // then all information is pushed through
-        // to other passes
+        // prepare cells
+        let intermediate: InterCell[] = prev.map((cell, i) => ({
+            ...defaultInterCell,
+            ...cell,
+            index: i,
+        }));
 
-        // regular sudoku solver
-        // (naked singles)
-        let intermediate: InterCell[] = prev.map((cell, i) => {
-            const pos = getCellAt(i);
-
-            const pencils =
-                isFilled(cell) && cell.given
-                    ? []
-                    : (!isFilled(cell) ? cell.pencils : NUMS).filter(
-                          (n) => !breaksSudoku(prev, pos, n)
-                      );
-
-            return {
-                ...cell,
-                index: i,
-                pencils,
-                initialPencils: isFilled(cell) ? pencils : cell.pencils,
-            };
-        });
-
-        // narrow cell solver (only valid position in row/col/box)
-        intermediate = solveNarrowCells(intermediate);
+        intermediate = intermediate
+            .map(solveNakedSingles(true))
+            .map(solveHiddenSingles);
 
         // pair/triple/quad solver
         intermediate = solveGroups(intermediate);
@@ -113,7 +102,7 @@ export const useSudokuReducer = () => {
             let { updatedBoard, hasChanged } = reduce(board);
 
             let tries = 0;
-            while (hasChanged && tries++ < 20) {
+            while (hasChanged && ++tries < 10) {
                 ({ updatedBoard, hasChanged } = reduce(updatedBoard));
             }
 
@@ -122,15 +111,3 @@ export const useSudokuReducer = () => {
         });
     };
 };
-
-const breaksSudoku = (board: ICell[], pos: Position, n: number) =>
-    inColumn(board, pos, n) || inRow(board, pos, n) || inBox(board, pos, n);
-
-const inColumn = (board: ICell[], pos: Position, n: number) =>
-    column(board, pos).map(getValue).includes(n);
-
-const inRow = (board: ICell[], pos: Position, n: number) =>
-    row(board, pos).map(getValue).includes(n);
-
-const inBox = (board: ICell[], pos: Position, n: number) =>
-    box(board, pos).map(getValue).includes(n);

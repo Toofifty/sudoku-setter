@@ -30,6 +30,9 @@ const Main = () => {
             <button className="btn" onClick={() => reset()}>
                 Reset
             </button>
+            <button className="btn" onClick={() => setShouldReduce(true)}>
+                Solve step
+            </button>
             <Context />
         </div>
     );

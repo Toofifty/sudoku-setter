@@ -53,7 +53,9 @@ export const solveRestrictedBox = (inter: InterCell[]): InterCell[] =>
                     n,
                     'in',
                     pos.y,
-                    digitIndices.join(',')
+                    digitIndices.join(','),
+                    'in box',
+                    JSON.stringify(currentBox)
                 );
                 // remove pencil marks from rest of row
                 row(board, pos, false)
@@ -76,8 +78,10 @@ export const solveRestrictedBox = (inter: InterCell[]): InterCell[] =>
                         'restricted column for',
                         n,
                         'in',
-                        pos.y,
-                        digitIndices.join(',')
+                        pos.x,
+                        digitIndices.join(','),
+                        'in box',
+                        JSON.stringify(currentBox)
                     );
                     // remove pencil marks from rest of row
                     column(board, pos, false)
