@@ -26,7 +26,9 @@ const Main = () => {
     return (
         <div>
             <Board />
-            <button onClick={() => reset()}>Reset</button>
+            <button className="btn" onClick={() => reset()}>
+                Reset
+            </button>
         </div>
     );
 };
