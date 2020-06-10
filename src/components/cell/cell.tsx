@@ -48,7 +48,7 @@ const Cell = ({
                 'cell',
                 given && 'cell--given',
                 value && 'cell--filled',
-                selected && 'cell--selected',
+                (selected || focus) && 'cell--selected',
                 highlighted && 'cell--highlighted'
             )}
             onClick={onClick}

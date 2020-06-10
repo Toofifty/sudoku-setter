@@ -24,6 +24,12 @@ Extra restrictions
 -   [ ] Killer boxes
 -   [ ] Diagonals
 -   [ ] Comparators
+-   [ ] Skyscrapers
+
+Features
+
+-   [ ] Cell colouring
+-   [ ] Step by step solve breakdown
 
 ### Scenarios
 

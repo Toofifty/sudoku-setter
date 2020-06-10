@@ -6,10 +6,10 @@ interface SudokuState {
 }
 
 const defaultState = (): SudokuState => ({
-    board: new Array(81).fill({
+    board: new Array(81).fill(null).map(() => ({
         pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         given: false,
-    }),
+    })),
     shouldReduce: false,
 });
 

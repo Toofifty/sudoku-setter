@@ -62,19 +62,13 @@ const Board = () => {
     );
 
     const highlightedRow =
-        focused !== null && selected.length === 1
-            ? row(board, getCellAt(focused))
-            : [];
+        focused !== null ? row(board, getCellAt(focused)) : [];
 
     const highlightedColumn =
-        focused !== null && selected.length === 1
-            ? column(board, getCellAt(focused))
-            : [];
+        focused !== null ? column(board, getCellAt(focused)) : [];
 
     const highlightedBox =
-        focused !== null && selected.length === 1
-            ? box(board, getCellAt(focused))
-            : [];
+        focused !== null ? box(board, getCellAt(focused)) : [];
 
     return (
         <div className="board">
@@ -99,7 +93,10 @@ const Board = () => {
                             onClick={() => {}}
                             onMouseEnter={({ buttons }) => {
                                 if (buttons) {
-                                    setSelected([...selected, index]);
+                                    setSelected([
+                                        ...selected.filter((i) => i !== index),
+                                        index,
+                                    ]);
                                 }
                             }}
                             onKeyDown={({ key }) => {
