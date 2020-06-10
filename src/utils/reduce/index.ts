@@ -23,7 +23,7 @@ const defaultInterCell: InterCell = {
 const SOLVE_PASSES = 20;
 
 export const useSudokuReducer = () => {
-    const board = useSelector((state) => state.sudoku.board);
+    const sudoku = useSelector((state) => state.sudoku);
     const setBoard = useAction('set-board');
 
     const reduce = (prev: ICell[]) => {
@@ -102,7 +102,7 @@ export const useSudokuReducer = () => {
 
     return () => {
         requestAnimationFrame(() => {
-            let { updatedBoard, hasChanged } = reduce(board);
+            let { updatedBoard, hasChanged } = reduce(sudoku.board);
 
             let tries = 0;
             while (hasChanged && ++tries < SOLVE_PASSES) {
@@ -110,7 +110,9 @@ export const useSudokuReducer = () => {
             }
 
             setBoard(updatedBoard);
-            window.location.hash = encode(board);
+
+            // TODO: move to thunk
+            window.location.hash = encode(sudoku);
         });
     };
 };

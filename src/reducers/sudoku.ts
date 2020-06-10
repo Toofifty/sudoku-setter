@@ -6,8 +6,9 @@ const emptyCell = () => ({
     given: false,
 });
 
-interface SudokuState {
+export interface SudokuState {
     board: ICell[];
+    thermos?: number[][];
     shouldReduce: boolean;
 }
 
