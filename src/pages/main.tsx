@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { decode } from 'utils';
 import Board from '../components/board';
 import useAction from '../hooks/use-action';
-import { decode } from '../util/url';
 import Context from '../components/context';
+import useSelector from 'hooks/use-selector';
 
 const Main = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
+    const debugMode = useSelector((state) => state.ui.debugMode);
+    const setDebugMode = useAction('set-debug-mode');
+    const hideSolution = useSelector((state) => state.ui.hideSolution);
+    const setHideSolution = useAction('set-hide-solution');
     const setBoard = useAction('set-board');
     const setShouldReduce = useAction('set-should-reduce');
     const _reset = useAction('reset');
@@ -25,14 +30,40 @@ const Main = () => {
     }, [hasLoadedFromHash, setBoard, setShouldReduce]);
 
     return (
-        <div>
+        <div style={{ margin: 100 }}>
             <Board />
-            <button className="btn" onClick={() => reset()}>
-                Reset
-            </button>
-            <button className="btn" onClick={() => setShouldReduce(true)}>
-                Solve step
-            </button>
+            <br />
+            <div className="container">
+                <div className="columns">
+                    <div className="column form-group">
+                        <label className="form-switch">
+                            <input
+                                type="checkbox"
+                                checked={debugMode}
+                                onChange={() => setDebugMode(!debugMode)}
+                            />
+                            <i className="form-icon" /> Debug
+                        </label>
+                        <label className="form-switch">
+                            <input
+                                type="checkbox"
+                                checked={hideSolution}
+                                onChange={() => setHideSolution(!hideSolution)}
+                            />
+                            <i className="form-icon" /> Hide solution
+                        </label>
+                    </div>
+                    <button className="btn mr-2" onClick={() => reset()}>
+                        Reset
+                    </button>
+                    <button
+                        className="btn"
+                        onClick={() => setShouldReduce(true)}
+                    >
+                        Solve step
+                    </button>
+                </div>
+            </div>
             <Context />
         </div>
     );

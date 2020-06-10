@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './board.scss';
 import useSelector from '../../hooks/use-selector';
 import { ICell, Position } from '../../types';
-import { getBoxIndex, getCellAt } from '../../util/sudoku';
+import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
-import { useSudokuReducer } from '../../util/reduce';
-import { row, column, box } from '../../util/reduce/helper';
+import { useSudokuReducer } from '../../utils/reduce';
+import { row, column, box } from '../../utils/reduce/helper';
 
 const Board = () => {
     const board = useSelector((state) => state.sudoku.board);
@@ -20,10 +20,12 @@ const Board = () => {
     const [focused, _setFocused] = useState<number | null>(null);
     const [selected, setSelected] = useState<number[]>([]);
 
-    const setFocused = (index: number) => {
+    const setFocused = (index: number, addToSelection = false) => {
         if (index >= 0 && index < 81) {
             _setFocused(index);
-            if (!selected.includes(index)) setSelected([...selected, index]);
+            if (!addToSelection) setSelected([index]);
+            else if (!selected.includes(index))
+                setSelected([...selected, index]);
         }
     };
 
@@ -38,8 +40,12 @@ const Board = () => {
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (!e.ctrlKey && !e.metaKey && e.button !== 2) setSelected([]);
+            if (!e.ctrlKey && !e.metaKey && e.button !== 2) {
+                _setFocused(null);
+                setSelected([]);
+            }
         };
+
         window.addEventListener('mousedown', onClick);
 
         return () => {
@@ -91,15 +97,16 @@ const Board = () => {
                                 highlightedColumn.includes(cell) ||
                                 highlightedBox.includes(cell)
                             }
-                            onMouseDown={(e) => {
-                                console.log(e.button);
-                                if (e.button === 0) {
-                                    setFocused(index);
+                            onMouseDown={({
+                                button,
+                                shiftKey,
+                                stopPropagation,
+                            }) => {
+                                if (button === 0) {
+                                    setFocused(index, shiftKey);
+                                    stopPropagation();
                                 }
-                                if (
-                                    e.button === 2 &&
-                                    !selected.includes(index)
-                                ) {
+                                if (button === 2 && !selected.includes(index)) {
                                     setFocused(index);
                                     setSelected([]);
                                 }
@@ -123,17 +130,13 @@ const Board = () => {
                                     return;
                                 }
                                 if (key === 'ArrowUp') {
-                                    setFocused(index - 9);
-                                    if (!shiftKey) setSelected([index - 9]);
+                                    setFocused(index - 9, shiftKey);
                                 } else if (key === 'ArrowDown') {
-                                    setFocused(index + 9);
-                                    if (!shiftKey) setSelected([index + 9]);
+                                    setFocused(index + 9, shiftKey);
                                 } else if (key === 'ArrowLeft') {
-                                    setFocused(index - 1);
-                                    if (!shiftKey) setSelected([index - 1]);
+                                    setFocused(index - 1, shiftKey);
                                 } else if (key === 'ArrowRight') {
-                                    setFocused(index + 1);
-                                    if (!shiftKey) setSelected([index + 1]);
+                                    setFocused(index + 1, shiftKey);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
                                     clearValue(pos);

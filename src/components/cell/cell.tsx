@@ -3,6 +3,7 @@ import cx from 'classnames';
 import './cell.scss';
 import { Position } from '../../types';
 import useRightClick from '../../hooks/use-right-click';
+import useSelector from 'hooks/use-selector';
 
 interface CellProps {
     value?: number;
@@ -17,7 +18,7 @@ interface CellProps {
     selection: number[];
     onMouseDown: (e: React.MouseEvent) => void;
     onKeyDown: (e: React.KeyboardEvent) => void;
-    num?: number;
+    num: number;
     pos?: Position;
 }
 
@@ -36,6 +37,8 @@ const Cell = ({
     onFocus,
     onMouseEnter,
 }: CellProps) => {
+    const debugMode = useSelector((state) => state.ui.debugMode);
+    const hideSolution = useSelector((state) => state.ui.hideSolution);
     const btn = useRef<HTMLButtonElement>(undefined!);
 
     useEffect(() => {
@@ -72,7 +75,7 @@ const Cell = ({
                                 <a href="#">Selection to thermo</a>
                             </li>
                             <li className="menu-item">
-                                <a href="#">Selection to killer box</a>
+                                <a href="#">Selection to killer cage</a>
                             </li>
                         </>
                     )}
@@ -101,16 +104,20 @@ const Cell = ({
             onFocus={onFocus}
             onMouseEnter={onMouseEnter}
         >
-            {value ? (
-                <span className="cell__value">{value}</span>
-            ) : (
-                new Array(9).fill(0).map((_, i) => (
-                    <span className={`cell__pencil pencil-${i + 1}`} key={i}>
-                        {pencils?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
-                    </span>
-                ))
-            )}
-            {num !== undefined && <span className="cell__num">{num}</span>}
+            {(!hideSolution || given) &&
+                (value ? (
+                    <span className="cell__value">{value}</span>
+                ) : (
+                    new Array(9).fill(0).map((_, i) => (
+                        <span
+                            className={`cell__pencil pencil-${i + 1}`}
+                            key={i}
+                        >
+                            {pencils?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
+                        </span>
+                    ))
+                ))}
+            {debugMode && <span className="cell__num">{num}</span>}
         </button>
     );
 };
