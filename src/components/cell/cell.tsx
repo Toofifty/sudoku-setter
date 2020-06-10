@@ -62,10 +62,10 @@ const Cell = ({
                 <li className="divider" data-content="Cell" />
             )}
             <li className="menu-item">
-                <a href="#">Begin thermo here</a>
+                <a href="#0">Begin thermo here</a>
             </li>
             <li className="menu-item">
-                <a href="#">Set colour</a>
+                <a href="#0">Set colour</a>
             </li>
             {selection.length > 1 && (
                 <>
@@ -76,15 +76,15 @@ const Cell = ({
                     {selection.length < 9 && (
                         <>
                             <li className="menu-item">
-                                <a href="#">Selection to thermo</a>
+                                <a href="#0">Selection to thermo</a>
                             </li>
                             <li className="menu-item">
-                                <a href="#">Selection to killer cage</a>
+                                <a href="#0">Selection to killer cage</a>
                             </li>
                         </>
                     )}
                     <li className="menu-item">
-                        <a href="#">Set colour</a>
+                        <a href="#0">Set colour</a>
                     </li>
                 </>
             )}
