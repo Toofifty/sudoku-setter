@@ -7,12 +7,11 @@ A tool to help people set advanced Sudoku puzzles. Doubles as a Sudoku solver :)
 Solvers
 
 -   [x] Naked singles
--   [x] Narrow cell (only in X)
--   [x] Pairs
-    -   [x] Exclusive (others can't be in the group)
-    -   [x] Inclusive (x numbers must be in the group)
--   [x] Restricted in box (i.e. Pencilled in column/row in another box)
--   [ ] Triples (exclusive/inclusive)
+-   [x] Hidden singles
+-   [x] Naked/hidden pairs
+-   [ ] Naked/hidden triplets
+-   [x] Line-locked candidates (eliminate in row/column)
+-   [ ] Box-locked candidates (eliminate in box)
 -   [ ] X wing
 -   [ ] Y wing
 
@@ -30,6 +29,7 @@ Features
 
 -   [ ] Cell colouring
 -   [ ] Step by step solve breakdown
+-   [ ] Play puzzle
 
 ### Scenarios
 

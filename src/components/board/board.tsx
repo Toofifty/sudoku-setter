@@ -31,10 +31,8 @@ const Board = () => {
 
     useEffect(() => {
         if (shouldReduce) {
-            setTimeout(() => {
-                setShouldReduce(false);
-                sudokuReduce();
-            }, 0);
+            setShouldReduce(false);
+            sudokuReduce();
         }
     }, [shouldReduce, setShouldReduce, sudokuReduce]);
 

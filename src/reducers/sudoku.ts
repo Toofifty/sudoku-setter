@@ -1,4 +1,10 @@
 import { ICell, Position } from '../types';
+import { isFilled } from 'utils/reduce/helper';
+
+const emptyCell = () => ({
+    pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    given: false,
+});
 
 interface SudokuState {
     board: ICell[];
@@ -6,14 +12,15 @@ interface SudokuState {
 }
 
 const defaultState = (): SudokuState => ({
-    board: new Array(81).fill(null).map(() => ({
-        pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        given: false,
-    })),
+    board: new Array(81).fill(null).map(emptyCell),
     shouldReduce: false,
 });
 
 const posToIndex = (pos: Position) => pos.x + pos.y * 9;
+
+const wipeSolution = (board: ICell[]) => [
+    ...board.map((c) => (c.given ? c : emptyCell())),
+];
 
 type SetValue = {
     type: 'set-value';
@@ -24,7 +31,9 @@ const setValue = (
     state: SudokuState,
     { cell, value, given }: SetValue['payload']
 ) => {
-    const board = [...state.board];
+    let board = [...state.board];
+    const target = board[posToIndex(cell)];
+    if (isFilled(target) && target.value !== value) board = wipeSolution(board);
     board[posToIndex(cell)] = { value, given: given ?? false };
     return { ...state, shouldReduce: true, board };
 };
@@ -35,11 +44,8 @@ type ClearValue = {
 };
 
 const clearValue = (state: SudokuState, pos: Position) => {
-    const board = [...state.board];
-    board[posToIndex(pos)] = {
-        pencils: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        given: false,
-    };
+    let board = wipeSolution(state.board);
+    board[posToIndex(pos)] = emptyCell();
     return { ...state, board, shouldReduce: true };
 };
 
