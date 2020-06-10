@@ -4,6 +4,8 @@ import './cell.scss';
 import { Position } from '../../types';
 import useRightClick from '../../hooks/use-right-click';
 import useSelector from 'hooks/use-selector';
+import useAction from 'hooks/use-action';
+import { capture } from 'utils';
 
 interface CellProps {
     value?: number;
@@ -39,6 +41,8 @@ const Cell = ({
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
+    const placeOnClick = useSelector((state) => state.ui.placeOnClick);
+    const setValue = useAction('set-value');
     const btn = useRef<HTMLButtonElement>(undefined!);
 
     useEffect(() => {
@@ -110,8 +114,24 @@ const Cell = ({
                 ) : (
                     new Array(9).fill(0).map((_, i) => (
                         <span
-                            className={`cell__pencil pencil-${i + 1}`}
+                            className={cx(
+                                `cell__pencil pencil-${i + 1}`,
+                                placeOnClick &&
+                                    pencils?.includes(i + 1) &&
+                                    'cell__pencil--can-click'
+                            )}
                             key={i}
+                            onClick={
+                                placeOnClick && pos
+                                    ? capture(() =>
+                                          setValue({
+                                              cell: pos,
+                                              value: i + 1,
+                                              given: true,
+                                          })
+                                      )
+                                    : undefined
+                            }
                         >
                             {pencils?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
                         </span>

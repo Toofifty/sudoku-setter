@@ -11,6 +11,8 @@ const Main = () => {
     const setDebugMode = useAction('set-debug-mode');
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const setHideSolution = useAction('set-hide-solution');
+    const placeOnClick = useSelector((state) => state.ui.placeOnClick);
+    const setPlaceOnClick = useAction('set-place-on-click');
     const setBoard = useAction('set-board');
     const setShouldReduce = useAction('set-should-reduce');
     const _reset = useAction('reset');
@@ -51,6 +53,14 @@ const Main = () => {
                                 onChange={() => setHideSolution(!hideSolution)}
                             />
                             <i className="form-icon" /> Hide solution
+                        </label>
+                        <label className="form-switch">
+                            <input
+                                type="checkbox"
+                                checked={placeOnClick}
+                                onChange={() => setPlaceOnClick(!placeOnClick)}
+                            />
+                            <i className="form-icon" /> Place numbers on click
                         </label>
                     </div>
                     <button className="btn mr-2" onClick={() => reset()}>

@@ -97,16 +97,15 @@ const Board = () => {
                                 highlightedColumn.includes(cell) ||
                                 highlightedBox.includes(cell)
                             }
-                            onMouseDown={({
-                                button,
-                                shiftKey,
-                                stopPropagation,
-                            }) => {
-                                if (button === 0) {
-                                    setFocused(index, shiftKey);
-                                    stopPropagation();
+                            onMouseDown={(e) => {
+                                if (e.button === 0) {
+                                    setFocused(index, e.shiftKey);
+                                    e.stopPropagation();
                                 }
-                                if (button === 2 && !selected.includes(index)) {
+                                if (
+                                    e.button === 2 &&
+                                    !selected.includes(index)
+                                ) {
                                     setFocused(index);
                                     setSelected([]);
                                 }

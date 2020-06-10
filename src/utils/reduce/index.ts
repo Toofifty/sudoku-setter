@@ -20,6 +20,8 @@ const defaultInterCell: InterCell = {
     given: false,
 };
 
+const SOLVE_PASSES = 20;
+
 export const useSudokuReducer = () => {
     const board = useSelector((state) => state.sudoku.board);
     const setBoard = useAction('set-board');
@@ -105,7 +107,7 @@ export const useSudokuReducer = () => {
             let { updatedBoard, hasChanged } = reduce(board);
 
             let tries = 0;
-            while (hasChanged && ++tries < 1) {
+            while (hasChanged && ++tries < SOLVE_PASSES) {
                 ({ updatedBoard, hasChanged } = reduce(updatedBoard));
             }
 

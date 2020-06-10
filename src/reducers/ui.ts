@@ -2,11 +2,13 @@ interface UIState {
     context?: React.ReactNode;
     debugMode: boolean;
     hideSolution: boolean;
+    placeOnClick: boolean;
 }
 
 const defaultState = (): UIState => ({
-    debugMode: true,
+    debugMode: process.env.NODE_ENV === 'development',
     hideSolution: false,
+    placeOnClick: false,
 });
 
 type OpenContext = { type: 'open-context'; payload: React.ReactNode };
@@ -34,11 +36,19 @@ const setHideSolution = (state: UIState, hideSolution: boolean) => ({
     hideSolution,
 });
 
+type SetPlaceOnClick = { type: 'set-place-on-click'; payload: boolean };
+
+const setPlaceOnClick = (state: UIState, placeOnClick: boolean) => ({
+    ...state,
+    placeOnClick,
+});
+
 export type UIAction =
     | OpenContext
     | CloseContext
     | SetDebugMode
-    | SetHideSolution;
+    | SetHideSolution
+    | SetPlaceOnClick;
 
 export default (state = defaultState(), action: UIAction) => {
     switch (action.type) {
@@ -50,6 +60,8 @@ export default (state = defaultState(), action: UIAction) => {
             return setDebugMode(state, action.payload);
         case 'set-hide-solution':
             return setHideSolution(state, action.payload);
+        case 'set-place-on-click':
+            return setPlaceOnClick(state, action.payload);
         default:
             return state;
     }
