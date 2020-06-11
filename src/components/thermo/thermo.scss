@@ -1,3 +1,5 @@
+@import '_var';
+
 @mixin fill {
     position: absolute;
     left: 0;
@@ -6,16 +8,22 @@
     height: 100%;
 }
 
-$color: #ced3da;
+@mixin thermo-part {
+    box-sizing: content-box;
+    position: absolute;
+    content: '';
+    border: $thickness solid $grey-200;
+    border-radius: $thickness;
+    background: $grey-200;
+}
+
 $thickness: 12px;
-$straight-line-len: 63%;
+$straight-len: calc(100% + 2px);
+$straight-offset: calc(-50% - #{$thickness} - 2px);
 
 .thermo {
     @include fill;
-    z-index: -1;
     overflow: visible;
-
-    pointer-events: none;
 
     &__bulb::before {
         @include fill;
@@ -30,82 +38,46 @@ $straight-line-len: 63%;
 
         border-radius: 100%;
 
-        background: $color;
+        background: $grey-200;
     }
 
     &__line {
         @include fill;
 
         &--b::before {
-            position: absolute;
-            content: '';
-            height: $straight-line-len;
-            width: 0px;
+            @include thermo-part;
+            height: $straight-len;
+            width: 0;
             transform: translateX(-50%);
             left: 50%;
-            bottom: 0;
-            border: $thickness solid $color;
-            border-top-left-radius: $thickness;
-            border-top-right-radius: $thickness;
-            background: $color;
+            bottom: $straight-offset;
         }
 
         &--t::before {
-            position: absolute;
-            content: '';
-            height: $straight-line-len;
-            width: 0px;
+            @include thermo-part;
+            height: $straight-len;
+            width: 0;
             transform: translateX(-50%);
             left: 50%;
-            top: 0;
-            border: $thickness solid $color;
-            border-bottom-left-radius: $thickness;
-            border-bottom-right-radius: $thickness;
-            background: $color;
+            top: $straight-offset;
         }
 
         &--l::before {
-            position: absolute;
-            content: '';
-            height: 0px;
-            width: $straight-line-len;
+            @include thermo-part;
+            width: $straight-len;
+            height: 0;
             transform: translateY(-50%);
             top: 50%;
-            left: 0;
-            border: $thickness solid $color;
-            border-top-right-radius: $thickness;
-            border-bottom-right-radius: $thickness;
-            background: $color;
+            left: $straight-offset;
         }
 
         &--r::before {
-            position: absolute;
-            content: '';
-            height: 0px;
-            width: $straight-line-len;
+            @include thermo-part;
+            width: $straight-len;
+            height: 0;
             transform: translateY(-50%);
             top: 50%;
-            right: 0;
-            border: $thickness solid $color;
-            border-top-left-radius: $thickness;
-            border-bottom-left-radius: $thickness;
-            background: $color;
-        }
-
-        &--tl::before {
-            // $thickness: 1px;
-            position: absolute;
-            content: '';
-            height: 0px;
-            width: 900px;
-            transform-origin: 0% 50%;
-            transform: translateY(-$thickness) rotate(45deg);
-            top: 0;
-            left: 0;
-            border: $thickness solid $color;
-            border-bottom-right-radius: $thickness;
-            border-top-right-radius: $thickness;
-            background: $color;
+            right: $straight-offset;
         }
     }
 }

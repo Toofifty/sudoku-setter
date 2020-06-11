@@ -34,16 +34,7 @@ const Thermo = ({ index }: { index: number }) => {
                     const last = indexInThermo === thermo.length - 1;
                     return (
                         <div className="thermo" key={i}>
-                            {first ? (
-                                <div className="thermo__bulb" />
-                            ) : (
-                                <div
-                                    className={`thermo__line thermo__line--${getDirectionTo(
-                                        index,
-                                        thermo[indexInThermo - 1]
-                                    )}`}
-                                />
-                            )}
+                            {first && <div className="thermo__bulb" />}
                             {!last && (
                                 <div
                                     className={`thermo__line thermo__line--${getDirectionTo(
