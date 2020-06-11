@@ -156,13 +156,14 @@ const Cell = ({
                                 key={i}
                                 onClick={
                                     placeOnClick && pos
-                                        ? capture(() =>
-                                              setValue({
+                                        ? capture(() => {
+                                              console.log('set valueee');
+                                              return setValue({
                                                   cell: pos,
                                                   value: i + 1,
                                                   given: true,
-                                              })
-                                          )
+                                              });
+                                          })
                                         : undefined
                                 }
                             >

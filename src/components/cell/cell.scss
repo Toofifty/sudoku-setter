@@ -8,6 +8,7 @@
     color: $purple-600;
     padding: 6px;
     position: relative;
+    z-index: 0;
 
     &--filled {
         font-size: 48px;
@@ -33,6 +34,7 @@
             bottom: $gap;
             right: $gap;
             border: 2px solid $purple-600;
+            pointer-events: none;
         }
     }
 

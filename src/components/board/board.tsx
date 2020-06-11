@@ -109,7 +109,6 @@ const Board = () => {
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
                                     setFocused(index, e.shiftKey);
-                                    // e.stopPropagation();
                                 }
                                 if (
                                     e.button === 2 &&
