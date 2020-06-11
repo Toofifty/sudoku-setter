@@ -26,7 +26,6 @@ interface CellProps {
 
     color: string;
     onColor: (color: string) => void;
-    onMultiColor: (color: string) => void;
 }
 
 const Cell = ({
@@ -45,7 +44,6 @@ const Cell = ({
     onMouseEnter,
     color,
     onColor,
-    onMultiColor,
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
@@ -75,7 +73,12 @@ const Cell = ({
             <li className="menu-item">
                 <a href="#0">Begin thermo here</a>
             </li>
-            <li className="divider" data-content="Set cell color" />
+            <li
+                className="divider"
+                data-content={`Set ${
+                    selection.length > 1 ? 'selection' : 'cell'
+                } color`}
+            />
             <li className="menu-item">
                 <ColorPicker color={color} onSelect={onColor} />
             </li>
@@ -100,13 +103,6 @@ const Cell = ({
                             </li>
                         </>
                     )}
-                    <li
-                        className="divider"
-                        data-content="Set selection color"
-                    />
-                    <li className="menu-item">
-                        <ColorPicker color={color} onSelect={onMultiColor} />
-                    </li>
                 </>
             )}
             {thermos?.some((thermo) => thermo.includes(num)) && (
@@ -147,30 +143,32 @@ const Cell = ({
                 (value ? (
                     <span className="cell__value">{value}</span>
                 ) : (
-                    new Array(9).fill(0).map((_, i) => (
-                        <span
-                            className={cx(
-                                `cell__mark mark-${i + 1}`,
-                                placeOnClick &&
-                                    marks?.includes(i + 1) &&
-                                    'cell__mark--can-click'
-                            )}
-                            key={i}
-                            onClick={
-                                placeOnClick && pos
-                                    ? capture(() =>
-                                          setValue({
-                                              cell: pos,
-                                              value: i + 1,
-                                              given: true,
-                                          })
-                                      )
-                                    : undefined
-                            }
-                        >
-                            {marks?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
-                        </span>
-                    ))
+                    Array(9)
+                        .fill(0)
+                        .map((_, i) => (
+                            <span
+                                className={cx(
+                                    `cell__mark mark-${i + 1}`,
+                                    placeOnClick &&
+                                        marks?.includes(i + 1) &&
+                                        'cell__mark--can-click'
+                                )}
+                                key={i}
+                                onClick={
+                                    placeOnClick && pos
+                                        ? capture(() =>
+                                              setValue({
+                                                  cell: pos,
+                                                  value: i + 1,
+                                                  given: true,
+                                              })
+                                          )
+                                        : undefined
+                                }
+                            >
+                                {marks?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
+                            </span>
+                        ))
                 ))}
             {debugMode && <span className="cell__num">{num}</span>}
         </button>

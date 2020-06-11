@@ -94,8 +94,7 @@ const Board = () => {
                             selected={selected.includes(index)}
                             selection={selected}
                             color={colors[index]}
-                            onColor={(color) => setColor({ index, color })}
-                            onMultiColor={(color) =>
+                            onColor={(color) =>
                                 setColor({ index: selected, color })
                             }
                             highlighted={
