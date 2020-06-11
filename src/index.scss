@@ -5,6 +5,7 @@ body {
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100vh;
 }
 
 code {
@@ -16,6 +17,7 @@ code {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
 }
 
 // spectre's btn-link doesn't match the

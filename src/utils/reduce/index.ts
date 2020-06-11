@@ -23,11 +23,13 @@ const defaultInterCell: InterCell = {
 
 const SOLVE_PASSES = 20;
 
+const noop = (a: any) => a;
+
 export const useSudokuReducer = () => {
     const sudoku = useSelector((state) => state.sudoku);
     const setBoard = useAction('set-board');
 
-    const reduce = ({ board, thermos }: SudokuState) => {
+    const reduce = ({ board, thermos, solvers }: SudokuState) => {
         let hasChanged = false;
         console.time('reduce');
 
@@ -40,13 +42,13 @@ export const useSudokuReducer = () => {
 
         intermediate = intermediate
             .map(solveNakedSingles(true))
-            .map(solveHiddenSingles)
-            .map(solveNakedPairs)
-            .map(solveHiddenPairs)
-            .map(solveLockedCandidates);
+            .map(solvers.hiddenSingles ? solveHiddenSingles : noop)
+            .map(solvers.nakedPairs ? solveNakedPairs : noop)
+            .map(solvers.hiddenPairs ? solveHiddenPairs : noop)
+            .map(solvers.lockedCandidates ? solveLockedCandidates : noop);
 
         // solve particular sudokus
-        if (thermos) {
+        if (thermos && solvers.thermos) {
             intermediate = intermediate.map(solveThermos(thermos));
         }
 

@@ -11,13 +11,32 @@ export interface SudokuState {
     thermos?: number[][];
     shouldReduce: boolean;
     colors: string[];
+    solvers: {
+        hiddenSingles: boolean;
+        nakedPairs: boolean;
+        hiddenPairs: boolean;
+        lockedCandidates: boolean;
+        thermos: boolean;
+    };
 }
 
 const defaultState = (): SudokuState => ({
     board: Array(81).fill(null).map(emptyCell),
     colors: Array(81).fill('white'),
     shouldReduce: false,
+    solvers: {
+        hiddenSingles: true,
+        nakedPairs: true,
+        hiddenPairs: true,
+        lockedCandidates: true,
+        thermos: true,
+    },
 });
+
+type Reducer<T extends { payload: any }> = (
+    state: SudokuState,
+    payload: T['payload']
+) => SudokuState;
 
 const posToIndex = (pos: Position) => pos.x + pos.y * 9;
 
@@ -30,10 +49,7 @@ type SetValue = {
     payload: { cell: Position; value: number; given?: boolean };
 };
 
-const setValue = (
-    state: SudokuState,
-    { cell, value, given }: SetValue['payload']
-) => {
+const setValue: Reducer<SetValue> = (state, { cell, value, given }) => {
     let board = [...state.board];
     const target = board[posToIndex(cell)];
     if (isFilled(target) && target.value !== value) board = wipeSolution(board);
@@ -46,7 +62,7 @@ type ClearValue = {
     payload: Position | number;
 };
 
-const clearValue = (state: SudokuState, pos: Position | number) => {
+const clearValue: Reducer<ClearValue> = (state, pos) => {
     let board = wipeSolution(state.board);
     board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
     return { ...state, board, shouldReduce: true };
@@ -57,7 +73,7 @@ type SetMarks = {
     payload: { cell: Position; marks: number[] };
 };
 
-const setMarks = (state: SudokuState, { cell, marks }: SetMarks['payload']) => {
+const setMarks: Reducer<SetMarks> = (state, { cell, marks }) => {
     const board = [...state.board];
     board[posToIndex(cell)] = { marks, given: false };
     return { ...state, board };
@@ -68,7 +84,7 @@ type SetBoard = {
     payload: ICell[];
 };
 
-const setBoard = (state: SudokuState, board: SetBoard['payload']) => {
+const setBoard: Reducer<SetBoard> = (state, board) => {
     return { ...state, board };
 };
 
@@ -77,21 +93,21 @@ type SetShouldReduce = {
     payload: boolean;
 };
 
-const setShouldReduce = (
-    state: SudokuState,
-    shouldReduce: SetShouldReduce['payload']
-) => ({ ...state, shouldReduce });
+const setShouldReduce: Reducer<SetShouldReduce> = (state, shouldReduce) => ({
+    ...state,
+    shouldReduce,
+});
 
 type Reset = {
     type: 'reset';
     payload: undefined;
 };
 
-const reset = (state: SudokuState) => defaultState();
+const reset = () => defaultState();
 
 type CreateThermo = { type: 'create-thermo'; payload: number[] };
 
-const createThermo = (state: SudokuState, thermo: number[]) => ({
+const createThermo: Reducer<CreateThermo> = (state, thermo) => ({
     ...state,
     thermos: [...(state.thermos ?? []), thermo],
     shouldReduce: true,
@@ -99,7 +115,7 @@ const createThermo = (state: SudokuState, thermo: number[]) => ({
 
 type DeleteThermo = { type: 'delete-thermo'; payload: number };
 
-const deleteThermo = (state: SudokuState, cellIndex: number) => ({
+const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     ...state,
     board: wipeSolution(state.board),
     thermos: (state.thermos ?? []).filter(
@@ -110,7 +126,7 @@ const deleteThermo = (state: SudokuState, cellIndex: number) => ({
 
 type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
 
-const setSudoku = (state: SudokuState, sudoku: Partial<SudokuState>) => ({
+const setSudoku: Reducer<SetSudoku> = (state, sudoku) => ({
     ...state,
     ...sudoku,
 });
@@ -120,15 +136,33 @@ type SetColor = {
     payload: { index: number | number[]; color: string };
 };
 
-const setColor = (
-    state: SudokuState,
-    { index, color }: SetColor['payload']
-) => {
+const setColor: Reducer<SetColor> = (state, { index, color }) => {
     if (typeof index === 'number') index = [index];
     const colors = [...state.colors];
     index.forEach((i) => (colors[i] = color));
     return { ...state, colors };
 };
+
+type SetSolvers = {
+    type: 'set-solvers';
+    payload: Partial<SudokuState['solvers']>;
+};
+
+const setSolvers: Reducer<SetSolvers> = (state, solvers) => ({
+    ...solveFromScratch(state, undefined),
+    solvers: { ...state.solvers, ...solvers },
+});
+
+type SolveFromScratch = {
+    type: 'solve-from-scratch';
+    payload: undefined;
+};
+
+const solveFromScratch: Reducer<SolveFromScratch> = (state) => ({
+    ...state,
+    board: wipeSolution(state.board),
+    shouldReduce: true,
+});
 
 export type SudokuAction =
     | SetValue
@@ -140,7 +174,9 @@ export type SudokuAction =
     | CreateThermo
     | SetSudoku
     | DeleteThermo
-    | SetColor;
+    | SetColor
+    | SetSolvers
+    | SolveFromScratch;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -155,7 +191,7 @@ export default (state = defaultState(), action: SudokuAction) => {
         case 'clear-value':
             return clearValue(state, action.payload);
         case 'reset':
-            return reset(state);
+            return reset();
         case 'create-thermo':
             return createThermo(state, action.payload);
         case 'set-sudoku':
@@ -164,6 +200,10 @@ export default (state = defaultState(), action: SudokuAction) => {
             return deleteThermo(state, action.payload);
         case 'set-color':
             return setColor(state, action.payload);
+        case 'set-solvers':
+            return setSolvers(state, action.payload);
+        case 'solve-from-scratch':
+            return solveFromScratch(state, action.payload);
         default:
             return state;
     }
