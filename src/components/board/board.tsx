@@ -22,9 +22,10 @@ const Board = () => {
 
     const setFocused = (index: number, addToSelection = false) => {
         if (index >= 0 && index < 81) {
-            _setFocused(index);
-            if (!addToSelection) setSelected([index]);
-            else if (!selected.includes(index))
+            if (!addToSelection) {
+                _setFocused(index);
+                setSelected([index]);
+            } else if (!selected.includes(index))
                 setSelected([...selected, index]);
         }
     };

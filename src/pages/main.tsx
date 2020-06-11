@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { decode } from 'utils';
-import Board from '../components/board';
-import useAction from '../hooks/use-action';
-import Context from '../components/context';
+import Board from 'components/board';
+import Context from 'components/context-menu';
+import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
 
 const Main = () => {

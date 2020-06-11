@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import useSelector from '../../hooks/use-selector';
-import './context.scss';
 import useAction from '../../hooks/use-action';
+import './context-menu.scss';
 
 const X_OFFSET = 4;
 const Y_OFFSET = 4;
 
 const Context = () => {
-    const content = useSelector((state) => state.ui.context);
+    const content = useSelector((state) => state.ui.contextMenu);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const closeContext = useAction('close-context');
+    const closeContextMenu = useAction('close-context-menu');
 
     useEffect(() => {
         const updateMousePos = (e: MouseEvent) => {
@@ -24,7 +24,7 @@ const Context = () => {
     }, []);
 
     useEffect(() => {
-        const close = () => setTimeout(closeContext, 100);
+        const close = () => setTimeout(closeContextMenu, 100);
         if (content) {
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
             window.addEventListener('mousedown', close);
@@ -42,7 +42,10 @@ const Context = () => {
 
     return (
         <ul
-            className={cx('context menu', content && 'context--visible')}
+            className={cx(
+                'context-menu menu',
+                content && 'context-menu--visible'
+            )}
             style={style}
         >
             {content?.()}

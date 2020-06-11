@@ -1,12 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
-import './cell.scss';
-import { Position } from '../../types';
-import useRightClick from '../../hooks/use-right-click';
+import { Position } from 'types';
+import Thermo from 'components/thermo';
+import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { capture } from 'utils';
-import Thermo from 'components/thermo';
+import './cell.scss';
 
 interface CellProps {
     value?: number;
@@ -47,7 +47,7 @@ const Cell = ({
     const setValue = useAction('set-value');
     const createThermo = useAction('create-thermo');
     const deleteThermo = useAction('delete-thermo');
-    const btn = useRef<HTMLButtonElement>(undefined!);
+    const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
         if (focus) {
@@ -55,7 +55,7 @@ const Cell = ({
         }
     }, [focus]);
 
-    const onRightClick = useRightClick(
+    const onContextMenu = useContextMenu(
         <>
             {pos ? (
                 <li
@@ -126,7 +126,7 @@ const Cell = ({
                 !value && marks?.length === 0 && 'cell--empty'
             )}
             onMouseDown={onMouseDown}
-            onContextMenu={onRightClick}
+            onContextMenu={onContextMenu}
             onKeyDown={onKeyDown}
             onFocus={onFocus}
             onMouseEnter={onMouseEnter}

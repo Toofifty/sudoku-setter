@@ -32,23 +32,27 @@ $cell-pad: 6px;
         #{$b}__mark {
             color: #5755d9;
         }
+
+        &::after {
+            $gap: 2px;
+            z-index: -1;
+            content: '';
+            position: absolute;
+            left: $gap;
+            top: $gap;
+            bottom: $gap;
+            right: $gap;
+            border: 2px solid #5755d9;
+            border-radius: 8px;
+        }
     }
 
     &--focused {
         background: #f1f1fc;
         position: relative;
 
-        &::before {
-            content: '';
-            border: 2px solid #5755d9;
-            border-radius: 4px;
-            width: 95%;
-            height: 95%;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
+        &::after {
+            border-width: 4px;
         }
     }
 
@@ -62,8 +66,15 @@ $cell-pad: 6px;
         grid-template-rows: 1fr 1fr 1fr;
     }
 
-    &--empty {
-        background: #e85600;
+    &--empty::after {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 4px solid #e85600;
     }
 
     &__value {

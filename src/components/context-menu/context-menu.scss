@@ -1,4 +1,4 @@
-.context {
+.context-menu {
     width: min-content;
     min-width: 200px;
 
@@ -8,9 +8,11 @@
 
     opacity: 0;
     transition: 0s;
+    pointer-events: none;
 
     &--visible {
         opacity: 1;
         transition: opacity 0.25s;
+        pointer-events: initial;
     }
 }

@@ -1,5 +1,5 @@
 interface UIState {
-    context?: () => React.ReactNode;
+    contextMenu?: () => React.ReactNode;
     debugMode: boolean;
     hideSolution: boolean;
     placeOnClick: boolean;
@@ -11,16 +11,25 @@ const defaultState = (): UIState => ({
     placeOnClick: false,
 });
 
-type OpenContext = { type: 'open-context'; payload: () => React.ReactNode };
+type OpenContextMenu = {
+    type: 'open-context-menu';
+    payload: () => React.ReactNode;
+};
 
-const openContext = (state: UIState, context: () => React.ReactNode) => ({
+const openContextMenu = (
+    state: UIState,
+    contextMenu: () => React.ReactNode
+) => ({
     ...state,
-    context,
+    contextMenu,
 });
 
-type CloseContext = { type: 'close-context'; payload: undefined };
+type CloseContextMenu = { type: 'close-context-menu'; payload: undefined };
 
-const closeContext = (state: UIState) => ({ ...state, context: undefined });
+const closeContextMenu = (state: UIState) => ({
+    ...state,
+    contextMenu: undefined,
+});
 
 type SetDebugMode = { type: 'set-debug-mode'; payload: boolean };
 
@@ -44,18 +53,18 @@ const setPlaceOnClick = (state: UIState, placeOnClick: boolean) => ({
 });
 
 export type UIAction =
-    | OpenContext
-    | CloseContext
+    | OpenContextMenu
+    | CloseContextMenu
     | SetDebugMode
     | SetHideSolution
     | SetPlaceOnClick;
 
 export default (state = defaultState(), action: UIAction) => {
     switch (action.type) {
-        case 'open-context':
-            return openContext(state, action.payload);
-        case 'close-context':
-            return closeContext(state);
+        case 'open-context-menu':
+            return openContextMenu(state, action.payload);
+        case 'close-context-menu':
+            return closeContextMenu(state);
         case 'set-debug-mode':
             return setDebugMode(state, action.payload);
         case 'set-hide-solution':
