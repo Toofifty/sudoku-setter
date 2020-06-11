@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getValue } from '../helper';
+import { getValue, isFilled } from '../helper';
 
 export const solveThermos = (thermos: number[][]): CellSolver => (
     cell,
@@ -11,39 +11,40 @@ export const solveThermos = (thermos: number[][]): CellSolver => (
 
         if (thermoIndex === -1) continue;
 
-        // predicate 1: this cell must be strictly greater than it's index
+        // this cell must be strictly greater than it's index
         // on the thermo.
         cell.marks = cell.marks.filter((n) => n > thermoIndex);
 
-        // predicate 2: this cell must be less than or equal to 9 minus
+        // this cell must be less than or equal to 9 minus
         // it's distance to the end of the thermo
         const inverseIndex = thermo.length - 1 - thermoIndex;
         cell.marks = cell.marks.filter((n) => n <= 9 - inverseIndex);
 
-        // predicate 3: the cell must be greater than anything
-        // preceding it on the thermo
+        const preceding = thermo
+            .slice(0, thermoIndex)
+            .map((index) => board[index]);
+
+        const following = thermo
+            .slice(thermoIndex + 1)
+            .map((index) => board[index]);
+
+        // the cell must be greater than the minimum mark (or final value)
+        // of all preceding cells on the thermo
         const largestPreceding = Math.max(
-            ...thermo
-                .slice(0, thermoIndex)
-                .map((index) => board[index])
-                .map(getValue)
-                .filter((n) => n > 0)
+            ...preceding.map((c) =>
+                isFilled(c) ? c.value : Math.min(...c.marks)
+            )
         );
         cell.marks = cell.marks.filter((n) => n > largestPreceding);
 
-        // predicate 4: the cell must be less than anything
-        // following it on the thermo
+        // the cell must be less than the maximum mark (or final value)
+        // of all following cells on the thermo
         const smallestFollowing = Math.min(
-            ...thermo
-                .slice(thermoIndex)
-                .map((index) => board[index])
-                .map(getValue)
-                .filter((n) => n > 0)
+            ...following.map((c) =>
+                isFilled(c) ? c.value : Math.max(...c.marks)
+            )
         );
         cell.marks = cell.marks.filter((n) => n < smallestFollowing);
-
-        // TODO: 5 & 6 there are m lower numbers than n preceding the cell,
-        // and v higher numbers following the cell
     }
 
     return cell;
