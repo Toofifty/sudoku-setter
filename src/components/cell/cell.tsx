@@ -6,6 +6,7 @@ import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { capture } from 'utils';
 import './cell.scss';
+import ColorPicker from 'components/color-picker';
 
 interface CellProps {
     value?: number;
@@ -22,6 +23,10 @@ interface CellProps {
     onKeyDown: (e: React.KeyboardEvent) => void;
     num: number;
     pos?: Position;
+
+    color: string;
+    onColor: (color: string) => void;
+    onMultiColor: (color: string) => void;
 }
 
 const Cell = ({
@@ -38,6 +43,9 @@ const Cell = ({
     highlighted,
     onFocus,
     onMouseEnter,
+    color,
+    onColor,
+    onMultiColor,
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
@@ -67,8 +75,9 @@ const Cell = ({
             <li className="menu-item">
                 <a href="#0">Begin thermo here</a>
             </li>
+            <li className="divider" data-content="Set cell color" />
             <li className="menu-item">
-                <a href="#0">Set colour</a>
+                <ColorPicker color={color} onSelect={onColor} />
             </li>
             {selection.length > 1 && (
                 <>
@@ -91,8 +100,12 @@ const Cell = ({
                             </li>
                         </>
                     )}
+                    <li
+                        className="divider"
+                        data-content="Set selection color"
+                    />
                     <li className="menu-item">
-                        <a href="#0">Set colour</a>
+                        <ColorPicker color={color} onSelect={onMultiColor} />
                     </li>
                 </>
             )}

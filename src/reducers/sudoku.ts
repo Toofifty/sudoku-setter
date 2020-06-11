@@ -10,10 +10,12 @@ export interface SudokuState {
     board: ICell[];
     thermos?: number[][];
     shouldReduce: boolean;
+    colors: string[];
 }
 
 const defaultState = (): SudokuState => ({
-    board: new Array(81).fill(null).map(emptyCell),
+    board: Array(81).fill(null).map(emptyCell),
+    colors: Array(81).fill('white'),
     shouldReduce: false,
 });
 
@@ -113,6 +115,21 @@ const setSudoku = (state: SudokuState, sudoku: Partial<SudokuState>) => ({
     ...sudoku,
 });
 
+type SetColor = {
+    type: 'set-color';
+    payload: { index: number | number[]; color: string };
+};
+
+const setColor = (
+    state: SudokuState,
+    { index, color }: SetColor['payload']
+) => {
+    if (typeof index === 'number') index = [index];
+    const colors = [...state.colors];
+    index.forEach((i) => (colors[i] = color));
+    return { ...state, colors };
+};
+
 export type SudokuAction =
     | SetValue
     | SetMarks
@@ -122,7 +139,8 @@ export type SudokuAction =
     | Reset
     | CreateThermo
     | SetSudoku
-    | DeleteThermo;
+    | DeleteThermo
+    | SetColor;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -144,6 +162,8 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setSudoku(state, action.payload);
         case 'delete-thermo':
             return deleteThermo(state, action.payload);
+        case 'set-color':
+            return setColor(state, action.payload);
         default:
             return state;
     }

@@ -25,8 +25,7 @@
         }
 
         &::after {
-            $gap: 2px;
-            z-index: -1;
+            $gap: 0px;
             content: '';
             position: absolute;
             left: $gap;
@@ -34,12 +33,11 @@
             bottom: $gap;
             right: $gap;
             border: 2px solid $purple-600;
-            border-radius: 8px;
         }
     }
 
     &--focused::after {
-        border-width: 4px;
+        border-width: 5px;
     }
 
     &--given {

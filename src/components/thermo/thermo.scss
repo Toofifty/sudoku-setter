@@ -13,7 +13,7 @@
     position: absolute;
     content: '';
     border: $thickness solid $grey-200;
-    border-radius: $thickness;
+    border-radius: $thickness * 2;
     background: $grey-200;
 }
 
@@ -24,6 +24,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 .thermo {
     @include fill;
     overflow: visible;
+    z-index: -1;
 
     &__bulb::before {
         @include fill;
@@ -78,6 +79,42 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
             transform: translateY(-50%);
             top: 50%;
             right: $straight-offset;
+        }
+
+        &--br::before {
+            @include thermo-part;
+            width: 145%;
+            transform-origin: $thickness 50%;
+            transform: rotate(45deg);
+            top: calc(50% - #{$thickness});
+            left: calc(50% - #{$thickness});
+        }
+
+        &--bl::before {
+            @include thermo-part;
+            width: 145%;
+            transform-origin: $thickness 50%;
+            transform: rotate(135deg);
+            top: calc(50% - #{$thickness});
+            left: calc(50% - #{$thickness});
+        }
+
+        &--tl::before {
+            @include thermo-part;
+            width: 145%;
+            transform-origin: $thickness 50%;
+            transform: rotate(-135deg);
+            top: calc(50% - #{$thickness});
+            left: calc(50% - #{$thickness});
+        }
+
+        &--tr::before {
+            @include thermo-part;
+            width: 145%;
+            transform-origin: $thickness 50%;
+            transform: rotate(-45deg);
+            top: calc(50% - #{$thickness});
+            left: calc(50% - #{$thickness});
         }
     }
 }

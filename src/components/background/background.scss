@@ -1,3 +1,5 @@
+@import '_var';
+
 .background {
     pointer-events: none;
     position: absolute;
@@ -12,4 +14,20 @@
 .background-cell {
     position: relative;
     border: 1px solid transparent;
+
+    &--yellow {
+        background: $yellow-100-2;
+    }
+
+    &--red {
+        background: $red-100-2;
+    }
+
+    &--green {
+        background: $green-100-2;
+    }
+
+    &--blue {
+        background: $blue-100-2;
+    }
 }

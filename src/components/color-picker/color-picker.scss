@@ -1,0 +1,47 @@
+@import '_var';
+
+.color-picker {
+    display: flex;
+    align-items: center;
+
+    &__option {
+        border: 2px solid $grey-300;
+        border-radius: 2px;
+        width: 28px;
+        height: 28px;
+        margin: 8px;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        &:hover {
+            cursor: pointer;
+            border-color: $purple-600;
+        }
+
+        &--white {
+            background: white;
+        }
+
+        &--yellow {
+            background: $yellow-100;
+        }
+
+        &--red {
+            background: $red-100;
+        }
+
+        &--green {
+            background: $green-100;
+        }
+
+        &--blue {
+            background: $blue-100;
+        }
+    }
+}

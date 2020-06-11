@@ -10,10 +10,12 @@ import { useSudokuReducer } from '../../utils/reduce';
 import { row, column, box } from '../../utils/reduce/helper';
 
 const Board = () => {
-    const board = useSelector((state) => state.sudoku.board);
-    const shouldReduce = useSelector((state) => state.sudoku.shouldReduce);
+    const { board, colors, shouldReduce } = useSelector(
+        (state) => state.sudoku
+    );
     const setValue = useAction('set-value');
     const clearValue = useAction('clear-value');
+    const setColor = useAction('set-color');
     const setShouldReduce = useAction('set-should-reduce');
     const sudokuReduce = useSudokuReducer();
 
@@ -91,6 +93,11 @@ const Board = () => {
                             focus={focused === index}
                             selected={selected.includes(index)}
                             selection={selected}
+                            color={colors[index]}
+                            onColor={(color) => setColor({ index, color })}
+                            onMultiColor={(color) =>
+                                setColor({ index: selected, color })
+                            }
                             highlighted={
                                 highlightedRow.includes(cell) ||
                                 highlightedColumn.includes(cell) ||

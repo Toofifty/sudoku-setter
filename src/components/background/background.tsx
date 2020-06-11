@@ -4,6 +4,7 @@ import { getBoxIndex } from 'utils/sudoku';
 import Box from 'components/box';
 import BackgroundCell from './background-cell';
 import './background.scss';
+import useSelector from 'hooks/use-selector';
 
 const boxes = range(0, 81).reduce(
     (boxes, i) => {
@@ -13,16 +14,20 @@ const boxes = range(0, 81).reduce(
     [[], [], [], [], [], [], [], [], []] as number[][]
 );
 
-const Background = () => (
-    <div className="background">
-        {boxes.map((box, i) => (
-            <Box key={i}>
-                {box.map((n) => (
-                    <BackgroundCell key={n} index={n} />
-                ))}
-            </Box>
-        ))}
-    </div>
-);
+const Background = () => {
+    const colors = useSelector((state) => state.sudoku.colors);
+
+    return (
+        <div className="background">
+            {boxes.map((box, i) => (
+                <Box key={i}>
+                    {box.map((n) => (
+                        <BackgroundCell key={n} index={n} color={colors[n]} />
+                    ))}
+                </Box>
+            ))}
+        </div>
+    );
+};
 
 export default Background;
