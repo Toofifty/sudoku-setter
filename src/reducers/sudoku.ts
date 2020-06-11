@@ -41,12 +41,12 @@ const setValue = (
 
 type ClearValue = {
     type: 'clear-value';
-    payload: Position;
+    payload: Position | number;
 };
 
-const clearValue = (state: SudokuState, pos: Position) => {
+const clearValue = (state: SudokuState, pos: Position | number) => {
     let board = wipeSolution(state.board);
-    board[posToIndex(pos)] = emptyCell();
+    board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
     return { ...state, board, shouldReduce: true };
 };
 
@@ -99,6 +99,7 @@ type DeleteThermo = { type: 'delete-thermo'; payload: number };
 
 const deleteThermo = (state: SudokuState, cellIndex: number) => ({
     ...state,
+    board: wipeSolution(state.board),
     thermos: (state.thermos ?? []).filter(
         (thermo) => !thermo.includes(cellIndex)
     ),

@@ -137,7 +137,7 @@ const Board = () => {
                                     setFocused(index + 1, shiftKey);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
-                                    clearValue(pos);
+                                    selected.forEach(clearValue);
                                 }
                             }}
                         />

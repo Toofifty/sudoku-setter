@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getValue, isFilled } from '../helper';
+import { isFilled } from '../helper';
 
 export const solveThermos = (thermos: number[][]): CellSolver => (
     cell,
