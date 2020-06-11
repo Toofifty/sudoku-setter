@@ -5,8 +5,8 @@ export const getBox = (cell: Position): Position => ({
     y: Math.floor(cell.y / 3),
 });
 
-export const getBoxIndex = (cell: Position): number => {
-    const box = getBox(cell);
+export const getBoxIndex = (cell: Position | number): number => {
+    const box = getBox(typeof cell === 'number' ? getCellAt(cell) : cell);
     return box.x + box.y * 3;
 };
 

@@ -13,6 +13,7 @@ $straight-line-len: 63%;
 .thermo {
     @include fill;
     z-index: -1;
+    overflow: visible;
 
     pointer-events: none;
 
@@ -88,6 +89,22 @@ $straight-line-len: 63%;
             border: $thickness solid $color;
             border-top-left-radius: $thickness;
             border-bottom-left-radius: $thickness;
+            background: $color;
+        }
+
+        &--tl::before {
+            // $thickness: 1px;
+            position: absolute;
+            content: '';
+            height: 0px;
+            width: 900px;
+            transform-origin: 0% 50%;
+            transform: translateY(-$thickness) rotate(45deg);
+            top: 0;
+            left: 0;
+            border: $thickness solid $color;
+            border-bottom-right-radius: $thickness;
+            border-top-right-radius: $thickness;
             background: $color;
         }
     }

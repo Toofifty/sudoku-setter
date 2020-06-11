@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { decode } from 'utils';
-import Board from 'components/board';
 import Context from 'components/context-menu';
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
+import BoardContainer from 'components/board-container';
 
 const Main = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -34,7 +34,7 @@ const Main = () => {
 
     return (
         <div style={{ margin: 100 }}>
-            <Board />
+            <BoardContainer />
             <br />
             <div className="container">
                 <div className="columns">

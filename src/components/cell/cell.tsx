@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
 import { Position } from 'types';
-import Thermo from 'components/thermo';
 import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
@@ -131,7 +130,6 @@ const Cell = ({
             onFocus={onFocus}
             onMouseEnter={onMouseEnter}
         >
-            <Thermo index={num} />
             {(!hideSolution || given) &&
                 (value ? (
                     <span className="cell__value">{value}</span>

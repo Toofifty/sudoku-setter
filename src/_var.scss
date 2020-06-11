@@ -1,0 +1,19 @@
+$grey-100: rgb(247, 248, 249);
+$grey-300: rgb(187, 194, 206);
+$grey-400: rgb(159, 165, 173);
+$grey-900: rgb(39, 51, 58);
+
+$purple-100: rgb(241, 241, 252);
+$purple-600: rgb(87, 85, 217);
+
+$red-600: rgb(232, 86, 0);
+
+// formula
+// output: x, opacity: p, input: y
+// 255 - (255 - y)/p = x
+
+// const op = (p, y) => (255 - (255 - y) / p)
+
+$grey-100-2: rgba(215, 220, 225, 0.2);
+
+$purple-100-2: rgba(185, 185, 240, 0.2);
