@@ -24,13 +24,13 @@ const Context = () => {
     }, []);
 
     useEffect(() => {
-        const close = () => setTimeout(closeContextMenu, 100);
+        const close = (e: MouseEvent) => e.button !== 2 && closeContextMenu();
         if (content) {
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
-            window.addEventListener('mousedown', close);
+            window.addEventListener('click', close);
         }
         return () => {
-            window.removeEventListener('mousedown', close);
+            window.removeEventListener('click', close);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [content]);

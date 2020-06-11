@@ -41,18 +41,22 @@ const Board = () => {
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (!e.ctrlKey && !e.metaKey && e.button !== 2) {
+            if (
+                !e
+                    .composedPath()
+                    .some((el: any) => el.classList?.contains('board'))
+            ) {
                 _setFocused(null);
                 setSelected([]);
             }
         };
 
-        window.addEventListener('mousedown', onClick);
+        window.addEventListener('click', onClick);
 
         return () => {
-            window.removeEventListener('mousedown', onClick);
+            window.removeEventListener('click', onClick);
         };
-    }, []);
+    }, [selected]);
 
     const boxes = board.reduce(
         (boxes, cell, i) => {
@@ -105,7 +109,7 @@ const Board = () => {
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
                                     setFocused(index, e.shiftKey);
-                                    e.stopPropagation();
+                                    // e.stopPropagation();
                                 }
                                 if (
                                     e.button === 2 &&
