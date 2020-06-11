@@ -122,7 +122,8 @@ const Cell = ({
                 value && 'cell--filled',
                 (selected || focus) && 'cell--selected',
                 focus && 'cell--focused',
-                highlighted && 'cell--highlighted'
+                highlighted && 'cell--highlighted',
+                !value && marks?.length === 0 && 'cell--empty'
             )}
             onMouseDown={onMouseDown}
             onContextMenu={onRightClick}

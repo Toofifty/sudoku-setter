@@ -62,6 +62,10 @@ $cell-pad: 6px;
         grid-template-rows: 1fr 1fr 1fr;
     }
 
+    &--empty {
+        background: #e85600;
+    }
+
     &__value {
         z-index: 1;
     }

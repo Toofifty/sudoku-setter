@@ -1,4 +1,3 @@
-import { ICell } from '../../types';
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
 import { InterCell } from './types';
@@ -11,6 +10,8 @@ import {
     solveNakedPairs,
     solveLockedCandidates,
 } from './solvers';
+import { SudokuState } from 'reducers/sudoku';
+import { solveThermos } from './solvers/thermos';
 
 const defaultInterCell: InterCell = {
     value: undefined,
@@ -26,12 +27,12 @@ export const useSudokuReducer = () => {
     const sudoku = useSelector((state) => state.sudoku);
     const setBoard = useAction('set-board');
 
-    const reduce = (prev: ICell[]) => {
+    const reduce = ({ board, thermos }: SudokuState) => {
         let hasChanged = false;
         console.time('reduce');
 
         // prepare cells
-        let intermediate: InterCell[] = prev.map((cell, i) => ({
+        let intermediate: InterCell[] = board.map((cell, i) => ({
             ...defaultInterCell,
             ...cell,
             index: i,
@@ -42,52 +43,60 @@ export const useSudokuReducer = () => {
             .map(solveHiddenSingles)
             .map(solveNakedPairs)
             .map(solveHiddenPairs)
-            .map(solveLockedCandidates)
-            .map(solveNakedSingles(false));
+            .map(solveLockedCandidates);
 
-        // check for changes
-        intermediate = intermediate.map((cell) => {
-            if (
-                JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)
-            ) {
-                // no change in marks - avoid
-                // toggling
-                return cell;
-            }
+        // solve particular sudokus
+        if (thermos) {
+            intermediate = intermediate.map(solveThermos(thermos));
+        }
 
-            if (
-                cell.marks.length === 1 &&
-                isFilled(cell) &&
-                cell.value === cell.marks[0]
-            ) {
-                // filled value is still correct
-                return cell;
-            }
+        // final cleanup & check for changes
+        intermediate = intermediate
+            .map(solveNakedSingles(false))
+            .map((cell) => {
+                if (
+                    JSON.stringify(cell.marks) ===
+                    JSON.stringify(cell.initialMarks)
+                ) {
+                    // no change in marks - avoid
+                    // toggling
+                    return cell;
+                }
 
-            if (
-                JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)
-            ) {
-                // no change in marks - avoid
-                // toggling
-                return cell;
-            }
+                if (
+                    cell.marks.length === 1 &&
+                    isFilled(cell) &&
+                    cell.value === cell.marks[0]
+                ) {
+                    // filled value is still correct
+                    return cell;
+                }
 
-            hasChanged = true;
+                if (
+                    JSON.stringify(cell.marks) ===
+                    JSON.stringify(cell.initialMarks)
+                ) {
+                    // no change in marks - avoid
+                    // toggling
+                    return cell;
+                }
 
-            if (cell.marks.length === 1) {
+                hasChanged = true;
+
+                if (cell.marks.length === 1) {
+                    return {
+                        ...cell,
+                        value: cell.marks[0],
+                        given: false,
+                    };
+                }
                 return {
                     ...cell,
-                    value: cell.marks[0],
+                    value: undefined,
                     given: false,
+                    marks: cell.marks,
                 };
-            }
-            return {
-                ...cell,
-                value: undefined,
-                given: false,
-                marks: cell.marks,
-            };
-        });
+            });
 
         console.timeEnd('reduce');
         return {
@@ -102,11 +111,14 @@ export const useSudokuReducer = () => {
 
     return () => {
         requestAnimationFrame(() => {
-            let { updatedBoard, hasChanged } = reduce(sudoku.board);
+            let { updatedBoard, hasChanged } = reduce(sudoku);
 
             let tries = 0;
             while (hasChanged && ++tries < SOLVE_PASSES) {
-                ({ updatedBoard, hasChanged } = reduce(updatedBoard));
+                ({ updatedBoard, hasChanged } = reduce({
+                    ...sudoku,
+                    board: updatedBoard,
+                }));
             }
 
             setBoard(updatedBoard);
