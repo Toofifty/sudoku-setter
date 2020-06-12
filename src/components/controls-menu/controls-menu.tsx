@@ -158,7 +158,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={solvers.antiKnight}
+                        onChange={() =>
+                            setSolvers({
+                                antiKnight: !solvers.antiKnight,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Anti-knight
                 </label>
             </li>
@@ -225,7 +233,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={restrictions.antiKnight}
+                        onChange={() =>
+                            setRestrictions({
+                                antiKnight: !restrictions.antiKnight,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Anti-knight
                 </label>
             </li>

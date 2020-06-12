@@ -1,5 +1,9 @@
+export { solveAntiKing } from './anti-king';
+export { solveAntiKnight } from './anti-knight';
 export { solveHiddenPairs } from './hidden-pairs';
 export { solveHiddenSingles } from './hidden-singles';
+export { solveKillerCages } from './killer-cages';
 export { solveLockedCandidates } from './locked-candidates';
 export { solveNakedPairs } from './naked-pairs';
 export { solveNakedSingles } from './naked-singles';
+export { solveThermos } from './thermos';

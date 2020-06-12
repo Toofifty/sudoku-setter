@@ -20,10 +20,12 @@ export interface SudokuState {
         thermos: boolean;
         killerCages: boolean;
         antiKing: boolean;
+        antiKnight: boolean;
     };
     stepSolve: boolean;
     restrictions: {
         antiKing: boolean;
+        antiKnight: boolean;
     };
 }
 
@@ -39,10 +41,12 @@ const defaultState = (): SudokuState => ({
         thermos: true,
         killerCages: true,
         antiKing: false,
+        antiKnight: false,
     },
     stepSolve: false,
     restrictions: {
         antiKing: false,
+        antiKnight: false,
     },
 });
 

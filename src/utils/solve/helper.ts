@@ -22,12 +22,37 @@ export const box = <T>(board: T[], pos: Position, includeSelf = false) => {
 };
 
 export const king = <T>(board: T[], pos: Position) => {
-    const index = getCellIndex(pos);
-    const deltas = [-10, -9, -8, -1, 1, 8, 9, 10];
+    const deltas = [
+        [-1, -1],
+        [0, -1],
+        [1, -1],
+        [-1, 0],
+        [1, 0],
+        [-1, 1],
+        [0, 1],
+        [1, 1],
+    ];
     return deltas
-        .map((n) => index + n)
-        .filter((n) => n >= 0 && n < 81)
-        .map((n) => board[n]);
+        .map(([x, y]) => ({ x: pos.x + x, y: pos.y + y }))
+        .filter(({ x, y }) => x >= 0 && x < 9 && y >= 0 && y < 9)
+        .map((p) => board[getCellIndex(p)]);
+};
+
+export const knight = <T>(board: T[], pos: Position) => {
+    const deltas = [
+        [-1, -2],
+        [1, -2],
+        [-2, -1],
+        [2, -1],
+        [-2, 1],
+        [2, 1],
+        [-1, 2],
+        [1, 2],
+    ];
+    return deltas
+        .map(([x, y]) => ({ x: pos.x + x, y: pos.y + y }))
+        .filter(({ x, y }) => x >= 0 && x < 9 && y >= 0 && y < 9)
+        .map((p) => board[getCellIndex(p)]);
 };
 
 export const getValue = (cell: ICell) => {
