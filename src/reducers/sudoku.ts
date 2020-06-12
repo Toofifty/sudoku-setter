@@ -20,6 +20,7 @@ export interface SudokuState {
         thermos: boolean;
         killerCages: boolean;
     };
+    stepSolve: boolean;
 }
 
 const defaultState = (): SudokuState => ({
@@ -34,6 +35,7 @@ const defaultState = (): SudokuState => ({
         thermos: true,
         killerCages: true,
     },
+    stepSolve: false,
 });
 
 type Reducer<T extends { payload: any }> = (
@@ -186,7 +188,18 @@ type SolveFromScratch = {
 const solveFromScratch: Reducer<SolveFromScratch> = (state) => ({
     ...state,
     board: wipeSolution(state.board),
-    shouldReduce: true,
+    shouldReduce: !state.stepSolve,
+});
+
+type SetStepSolve = {
+    type: 'set-step-solve';
+    payload: boolean;
+};
+
+const setStepSolve: Reducer<SetStepSolve> = (state, stepSolve) => ({
+    ...state,
+    stepSolve,
+    board: wipeSolution(state.board),
 });
 
 export type SudokuAction =
@@ -203,7 +216,8 @@ export type SudokuAction =
     | SetSudoku
     | SetColor
     | SetSolvers
-    | SolveFromScratch;
+    | SolveFromScratch
+    | SetStepSolve;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -235,6 +249,8 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setSolvers(state, action.payload);
         case 'solve-from-scratch':
             return solveFromScratch(state, action.payload);
+        case 'set-step-solve':
+            return setStepSolve(state, action.payload);
         default:
             return state;
     }

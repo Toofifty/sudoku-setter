@@ -23,13 +23,13 @@ const defaultInterCell: InterCell = {
     given: false,
 };
 
-const SOLVE_PASSES = 1;
+const SOLVE_PASSES = 20;
 
 const noop = (a: any) => a;
 
-const reduce = ({ board, thermos, killerCages, solvers }: SudokuState) => {
+const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
     let hasChanged = false;
-    console.time('reduce');
+    console.time('solve step');
 
     // prepare cells
     let intermediate: InterCell[] = board.map((cell, i) => ({
@@ -97,7 +97,7 @@ const reduce = ({ board, thermos, killerCages, solvers }: SudokuState) => {
         };
     });
 
-    console.timeEnd('reduce');
+    console.timeEnd('solve step');
     return {
         updatedBoard: intermediate.map((cell) =>
             isFilled(cell)
@@ -109,11 +109,12 @@ const reduce = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 };
 
 const solveBoard = (sudoku: SudokuState) => {
-    let { updatedBoard, hasChanged } = reduce(sudoku);
+    let { updatedBoard, hasChanged } = solveStep(sudoku);
+    const maxTries = sudoku.stepSolve ? 1 : SOLVE_PASSES;
 
     let tries = 0;
-    while (hasChanged && ++tries < SOLVE_PASSES) {
-        ({ updatedBoard, hasChanged } = reduce({
+    while (hasChanged && ++tries < maxTries) {
+        ({ updatedBoard, hasChanged } = solveStep({
             ...sudoku,
             board: updatedBoard,
         }));

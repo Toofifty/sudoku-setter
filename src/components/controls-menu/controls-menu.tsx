@@ -9,6 +9,8 @@ const ControlsMenu = () => {
     const setHideSolution = useAction('set-hide-solution');
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
     const setPlaceOnClick = useAction('set-place-on-click');
+    const stepSolve = useSelector((state) => state.sudoku.stepSolve);
+    const setStepSolve = useAction('set-step-solve');
 
     const solvers = useSelector((state) => state.sudoku.solvers);
     const setSolvers = useAction('set-solvers');
@@ -181,12 +183,8 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.killerCages}
-                        onChange={() =>
-                            setSolvers({
-                                killerCages: !solvers.killerCages,
-                            })
-                        }
+                        checked={stepSolve}
+                        onChange={() => setStepSolve(!stepSolve)}
                     />
                     <i className="form-icon" /> Step-by-step solve
                 </label>
@@ -194,6 +192,7 @@ const ControlsMenu = () => {
             <li className="menu-item">
                 <button
                     className="btn-fake-link"
+                    disabled={!stepSolve}
                     onClick={() => setShouldReduce(true)}
                 >
                     <i className="icon icon-time mr-1" /> Run solve step

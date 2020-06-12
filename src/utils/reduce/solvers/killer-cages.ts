@@ -1,5 +1,4 @@
 import { CellSolver } from './types';
-import { getCellAt } from 'utils/sudoku';
 import { isFilled } from '../helper';
 import { range, sum } from 'utils/misc';
 import { InterCell } from '../types';
@@ -50,8 +49,6 @@ const canFillCage = (options: number[], cage: InterCell[]) => {
 export const solveKillerCages = (
     killerCages: { total: number; cage: number[] }[]
 ): CellSolver => (cell, i, board) => {
-    const pos = getCellAt(i);
-
     if (isFilled(cell)) return cell;
 
     for (let { total, cage } of killerCages.filter(({ cage }) =>
@@ -68,7 +65,6 @@ export const solveKillerCages = (
                 // ensure other caged cells can contain the
                 // other options
                 const otherOptions = except(option, n);
-                console.log(n, 'checking options for', option, 'in', cage);
                 return canFillCage(otherOptions, otherCells);
             })
         );

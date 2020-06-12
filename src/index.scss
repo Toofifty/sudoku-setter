@@ -44,15 +44,22 @@ code {
         outline: none;
     }
 
-    &:focus,
-    &:hover {
-        background: $purple-100;
-        color: $purple-600;
+    &:not(:disabled) {
+        &:focus,
+        &:hover {
+            background: $purple-100;
+            color: $purple-600;
+        }
+
+        &:active {
+            color: $purple-600;
+            background: $purple-200;
+        }
     }
 
-    &:active {
-        color: $purple-600;
-        background: $purple-200;
+    &:disabled {
+        cursor: default;
+        color: $grey-400;
     }
 }
 
