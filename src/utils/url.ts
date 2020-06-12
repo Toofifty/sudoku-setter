@@ -1,5 +1,5 @@
 import { ICell } from '../types';
-import { isFilled } from './reduce/helper';
+import { isFilled } from './solve/helper';
 import { SudokuState } from 'reducers/sudoku';
 
 type EncodedData = {

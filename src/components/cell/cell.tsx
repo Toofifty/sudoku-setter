@@ -5,28 +5,23 @@ import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { capture } from 'utils';
+import CellContextMenu from './cell-context-menu';
 import './cell.scss';
-import ColorPicker from 'components/color-picker';
-import { isContiguousSequential, isContiguous } from 'utils/contiguous';
 
 interface CellProps {
+    index: number;
+    pos: Position;
     value?: number;
     marks?: number[];
     given: boolean;
 
-    focus?: boolean;
+    selection: number[];
+    highlighted?: boolean;
+    focused?: boolean;
     onFocus?: () => void;
     onMouseEnter?: (e: React.MouseEvent) => void;
-    highlighted?: boolean;
-    selected?: boolean;
-    selection: number[];
     onMouseDown: (e: React.MouseEvent) => void;
     onKeyDown: (e: React.KeyboardEvent) => void;
-    num: number;
-    pos?: Position;
-
-    color: string;
-    onColor: (color: string) => void;
 
     onCreateKillerCage: () => void;
 }
@@ -35,115 +30,38 @@ const Cell = ({
     value,
     marks,
     given,
-    selected,
     selection,
     onMouseDown,
     onKeyDown,
-    num,
+    index,
     pos,
-    focus,
+    focused,
     highlighted,
     onFocus,
     onMouseEnter,
-    color,
-    onColor,
     onCreateKillerCage,
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
-    const { thermos, killerCages } = useSelector((state) => state.sudoku);
     const setValue = useAction('set-value');
-    const createThermo = useAction('create-thermo');
-    const deleteThermo = useAction('delete-thermo');
-    const deleteKillerCage = useAction('delete-killer-cage');
     const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
-        if (focus) {
+        if (focused) {
             btn.current.focus();
         }
-    }, [focus]);
+    }, [focused]);
 
     const onContextMenu = useContextMenu(
-        <>
-            {pos ? (
-                <li
-                    className="divider"
-                    data-content={`Cell r${pos.y + 1}c${pos.x + 1}`}
-                />
-            ) : (
-                <li className="divider" data-content="Cell" />
-            )}
-            <li className="menu-item">
-                <a href="#0">Begin thermo here</a>
-            </li>
-            <li
-                className="divider"
-                data-content={`Set ${
-                    selection.length > 1 ? 'selection' : 'cell'
-                } color`}
-            />
-            <li className="menu-item">
-                <ColorPicker color={color} onSelect={onColor} />
-            </li>
-            {selection.length <= 9 && isContiguous(selection, true) && (
-                <>
-                    <li
-                        className="divider"
-                        data-content={`Selection (${selection.length})`}
-                    />
-                    {selection.length > 1 &&
-                        isContiguousSequential(selection, true) && (
-                            <li className="menu-item">
-                                <button
-                                    className="btn-fake-link"
-                                    onClick={() => createThermo(selection)}
-                                >
-                                    Selection to thermo
-                                </button>
-                            </li>
-                        )}
-                    {isContiguous(selection) && (
-                        <li className="menu-item">
-                            <button
-                                className="btn-fake-link"
-                                onClick={onCreateKillerCage}
-                            >
-                                Selection to killer cage
-                            </button>
-                        </li>
-                    )}
-                </>
-            )}
-            {thermos?.some((thermo) => thermo.includes(num)) && (
-                <>
-                    <li className="divider" data-content="Thermos" />
-                    <li className="menu-item">
-                        <button
-                            className="btn-fake-link"
-                            onClick={() => deleteThermo(num)}
-                        >
-                            Delete thermo
-                        </button>
-                    </li>
-                </>
-            )}
-            {killerCages?.some(({ cage }) => cage.includes(num)) && (
-                <>
-                    <li className="divider" data-content="Thermos" />
-                    <li className="menu-item">
-                        <button
-                            className="btn-fake-link"
-                            onClick={() => deleteKillerCage(num)}
-                        >
-                            Delete killer cage
-                        </button>
-                    </li>
-                </>
-            )}
-        </>
+        <CellContextMenu
+            index={index}
+            selection={selection}
+            onCreateKillerCage={onCreateKillerCage}
+        />
     );
+
+    const selected = selection.includes(index);
 
     return (
         <button
@@ -152,8 +70,8 @@ const Cell = ({
                 'cell',
                 given && 'cell--given',
                 value && 'cell--filled',
-                (selected || focus) && 'cell--selected',
-                focus && 'cell--focused',
+                (selected || focused) && 'cell--selected',
+                focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
                 !value && marks?.length === 0 && 'cell--empty'
             )}
@@ -195,7 +113,7 @@ const Cell = ({
                             </span>
                         ))
                 ))}
-            {debugMode && <span className="cell__num">{num}</span>}
+            {debugMode && <span className="cell__num">{index}</span>}
         </button>
     );
 };

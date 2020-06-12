@@ -15,7 +15,7 @@ const ControlsMenu = () => {
     const solvers = useSelector((state) => state.sudoku.solvers);
     const setSolvers = useAction('set-solvers');
 
-    const setShouldReduce = useAction('set-should-reduce');
+    const setShouldSolve = useAction('set-should-solve');
     const solveFromScratch = useAction('solve-from-scratch');
     const _reset = useAction('reset');
 
@@ -193,7 +193,7 @@ const ControlsMenu = () => {
                 <button
                     className="btn-fake-link"
                     disabled={!stepSolve}
-                    onClick={() => setShouldReduce(true)}
+                    onClick={() => setShouldSolve(true)}
                 >
                     <i className="icon icon-time mr-1" /> Run solve step
                 </button>

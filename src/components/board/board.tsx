@@ -6,40 +6,39 @@ import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
-import { useSudokuReducer } from '../../utils/reduce';
-import { row, column, box } from '../../utils/reduce/helper';
+import { useSudokuSolver } from '../../utils/solve';
+import { row, column, box } from '../../utils/solve/helper';
 import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
-    const { board, thermos, colors, shouldReduce } = useSelector(
+    const { board, thermos, killerCages, shouldSolve } = useSelector(
         (state) => state.sudoku
     );
     const setValue = useAction('set-value');
     const clearValue = useAction('clear-value');
-    const setColor = useAction('set-color');
-    const setShouldReduce = useAction('set-should-reduce');
-    const sudokuReduce = useSudokuReducer();
+    const setShouldSolve = useAction('set-should-solve');
+    const solve = useSudokuSolver();
 
     const [focused, _setFocused] = useState<number | null>(null);
-    const [selected, setSelected] = useState<number[]>([]);
+    const [selection, setSelection] = useState<number[]>([]);
     const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
     const setFocused = (index: number, addToSelection = false) => {
         if (index >= 0 && index < 81) {
             if (!addToSelection) {
                 _setFocused(index);
-                setSelected([index]);
-            } else if (!selected.includes(index))
-                setSelected([...selected, index]);
+                setSelection([index]);
+            } else if (!selection.includes(index))
+                setSelection([...selection, index]);
         }
     };
 
     useEffect(() => {
-        if (shouldReduce) {
-            setShouldReduce(false);
-            sudokuReduce();
+        if (shouldSolve) {
+            setShouldSolve(false);
+            solve();
         }
-    }, [shouldReduce, setShouldReduce, sudokuReduce]);
+    }, [shouldSolve, setShouldSolve, solve]);
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
@@ -54,7 +53,7 @@ const Board = () => {
                     )
             ) {
                 _setFocused(null);
-                setSelected([]);
+                setSelection([]);
             }
         };
 
@@ -63,7 +62,7 @@ const Board = () => {
         return () => {
             window.removeEventListener('click', onClick);
         };
-    }, [selected]);
+    }, [selection]);
 
     const boxes = board.reduce(
         (boxes, cell, i) => {
@@ -96,11 +95,19 @@ const Board = () => {
             ? thermos.filter((thermo) => thermo.includes(focused)).flat()
             : [];
 
+    const highlightedKillerCages =
+        focused !== null && killerCages
+            ? killerCages
+                  .filter(({ cage }) => cage.includes(focused))
+                  .map(({ cage }) => cage)
+                  .flat()
+            : [];
+
     return (
         <div className="board">
             {killerCageModalOpen && (
                 <KillerCageModal
-                    selection={selected}
+                    selection={selection}
                     onClose={() => setKillerCageModalOpen(false)}
                 />
             )}
@@ -110,20 +117,16 @@ const Board = () => {
                         <Cell
                             key={i}
                             {...cell}
-                            num={index}
+                            index={index}
                             pos={pos}
-                            focus={focused === index}
-                            selected={selected.includes(index)}
-                            selection={selected}
-                            color={colors[index]}
-                            onColor={(color) =>
-                                setColor({ index: selected, color })
-                            }
+                            focused={focused === index}
+                            selection={selection}
                             highlighted={
                                 highlightedRow.includes(cell) ||
                                 highlightedColumn.includes(cell) ||
                                 highlightedBox.includes(cell) ||
-                                highlightedThermos.includes(index)
+                                highlightedThermos.includes(index) ||
+                                highlightedKillerCages.includes(index)
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
@@ -131,18 +134,18 @@ const Board = () => {
                                 }
                                 if (
                                     e.button === 2 &&
-                                    !selected.includes(index)
+                                    !selection.includes(index)
                                 ) {
                                     setFocused(index);
-                                    setSelected([]);
+                                    setSelection([]);
                                 }
                             }}
                             onMouseEnter={({ buttons }) => {
                                 if (
                                     buttons === 1 &&
-                                    !selected.includes(index)
+                                    !selection.includes(index)
                                 ) {
-                                    setSelected([...selected, index]);
+                                    setSelection([...selection, index]);
                                 }
                             }}
                             onKeyDown={({ key, shiftKey }) => {
@@ -165,7 +168,7 @@ const Board = () => {
                                     setFocused(index + 1, shiftKey);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
-                                    selected.forEach(clearValue);
+                                    selection.forEach(clearValue);
                                 }
                             }}
                             onCreateKillerCage={() =>

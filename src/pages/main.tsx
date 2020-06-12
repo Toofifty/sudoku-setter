@@ -13,7 +13,7 @@ const Main = () => {
         if (!hasLoadedFromHash && window.location.hash) {
             setSudoku({
                 ...decode(window.location.hash.slice(1)),
-                shouldReduce: true,
+                shouldSolve: true,
             });
         }
         setHasLoadedFromHash(true);

@@ -43,5 +43,9 @@
         &--blue {
             background: $blue-100;
         }
+
+        &--selected {
+            border-color: $grey-500;
+        }
     }
 }

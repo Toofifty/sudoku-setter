@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useSelector from 'hooks/use-selector';
-import { isFilled } from 'utils/reduce/helper';
+import { isFilled } from 'utils/solve/helper';
 import useAction from 'hooks/use-action';
 
 interface KillerCageModalProps {

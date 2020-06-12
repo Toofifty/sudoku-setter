@@ -15,7 +15,7 @@ type WorkerEvent = SolveBoardResponse;
 
 const worker = new SolverWorker();
 
-export const useSudokuReducer = () => {
+export const useSudokuSolver = () => {
     const sudoku = useSelector((state) => state.sudoku);
     const setBoard = useAction('set-board');
 

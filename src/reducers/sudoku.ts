@@ -1,5 +1,5 @@
 import { ICell, Position } from '../types';
-import { isFilled } from 'utils/reduce/helper';
+import { isFilled } from 'utils/solve/helper';
 
 const emptyCell = () => ({
     marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -10,7 +10,7 @@ export interface SudokuState {
     board: ICell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
-    shouldReduce: boolean;
+    shouldSolve: boolean;
     colors: string[];
     solvers: {
         hiddenSingles: boolean;
@@ -26,7 +26,7 @@ export interface SudokuState {
 const defaultState = (): SudokuState => ({
     board: Array(81).fill(null).map(emptyCell),
     colors: Array(81).fill('white'),
-    shouldReduce: false,
+    shouldSolve: false,
     solvers: {
         hiddenSingles: true,
         nakedPairs: true,
@@ -59,7 +59,7 @@ const setValue: Reducer<SetValue> = (state, { cell, value, given }) => {
     const target = board[posToIndex(cell)];
     if (isFilled(target) && target.value !== value) board = wipeSolution(board);
     board[posToIndex(cell)] = { value, given: given ?? false };
-    return { ...state, shouldReduce: true, board };
+    return { ...state, shouldSolve: true, board };
 };
 
 type ClearValue = {
@@ -70,7 +70,7 @@ type ClearValue = {
 const clearValue: Reducer<ClearValue> = (state, pos) => {
     let board = wipeSolution(state.board);
     board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
-    return { ...state, board, shouldReduce: true };
+    return { ...state, board, shouldSolve: true };
 };
 
 type SetMarks = {
@@ -93,14 +93,14 @@ const setBoard: Reducer<SetBoard> = (state, board) => {
     return { ...state, board };
 };
 
-type SetShouldReduce = {
-    type: 'set-should-reduce';
+type SetShouldSolve = {
+    type: 'set-should-solve';
     payload: boolean;
 };
 
-const setShouldReduce: Reducer<SetShouldReduce> = (state, shouldReduce) => ({
+const setShouldSolve: Reducer<SetShouldSolve> = (state, shouldSolve) => ({
     ...state,
-    shouldReduce,
+    shouldSolve,
 });
 
 type Reset = {
@@ -115,7 +115,7 @@ type CreateThermo = { type: 'create-thermo'; payload: number[] };
 const createThermo: Reducer<CreateThermo> = (state, thermo) => ({
     ...state,
     thermos: [...(state.thermos ?? []), thermo],
-    shouldReduce: true,
+    shouldSolve: true,
 });
 
 type DeleteThermo = { type: 'delete-thermo'; payload: number };
@@ -126,7 +126,7 @@ const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     thermos: (state.thermos ?? []).filter(
         (thermo) => !thermo.includes(cellIndex)
     ),
-    shouldReduce: true,
+    shouldSolve: true,
 });
 
 type CreateKillerCage = {
@@ -137,7 +137,7 @@ type CreateKillerCage = {
 const createKillerCage: Reducer<CreateKillerCage> = (state, killerCage) => ({
     ...state,
     killerCages: [...(state.killerCages ?? []), killerCage],
-    shouldReduce: true,
+    shouldSolve: true,
 });
 
 type DeleteKillerCage = { type: 'delete-killer-cage'; payload: number };
@@ -148,7 +148,7 @@ const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
     killerCages: (state.killerCages ?? []).filter(
         ({ cage }) => !cage.includes(cellIndex)
     ),
-    shouldReduce: true,
+    shouldSolve: true,
 });
 
 type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
@@ -188,7 +188,7 @@ type SolveFromScratch = {
 const solveFromScratch: Reducer<SolveFromScratch> = (state) => ({
     ...state,
     board: wipeSolution(state.board),
-    shouldReduce: !state.stepSolve,
+    shouldSolve: !state.stepSolve,
 });
 
 type SetStepSolve = {
@@ -205,7 +205,7 @@ const setStepSolve: Reducer<SetStepSolve> = (state, stepSolve) => ({
 export type SudokuAction =
     | SetValue
     | SetMarks
-    | SetShouldReduce
+    | SetShouldSolve
     | SetBoard
     | ClearValue
     | Reset
@@ -225,8 +225,8 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setValue(state, action.payload);
         case 'set-marks':
             return setMarks(state, action.payload);
-        case 'set-should-reduce':
-            return setShouldReduce(state, action.payload);
+        case 'set-should-solve':
+            return setShouldSolve(state, action.payload);
         case 'set-board':
             return setBoard(state, action.payload);
         case 'clear-value':
