@@ -7,6 +7,7 @@ import useAction from 'hooks/use-action';
 import { capture } from 'utils';
 import './cell.scss';
 import ColorPicker from 'components/color-picker';
+import { isContiguous } from 'utils/contiguous';
 
 interface CellProps {
     value?: number;
@@ -82,29 +83,29 @@ const Cell = ({
             <li className="menu-item">
                 <ColorPicker color={color} onSelect={onColor} />
             </li>
-            {selection.length > 1 && (
-                <>
-                    <li
-                        className="divider"
-                        data-content={`Selection (${selection.length})`}
-                    />
-                    {selection.length <= 9 && (
-                        <>
-                            <li className="menu-item">
-                                <button
-                                    className="btn-fake-link"
-                                    onClick={() => createThermo(selection)}
-                                >
-                                    Selection to thermo
-                                </button>
-                            </li>
+            {selection.length > 1 &&
+                selection.length <= 9 &&
+                isContiguous(selection, true) && (
+                    <>
+                        <li
+                            className="divider"
+                            data-content={`Selection (${selection.length})`}
+                        />
+                        <li className="menu-item">
+                            <button
+                                className="btn-fake-link"
+                                onClick={() => createThermo(selection)}
+                            >
+                                Selection to thermo
+                            </button>
+                        </li>
+                        {isContiguous(selection) && (
                             <li className="menu-item">
                                 <a href="#0">Selection to killer cage</a>
                             </li>
-                        </>
-                    )}
-                </>
-            )}
+                        )}
+                    </>
+                )}
             {thermos?.some((thermo) => thermo.includes(num)) && (
                 <>
                     <li className="divider" data-content="Thermos" />
