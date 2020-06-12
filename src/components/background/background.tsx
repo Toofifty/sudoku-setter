@@ -15,14 +15,22 @@ const boxes = range(0, 81).reduce(
 );
 
 const Background = () => {
-    const colors = useSelector((state) => state.sudoku.colors);
+    const { colors, thermos, killerCages } = useSelector(
+        (state) => state.sudoku
+    );
 
     return (
         <div className="background">
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map((n) => (
-                        <BackgroundCell key={n} index={n} color={colors[n]} />
+                        <BackgroundCell
+                            key={n}
+                            index={n}
+                            color={colors[n]}
+                            thermos={thermos}
+                            killerCages={killerCages}
+                        />
                     ))}
                 </Box>
             ))}

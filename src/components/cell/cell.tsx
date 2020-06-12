@@ -7,7 +7,7 @@ import useAction from 'hooks/use-action';
 import { capture } from 'utils';
 import './cell.scss';
 import ColorPicker from 'components/color-picker';
-import { isContiguous } from 'utils/contiguous';
+import { isContiguousSequential, isContiguous } from 'utils/contiguous';
 
 interface CellProps {
     value?: number;
@@ -52,10 +52,11 @@ const Cell = ({
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
-    const thermos = useSelector((state) => state.sudoku.thermos);
+    const { thermos, killerCages } = useSelector((state) => state.sudoku);
     const setValue = useAction('set-value');
     const createThermo = useAction('create-thermo');
     const deleteThermo = useAction('delete-thermo');
+    const deleteKillerCage = useAction('delete-killer-cage');
     const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
@@ -92,16 +93,17 @@ const Cell = ({
                         className="divider"
                         data-content={`Selection (${selection.length})`}
                     />
-                    {selection.length > 1 && (
-                        <li className="menu-item">
-                            <button
-                                className="btn-fake-link"
-                                onClick={() => createThermo(selection)}
-                            >
-                                Selection to thermo
-                            </button>
-                        </li>
-                    )}
+                    {selection.length > 1 &&
+                        isContiguousSequential(selection, true) && (
+                            <li className="menu-item">
+                                <button
+                                    className="btn-fake-link"
+                                    onClick={() => createThermo(selection)}
+                                >
+                                    Selection to thermo
+                                </button>
+                            </li>
+                        )}
                     {isContiguous(selection) && (
                         <li className="menu-item">
                             <button
@@ -123,6 +125,19 @@ const Cell = ({
                             onClick={() => deleteThermo(num)}
                         >
                             Delete thermo
+                        </button>
+                    </li>
+                </>
+            )}
+            {killerCages?.some(({ cage }) => cage.includes(num)) && (
+                <>
+                    <li className="divider" data-content="Thermos" />
+                    <li className="menu-item">
+                        <button
+                            className="btn-fake-link"
+                            onClick={() => deleteKillerCage(num)}
+                        >
+                            Delete killer cage
                         </button>
                     </li>
                 </>

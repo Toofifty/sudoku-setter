@@ -1,0 +1,49 @@
+@import '_var';
+
+.killer-cage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    &__total {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0 6px;
+        background: white;
+        font-size: 12px;
+        font-weight: bold;
+        // border: 2px dashed $grey-900;
+    }
+
+    &__cage {
+        padding: 4px;
+        height: 100%;
+        width: 100%;
+        display: flex;
+
+        &::before {
+            content: '';
+            height: 100%;
+            width: 100%;
+            border: 3px dashed $grey-900;
+        }
+
+        &--has {
+            &-r::before {
+                border-right-color: transparent;
+            }
+            &-l::before {
+                border-left-color: transparent;
+            }
+            &-t::before {
+                border-top-color: transparent;
+            }
+            &-b::before {
+                border-bottom-color: transparent;
+            }
+        }
+    }
+}

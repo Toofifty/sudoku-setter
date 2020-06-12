@@ -1,5 +1,4 @@
 import React from 'react';
-import useSelector from 'hooks/use-selector';
 import './thermo.scss';
 
 const directionMap: Record<
@@ -19,9 +18,12 @@ const directionMap: Record<
 const getDirectionTo = (index: number, target: number) =>
     directionMap[target - index];
 
-const Thermo = ({ index }: { index: number }) => {
-    const thermos = useSelector((state) => state.sudoku.thermos);
+interface ThermoProps {
+    index: number;
+    thermos?: number[][];
+}
 
+const Thermo = ({ index, thermos }: ThermoProps) => {
     if (!thermos) return null;
 
     return (
