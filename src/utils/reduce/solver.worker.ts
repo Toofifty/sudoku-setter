@@ -50,12 +50,14 @@ const reduce = ({ board, thermos, solvers }: SudokuState) => {
     }
 
     // final cleanup & check for changes
-    intermediate = intermediate.map(solveNakedSingles(false)).map((cell) => {
+    intermediate = intermediate.map(solveNakedSingles(false)).map((cell, i) => {
         if (JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)) {
             // no change in marks - avoid
             // toggling
             return cell;
         }
+
+        hasChanged = true;
 
         if (
             cell.marks.length === 1 &&
@@ -66,21 +68,16 @@ const reduce = ({ board, thermos, solvers }: SudokuState) => {
             return cell;
         }
 
-        if (JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)) {
-            // no change in marks - avoid
-            // toggling
-            return cell;
-        }
-
-        hasChanged = true;
-
         if (cell.marks.length === 1) {
+            console.log('set', i, 'to', cell.marks[0]);
+
             return {
                 ...cell,
                 value: cell.marks[0],
                 given: false,
             };
         }
+
         return {
             ...cell,
             value: undefined,

@@ -6,29 +6,36 @@ import { Position } from '../../../types';
 
 const NUMS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-export const solveNakedSingles = (setInitial = false): CellSolver => (
-    cell,
-    i,
-    board
-) => {
-    const pos = getCellAt(i);
+export const solveNakedSingles = (initial = false): CellSolver => {
+    let workingBoard: InterCell[] | undefined;
 
-    const marks =
-        isFilled(cell) && cell.given
-            ? []
-            : (!isFilled(cell) ? cell.marks : NUMS).filter(
-                  (n) => !breaksSudoku(board, pos, n)
-              );
+    return (cell, i, board) => {
+        if (!workingBoard) workingBoard = board;
 
-    return {
-        ...cell,
-        index: i,
-        marks,
-        initialMarks: setInitial
-            ? isFilled(cell)
-                ? marks
-                : cell.marks
-            : cell.initialMarks,
+        const pos = getCellAt(i);
+
+        const marks =
+            isFilled(cell) && cell.given
+                ? []
+                : (!isFilled(cell) ? cell.marks : NUMS).filter(
+                      (n) => !breaksSudoku(workingBoard!, pos, n)
+                  );
+
+        const newCell = {
+            ...cell,
+            value: cell.value ?? (marks.length === 1 ? marks[0] : undefined),
+            index: i,
+            marks,
+            initialMarks: initial
+                ? isFilled(cell)
+                    ? marks
+                    : cell.marks
+                : cell.initialMarks,
+        };
+
+        workingBoard[i] = newCell;
+
+        return newCell;
     };
 };
 
