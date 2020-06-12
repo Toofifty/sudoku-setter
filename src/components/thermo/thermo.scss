@@ -12,9 +12,9 @@
     box-sizing: content-box;
     position: absolute;
     content: '';
-    border: $thickness solid $grey-200;
+    border: $thickness solid $grey-300;
     border-radius: $thickness * 2;
-    background: $grey-200;
+    background: $grey-300;
 }
 
 $thickness: 12px;
@@ -39,7 +39,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         border-radius: 100%;
 
-        background: $grey-200;
+        background: $grey-300;
     }
 
     &__line {

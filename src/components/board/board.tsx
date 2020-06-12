@@ -10,7 +10,7 @@ import { useSudokuReducer } from '../../utils/reduce';
 import { row, column, box } from '../../utils/reduce/helper';
 
 const Board = () => {
-    const { board, colors, shouldReduce } = useSelector(
+    const { board, thermos, colors, shouldReduce } = useSelector(
         (state) => state.sudoku
     );
     const setValue = useAction('set-value');
@@ -84,6 +84,11 @@ const Board = () => {
     const highlightedBox =
         focused !== null ? box(board, getCellAt(focused)) : [];
 
+    const highlightedThermos =
+        focused !== null && thermos
+            ? thermos.filter((thermo) => thermo.includes(focused)).flat()
+            : [];
+
     return (
         <div className="board">
             {boxes.map((box, i) => (
@@ -104,7 +109,8 @@ const Board = () => {
                             highlighted={
                                 highlightedRow.includes(cell) ||
                                 highlightedColumn.includes(cell) ||
-                                highlightedBox.includes(cell)
+                                highlightedBox.includes(cell) ||
+                                highlightedThermos.includes(index)
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
