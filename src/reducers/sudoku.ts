@@ -19,8 +19,12 @@ export interface SudokuState {
         lockedCandidates: boolean;
         thermos: boolean;
         killerCages: boolean;
+        antiKing: boolean;
     };
     stepSolve: boolean;
+    restrictions: {
+        antiKing: boolean;
+    };
 }
 
 const defaultState = (): SudokuState => ({
@@ -34,8 +38,12 @@ const defaultState = (): SudokuState => ({
         lockedCandidates: true,
         thermos: true,
         killerCages: true,
+        antiKing: false,
     },
     stepSolve: false,
+    restrictions: {
+        antiKing: false,
+    },
 });
 
 type Reducer<T extends { payload: any }> = (
@@ -178,6 +186,15 @@ type SetSolvers = {
 const setSolvers: Reducer<SetSolvers> = (state, solvers) => ({
     ...solveFromScratch(state, undefined),
     solvers: { ...state.solvers, ...solvers },
+    restrictions: {
+        ...state.restrictions,
+        ...Object.entries(solvers).reduce((acc, [solver, value]) => {
+            if (value && solver in state.restrictions) {
+                return { acc, [solver]: true };
+            }
+            return acc;
+        }, {} as any),
+    },
 });
 
 type SolveFromScratch = {
@@ -202,6 +219,25 @@ const setStepSolve: Reducer<SetStepSolve> = (state, stepSolve) => ({
     board: wipeSolution(state.board),
 });
 
+type SetRestrictions = {
+    type: 'set-restrictions';
+    payload: Partial<SudokuState['restrictions']>;
+};
+
+const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
+    ...state,
+    restrictions: { ...state.restrictions, ...restrictions },
+    solvers: {
+        ...state.solvers,
+        ...Object.entries(restrictions).reduce((acc, [restriction, value]) => {
+            if (restriction in state.solvers) {
+                return { acc, [restriction]: value };
+            }
+            return acc;
+        }, {} as any),
+    },
+});
+
 export type SudokuAction =
     | SetValue
     | SetMarks
@@ -217,7 +253,8 @@ export type SudokuAction =
     | SetColor
     | SetSolvers
     | SolveFromScratch
-    | SetStepSolve;
+    | SetStepSolve
+    | SetRestrictions;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -251,6 +288,8 @@ export default (state = defaultState(), action: SudokuAction) => {
             return solveFromScratch(state, action.payload);
         case 'set-step-solve':
             return setStepSolve(state, action.payload);
+        case 'set-restrictions':
+            return setRestrictions(state, action.payload);
         default:
             return state;
     }

@@ -1,5 +1,5 @@
 import { ICell, Position, FilledCell } from '../../types';
-import { getBoxIndex, getCellAt } from '../sudoku';
+import { getBoxIndex, getCellAt, getCellIndex } from '../sudoku';
 
 export const row = <T>(board: T[], pos: Position, includeSelf = false) => {
     const row = board.slice(pos.y * 9, (pos.y + 1) * 9);
@@ -19,6 +19,15 @@ export const box = <T>(board: T[], pos: Position, includeSelf = false) => {
     if (!includeSelf)
         return box.filter((_, i) => i !== (pos.x % 3) + (pos.y % 3) * 3);
     return box;
+};
+
+export const king = <T>(board: T[], pos: Position) => {
+    const index = getCellIndex(pos);
+    const deltas = [-10, -9, -8, -1, 1, 8, 9, 10];
+    return deltas
+        .map((n) => index + n)
+        .filter((n) => n >= 0)
+        .map((n) => board[n]);
 };
 
 export const getValue = (cell: ICell) => {

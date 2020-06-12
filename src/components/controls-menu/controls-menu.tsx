@@ -14,6 +14,8 @@ const ControlsMenu = () => {
 
     const solvers = useSelector((state) => state.sudoku.solvers);
     const setSolvers = useAction('set-solvers');
+    const restrictions = useSelector((state) => state.sudoku.restrictions);
+    const setRestrictions = useAction('set-restrictions');
 
     const setShouldSolve = useAction('set-should-solve');
     const solveFromScratch = useAction('solve-from-scratch');
@@ -162,7 +164,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={solvers.antiKing}
+                        onChange={() =>
+                            setSolvers({
+                                antiKing: !solvers.antiKing,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Anti-king
                 </label>
             </li>
@@ -221,7 +231,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={restrictions.antiKing}
+                        onChange={() =>
+                            setRestrictions({
+                                antiKing: !restrictions.antiKing,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Anti-king
                 </label>
             </li>

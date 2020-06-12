@@ -7,13 +7,17 @@ import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
 import { useSudokuSolver } from '../../utils/solve';
-import { row, column, box } from '../../utils/solve/helper';
+import { row, column, box, king } from '../../utils/solve/helper';
 import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
-    const { board, thermos, killerCages, shouldSolve } = useSelector(
-        (state) => state.sudoku
-    );
+    const {
+        board,
+        thermos,
+        killerCages,
+        shouldSolve,
+        restrictions,
+    } = useSelector((state) => state.sudoku);
     const setValue = useAction('set-value');
     const clearValue = useAction('clear-value');
     const setShouldSolve = useAction('set-should-solve');
@@ -103,6 +107,11 @@ const Board = () => {
                   .flat()
             : [];
 
+    const highlightedKingCells =
+        focused !== null && restrictions.antiKing
+            ? king(board, getCellAt(focused))
+            : [];
+
     return (
         <div className="board">
             {killerCageModalOpen && (
@@ -126,7 +135,8 @@ const Board = () => {
                                 highlightedColumn.includes(cell) ||
                                 highlightedBox.includes(cell) ||
                                 highlightedThermos.includes(index) ||
-                                highlightedKillerCages.includes(index)
+                                highlightedKillerCages.includes(index) ||
+                                highlightedKingCells.includes(cell)
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {

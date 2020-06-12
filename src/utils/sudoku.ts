@@ -15,3 +15,5 @@ export const getCellAt = (index: number): Position => {
     const x = index - y * 9;
     return { x, y };
 };
+
+export const getCellIndex = (pos: Position): number => pos.x + pos.y * 9;
