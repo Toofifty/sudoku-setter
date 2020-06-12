@@ -134,7 +134,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={solvers.killerCages}
+                        onChange={() =>
+                            setSolvers({
+                                killerCages: !solvers.killerCages,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Killer sudoku
                 </label>
             </li>
@@ -166,6 +174,21 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input type="checkbox" disabled />
                     <i className="form-icon" /> Non-sequential neighbors
+                </label>
+            </li>
+            <li className="divider" />
+            <li className="menu-item">
+                <label className="form-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={solvers.killerCages}
+                        onChange={() =>
+                            setSolvers({
+                                killerCages: !solvers.killerCages,
+                            })
+                        }
+                    />
+                    <i className="form-icon" /> Step-by-step solve
                 </label>
             </li>
             <li className="menu-item">

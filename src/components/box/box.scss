@@ -1,5 +1,7 @@
+@import '_var';
+
 .box {
-    border: 1px solid #bcc3ce;
+    border: 1px solid $grey-500;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;

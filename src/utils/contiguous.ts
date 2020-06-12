@@ -23,6 +23,7 @@ export const isContiguous = (
     allowDiagonals = false
 ): boolean => {
     if (cells.length === 0) return false;
+    if (cells.length === 1) return true;
     const check = allowDiagonals ? validDiagonal : valid;
     for (let cell of cells) {
         if (!cells.some((other) => check.includes(cell - other))) return false;

@@ -18,6 +18,7 @@ export interface SudokuState {
         hiddenPairs: boolean;
         lockedCandidates: boolean;
         thermos: boolean;
+        killerCages: boolean;
     };
 }
 
@@ -31,6 +32,7 @@ const defaultState = (): SudokuState => ({
         hiddenPairs: true,
         lockedCandidates: true,
         thermos: true,
+        killerCages: true,
     },
 });
 

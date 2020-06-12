@@ -9,6 +9,7 @@ import {
 } from './solvers';
 import { solveThermos } from './solvers/thermos';
 import { isFilled } from './helper';
+import { solveKillerCages } from './solvers/killer-cages';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SudokuState };
 
@@ -22,11 +23,11 @@ const defaultInterCell: InterCell = {
     given: false,
 };
 
-const SOLVE_PASSES = 20;
+const SOLVE_PASSES = 1;
 
 const noop = (a: any) => a;
 
-const reduce = ({ board, thermos, solvers }: SudokuState) => {
+const reduce = ({ board, thermos, killerCages, solvers }: SudokuState) => {
     let hasChanged = false;
     console.time('reduce');
 
@@ -34,6 +35,8 @@ const reduce = ({ board, thermos, solvers }: SudokuState) => {
     let intermediate: InterCell[] = board.map((cell, i) => ({
         ...defaultInterCell,
         ...cell,
+        marks: isFilled(cell) ? [cell.value] : cell.marks,
+        initialMarks: isFilled(cell) ? [cell.value] : cell.marks,
         index: i,
     }));
 
@@ -49,9 +52,17 @@ const reduce = ({ board, thermos, solvers }: SudokuState) => {
         intermediate = intermediate.map(solveThermos(thermos));
     }
 
+    if (killerCages && solvers.killerCages) {
+        intermediate = intermediate.map(solveKillerCages(killerCages));
+    }
+
     // final cleanup & check for changes
     intermediate = intermediate.map(solveNakedSingles(false)).map((cell, i) => {
-        if (JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks)) {
+        if (
+            JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks) ||
+            (cell.initialMarks.length === 1 &&
+                cell.initialMarks[0] === cell.value)
+        ) {
             // no change in marks - avoid
             // toggling
             return cell;

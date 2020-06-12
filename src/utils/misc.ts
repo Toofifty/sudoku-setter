@@ -12,3 +12,5 @@ export const range = (min: number, max: number): number[] =>
     Array(max - min)
         .fill(0)
         .map((_, i) => i + min);
+
+export const sum = (arr: number[]) => arr.reduce((total, n) => total + n, 0);

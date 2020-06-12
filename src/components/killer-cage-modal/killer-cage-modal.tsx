@@ -80,6 +80,7 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                                     Value
                                 </label>
                                 <input
+                                    name="total"
                                     className="form-input"
                                     type="number"
                                     min={minimum}
@@ -99,10 +100,16 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-link mr-2" onClick={onClose}>
+                        <button
+                            className="btn btn-link mr-2"
+                            onClick={onClose}
+                            type="button"
+                        >
                             Cancel
                         </button>
-                        <button className="btn btn-primary">Create</button>
+                        <button className="btn btn-primary" type="submit">
+                            Create
+                        </button>
                     </div>
                 </form>
             </div>
