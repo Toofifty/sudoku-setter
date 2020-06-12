@@ -1,3 +1,5 @@
+@import '_var';
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
@@ -36,10 +38,45 @@ code {
     cursor: pointer;
     box-sizing: border-box;
 
-    &:focus,
-    &:hover,
-    &:active {
-        background: #f1f1fc;
-        color: #5755d9;
+    transition: 0.15s;
+
+    &:focus {
+        outline: none;
     }
+
+    &:focus,
+    &:hover {
+        background: $purple-100;
+        color: $purple-600;
+    }
+
+    &:active {
+        color: $purple-600;
+        background: $purple-200;
+    }
+}
+
+.form-checkbox,
+.form-switch {
+    cursor: pointer;
+    padding: 0.2rem 0.4rem;
+    padding-left: 1.6rem;
+    border-radius: 2px;
+
+    margin: 0 -0.4rem !important;
+
+    .form-icon {
+        margin-left: 0.4rem;
+        margin-top: 0.1rem;
+    }
+
+    &:focus-within,
+    &:hover {
+        color: $purple-600;
+        background: $purple-100;
+    }
+}
+
+.form-switch {
+    padding-left: 2.4rem;
 }
