@@ -8,6 +8,7 @@ import Cell from '../cell';
 import useAction from '../../hooks/use-action';
 import { useSudokuReducer } from '../../utils/reduce';
 import { row, column, box } from '../../utils/reduce/helper';
+import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
     const { board, thermos, colors, shouldReduce } = useSelector(
@@ -21,6 +22,7 @@ const Board = () => {
 
     const [focused, _setFocused] = useState<number | null>(null);
     const [selected, setSelected] = useState<number[]>([]);
+    const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
     const setFocused = (index: number, addToSelection = false) => {
         if (index >= 0 && index < 81) {
@@ -44,7 +46,12 @@ const Board = () => {
             if (
                 !e
                     .composedPath()
-                    .some((el: any) => el.classList?.contains('board'))
+                    .some(
+                        (el: any) =>
+                            el.classList?.contains('board') ||
+                            el.classList?.contains('menu') ||
+                            el.classList?.contains('modal')
+                    )
             ) {
                 _setFocused(null);
                 setSelected([]);
@@ -91,6 +98,12 @@ const Board = () => {
 
     return (
         <div className="board">
+            {killerCageModalOpen && (
+                <KillerCageModal
+                    selection={selected}
+                    onClose={() => setKillerCageModalOpen(false)}
+                />
+            )}
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map(({ cell, pos, index }, i) => (
@@ -155,6 +168,9 @@ const Board = () => {
                                     selected.forEach(clearValue);
                                 }
                             }}
+                            onCreateKillerCage={() =>
+                                setKillerCageModalOpen(true)
+                            }
                         />
                     ))}
                 </Box>

@@ -9,6 +9,7 @@ const emptyCell = () => ({
 export interface SudokuState {
     board: ICell[];
     thermos?: number[][];
+    killerCages?: { total: number; cage: number[] }[];
     shouldReduce: boolean;
     colors: string[];
     solvers: {
@@ -124,6 +125,28 @@ const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     shouldReduce: true,
 });
 
+type CreateKillerCage = {
+    type: 'create-killer-cage';
+    payload: { total: number; cage: number[] };
+};
+
+const createKillerCage: Reducer<CreateKillerCage> = (state, killerCage) => ({
+    ...state,
+    killerCages: [...(state.killerCages ?? []), killerCage],
+    shouldReduce: true,
+});
+
+type DeleteKillerCage = { type: 'delete-killer-cage'; payload: number };
+
+const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
+    ...state,
+    board: wipeSolution(state.board),
+    killerCages: (state.killerCages ?? []).filter(
+        ({ cage }) => !cage.includes(cellIndex)
+    ),
+    shouldReduce: true,
+});
+
 type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
 
 const setSudoku: Reducer<SetSudoku> = (state, sudoku) => ({
@@ -172,8 +195,10 @@ export type SudokuAction =
     | ClearValue
     | Reset
     | CreateThermo
-    | SetSudoku
     | DeleteThermo
+    | CreateKillerCage
+    | DeleteKillerCage
+    | SetSudoku
     | SetColor
     | SetSolvers
     | SolveFromScratch;
@@ -194,10 +219,14 @@ export default (state = defaultState(), action: SudokuAction) => {
             return reset();
         case 'create-thermo':
             return createThermo(state, action.payload);
-        case 'set-sudoku':
-            return setSudoku(state, action.payload);
         case 'delete-thermo':
             return deleteThermo(state, action.payload);
+        case 'create-killer-cage':
+            return createKillerCage(state, action.payload);
+        case 'delete-killer-cage':
+            return deleteKillerCage(state, action.payload);
+        case 'set-sudoku':
+            return setSudoku(state, action.payload);
         case 'set-color':
             return setColor(state, action.payload);
         case 'set-solvers':

@@ -27,6 +27,8 @@ interface CellProps {
 
     color: string;
     onColor: (color: string) => void;
+
+    onCreateKillerCage: () => void;
 }
 
 const Cell = ({
@@ -45,6 +47,7 @@ const Cell = ({
     onMouseEnter,
     color,
     onColor,
+    onCreateKillerCage,
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
@@ -83,14 +86,13 @@ const Cell = ({
             <li className="menu-item">
                 <ColorPicker color={color} onSelect={onColor} />
             </li>
-            {selection.length > 1 &&
-                selection.length <= 9 &&
-                isContiguous(selection, true) && (
-                    <>
-                        <li
-                            className="divider"
-                            data-content={`Selection (${selection.length})`}
-                        />
+            {selection.length <= 9 && isContiguous(selection, true) && (
+                <>
+                    <li
+                        className="divider"
+                        data-content={`Selection (${selection.length})`}
+                    />
+                    {selection.length > 1 && (
                         <li className="menu-item">
                             <button
                                 className="btn-fake-link"
@@ -99,13 +101,19 @@ const Cell = ({
                                 Selection to thermo
                             </button>
                         </li>
-                        {isContiguous(selection) && (
-                            <li className="menu-item">
-                                <a href="#0">Selection to killer cage</a>
-                            </li>
-                        )}
-                    </>
-                )}
+                    )}
+                    {isContiguous(selection) && (
+                        <li className="menu-item">
+                            <button
+                                className="btn-fake-link"
+                                onClick={onCreateKillerCage}
+                            >
+                                Selection to killer cage
+                            </button>
+                        </li>
+                    )}
+                </>
+            )}
             {thermos?.some((thermo) => thermo.includes(num)) && (
                 <>
                     <li className="divider" data-content="Thermos" />
