@@ -26,7 +26,7 @@ export const king = <T>(board: T[], pos: Position) => {
     const deltas = [-10, -9, -8, -1, 1, 8, 9, 10];
     return deltas
         .map((n) => index + n)
-        .filter((n) => n >= 0)
+        .filter((n) => n >= 0 && n < 81)
         .map((n) => board[n]);
 };
 

@@ -10,6 +10,7 @@ import {
 import { solveThermos } from './solvers/thermos';
 import { isFilled } from './helper';
 import { solveKillerCages } from './solvers/killer-cages';
+import { solveAntiKing } from './solvers/anti-king';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SudokuState };
 
@@ -54,6 +55,10 @@ const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 
     if (killerCages && solvers.killerCages) {
         intermediate = intermediate.map(solveKillerCages(killerCages));
+    }
+
+    if (solvers.antiKing) {
+        intermediate = intermediate.map(solveAntiKing);
     }
 
     // final cleanup & check for changes

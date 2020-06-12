@@ -225,7 +225,7 @@ type SetRestrictions = {
 };
 
 const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
-    ...state,
+    ...solveFromScratch(state, undefined),
     restrictions: { ...state.restrictions, ...restrictions },
     solvers: {
         ...state.solvers,
