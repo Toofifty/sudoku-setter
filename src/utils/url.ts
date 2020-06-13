@@ -1,6 +1,6 @@
+import { SudokuState } from 'reducers/sudoku';
 import { ICell } from '../types';
 import { isFilled } from './solve/helper';
-import { SudokuState } from 'reducers/sudoku';
 
 type EncodedData = {
     givens: string;
@@ -9,61 +9,90 @@ type EncodedData = {
 };
 
 type DecodedData = {
-    board: ICell[];
+    board?: ICell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
 };
 
-export const encode = ({ board, thermos, killerCages }: SudokuState) => {
-    const data: EncodedData = {
-        givens: board
-            .map((cell) => (isFilled(cell) && cell.given ? cell.value : 0))
-            .join(''),
-    };
-    if (thermos) {
-        data.thermos = thermos.map((thermo) => thermo.join(',')).join(';');
-    }
-    if (killerCages) {
-        data.killerCages = killerCages
-            .map(({ total, cage }) => `${total}:${cage.join(',')}`)
-            .join(';');
-    }
-    return JSON.stringify(data);
+const RADIX = 36;
+
+const encodeGivens = (givens: number[]) =>
+    givens
+        .map((value, i) => (value > 0 ? `${i.toString(RADIX)}:${value}` : null))
+        .filter(Boolean)
+        .join(',');
+
+const decodeGivens = (encoded: string) => {
+    const board: ICell[] = Array(81)
+        .fill({})
+        .map(() => ({
+            marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            given: false,
+        }));
+    encoded.split(',').forEach((part) => {
+        const [index, value] = part.split(':');
+        board[parseInt(index, RADIX)] = {
+            value: Number(value),
+            given: true,
+        };
+    });
+    return board;
 };
 
-export const decode = (b64: string): DecodedData => {
-    const { givens, thermos, killerCages }: EncodedData = JSON.parse(
-        decodeURI(b64)
-    );
-
-    const decoded: DecodedData = {
-        board: givens.split('').map((sv) => {
-            const v = Number(sv);
-            if (v === 0) {
-                return {
-                    marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                    given: false,
-                };
-            }
-            return {
-                value: v,
-                given: true,
-            };
-        }),
+export const encode = ({ board, thermos, killerCages }: SudokuState) => {
+    const data: EncodedData = {
+        givens: encodeGivens(
+            board.map((cell) => (isFilled(cell) && cell.given ? cell.value : 0))
+        ),
+        thermos: thermos
+            ?.map((thermo) => thermo.map((n) => n.toString(RADIX)).join(','))
+            .join(';'),
+        killerCages: killerCages
+            ?.map(
+                ({ total, cage }) =>
+                    `${total}:${cage.map((n) => n.toString(RADIX)).join(',')}`
+            )
+            .join(';'),
     };
+    let encoded = data.givens ? `G:${data.givens}` : '';
+    if (data.thermos) encoded += data.thermos ? `!T:${data.thermos}` : '';
+    if (data.killerCages)
+        encoded += data.killerCages ? `!K:${data.killerCages}` : '';
 
-    if (thermos) {
-        decoded.thermos = thermos
-            .split(';')
-            .map((thermo) => thermo.split(',').map(Number));
-    }
+    return encoded;
+};
 
-    if (killerCages) {
-        decoded.killerCages = killerCages.split(';').map((part) => {
-            const [total, cage] = part.split(':');
-            return { total: Number(total), cage: cage.split(',').map(Number) };
-        });
-    }
+export const decode = (encoded: string): DecodedData => {
+    const encodedParts = encoded.split('!');
+    const decoded: DecodedData = {};
+
+    encodedParts.forEach((part) => {
+        if (part.startsWith('G')) {
+            decoded.board = decodeGivens(part.substr(2));
+        }
+
+        if (part.startsWith('T')) {
+            decoded.thermos = part
+                .substr(2)
+                .split(';')
+                .map((thermo) =>
+                    thermo.split(',').map((v) => parseInt(v, RADIX))
+                );
+        }
+
+        if (part.startsWith('K')) {
+            decoded.killerCages = part
+                .substr(2)
+                .split(';')
+                .map((part) => {
+                    const [total, cage] = part.split(':');
+                    return {
+                        total: Number(total),
+                        cage: cage.split(',').map((v) => parseInt(v, RADIX)),
+                    };
+                });
+        }
+    });
 
     return decoded;
 };

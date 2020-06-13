@@ -18,17 +18,20 @@ Solvers
 Extra restrictions
 
 -   [ ] Sandwich
--   [ ] Chess moves (King, Knight)
--   [ ] Thermos
--   [ ] Killer boxes
+-   [x] Chess moves (King, Knight)
+-   [x] Thermos
+-   [x] Killer boxes
+-   [ ] Non-sequential neighbors
 -   [ ] Diagonals
 -   [ ] Comparators
 -   [ ] Skyscrapers
 
 Features
 
--   [ ] Cell colouring
--   [ ] Step by step solve breakdown
+-   [x] Cell colouring
+-   [x] Step by step solve
+-   [x] Better URL encoding
+-   [ ] Solve breakdown
 -   [ ] Play puzzle
 
 ### Scenarios
