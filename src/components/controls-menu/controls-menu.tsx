@@ -11,6 +11,8 @@ const ControlsMenu = () => {
     const setPlaceOnClick = useAction('set-place-on-click');
     const stepSolve = useSelector((state) => state.sudoku.stepSolve);
     const setStepSolve = useAction('set-step-solve');
+    const lookaheadSolve = useSelector((state) => state.sudoku.lookaheadSolve);
+    const setLookaheadSolve = useAction('set-lookahead-solve');
 
     const solvers = useSelector((state) => state.sudoku.solvers);
     const setSolvers = useAction('set-solvers');
@@ -205,6 +207,16 @@ const ControlsMenu = () => {
                 </label>
             </li>
             <li className="divider" />
+            <li className="menu-item">
+                <label className="form-checkbox">
+                    <input
+                        type="checkbox"
+                        checked={lookaheadSolve}
+                        onChange={() => setLookaheadSolve(!lookaheadSolve)}
+                    />
+                    <i className="form-icon" /> Enable look-ahead solve
+                </label>
+            </li>
             <li className="menu-item">
                 <label className="form-checkbox">
                     <input

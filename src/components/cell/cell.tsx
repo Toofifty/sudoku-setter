@@ -44,6 +44,9 @@ const Cell = ({
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const placeOnClick = useSelector((state) => state.ui.placeOnClick);
+    const invalidMarks = useSelector(
+        (state) => state.sudoku.invalidMarks[index]
+    );
     const setValue = useAction('set-value');
     const btn = useRef<HTMLButtonElement>(null!);
 
@@ -93,7 +96,9 @@ const Cell = ({
                                     `cell__mark mark-${i + 1}`,
                                     placeOnClick &&
                                         marks?.includes(i + 1) &&
-                                        'cell__mark--can-click'
+                                        'cell__mark--can-click',
+                                    invalidMarks.includes(i + 1) &&
+                                        'cell__mark--invalid'
                                 )}
                                 key={i}
                                 onClick={

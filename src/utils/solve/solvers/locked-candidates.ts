@@ -43,15 +43,15 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
             allIncluded(digitIndices, [6, 7, 8]);
 
         if (inRow) {
-            console.log(
-                'locked row for',
-                n,
-                'in',
-                pos.y,
-                digitIndices.join(','),
-                'in box',
-                JSON.stringify(currentBox)
-            );
+            // console.log(
+            //     'locked row for',
+            //     n,
+            //     'in',
+            //     pos.y,
+            //     digitIndices.join(','),
+            //     'in box',
+            //     JSON.stringify(currentBox)
+            // );
             // remove marks from rest of row
             row(board, pos, false)
                 .filter((_, j) => !boxRow.includes(j))
@@ -67,15 +67,15 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
                 allIncluded(digitIndices, [2, 5, 8]);
 
             if (inColumn) {
-                console.log(
-                    'locked column for',
-                    n,
-                    'in',
-                    pos.x,
-                    digitIndices.join(','),
-                    'in box',
-                    JSON.stringify(currentBox)
-                );
+                // console.log(
+                //     'locked column for',
+                //     n,
+                //     'in',
+                //     pos.x,
+                //     digitIndices.join(','),
+                //     'in box',
+                //     JSON.stringify(currentBox)
+                // );
                 // remove marks from rest of row
                 column(board, pos, false)
                     .filter((_, j) => !boxColumn.includes(j))

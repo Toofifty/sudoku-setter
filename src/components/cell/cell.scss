@@ -85,6 +85,10 @@
             color: $purple-600;
             cursor: pointer;
         }
+
+        &--invalid {
+            color: $red-600 !important;
+        }
     }
 
     &__num {

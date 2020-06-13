@@ -6,8 +6,14 @@ const emptyCell = () => ({
     given: false,
 });
 
+const emptyInvalidMarks = () =>
+    Array(81)
+        .fill(null)
+        .map(() => []);
+
 export interface SudokuState {
     board: ICell[];
+    invalidMarks: number[][];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
     shouldSolve: boolean;
@@ -23,6 +29,7 @@ export interface SudokuState {
         antiKnight: boolean;
         nonSeqNeighbors: boolean;
     };
+    lookaheadSolve: boolean;
     stepSolve: boolean;
     restrictions: {
         antiKing: boolean;
@@ -32,6 +39,7 @@ export interface SudokuState {
 
 const defaultState = (): SudokuState => ({
     board: Array(81).fill(null).map(emptyCell),
+    invalidMarks: emptyInvalidMarks(),
     colors: Array(81).fill('white'),
     shouldSolve: false,
     solvers: {
@@ -45,6 +53,7 @@ const defaultState = (): SudokuState => ({
         antiKnight: false,
         nonSeqNeighbors: false,
     },
+    lookaheadSolve: false,
     stepSolve: false,
     restrictions: {
         antiKing: false,
@@ -70,10 +79,14 @@ type SetValue = {
 
 const setValue: Reducer<SetValue> = (state, { cell, value, given }) => {
     let board = [...state.board];
+    let invalidMarks = state.invalidMarks;
     const target = board[posToIndex(cell)];
-    if (isFilled(target) && target.value !== value) board = wipeSolution(board);
+    if (isFilled(target) && target.value !== value) {
+        board = wipeSolution(board);
+        invalidMarks = emptyInvalidMarks();
+    }
     board[posToIndex(cell)] = { value, given: given ?? false };
-    return { ...state, shouldSolve: true, board };
+    return { ...state, shouldSolve: true, board, invalidMarks };
 };
 
 type ClearValue = {
@@ -84,7 +97,12 @@ type ClearValue = {
 const clearValue: Reducer<ClearValue> = (state, pos) => {
     let board = wipeSolution(state.board);
     board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
-    return { ...state, board, shouldSolve: true };
+    return {
+        ...state,
+        board,
+        invalidMarks: emptyInvalidMarks(),
+        shouldSolve: true,
+    };
 };
 
 type SetMarks = {
@@ -137,6 +155,7 @@ type DeleteThermo = { type: 'delete-thermo'; payload: number };
 const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     ...state,
     board: wipeSolution(state.board),
+    invalidMarks: emptyInvalidMarks(),
     thermos: (state.thermos ?? []).filter(
         (thermo) => !thermo.includes(cellIndex)
     ),
@@ -159,6 +178,7 @@ type DeleteKillerCage = { type: 'delete-killer-cage'; payload: number };
 const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
     ...state,
     board: wipeSolution(state.board),
+    invalidMarks: emptyInvalidMarks(),
     killerCages: (state.killerCages ?? []).filter(
         ({ cage }) => !cage.includes(cellIndex)
     ),
@@ -211,6 +231,7 @@ type SolveFromScratch = {
 const solveFromScratch: Reducer<SolveFromScratch> = (state) => ({
     ...state,
     board: wipeSolution(state.board),
+    invalidMarks: emptyInvalidMarks(),
     shouldSolve: !state.stepSolve,
 });
 
@@ -223,6 +244,20 @@ const setStepSolve: Reducer<SetStepSolve> = (state, stepSolve) => ({
     ...state,
     stepSolve,
     board: wipeSolution(state.board),
+    invalidMarks: emptyInvalidMarks(),
+});
+
+type SetLookaheadSolve = {
+    type: 'set-lookahead-solve';
+    payload: boolean;
+};
+
+const setLookaheadSolve: Reducer<SetLookaheadSolve> = (
+    state,
+    lookaheadSolve
+) => ({
+    ...state,
+    lookaheadSolve,
 });
 
 type SetRestrictions = {
@@ -244,6 +279,25 @@ const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
     },
 });
 
+type InvalidateMarks = {
+    type: 'invalidate-marks';
+    payload: { index: number; marks: number[] }[];
+};
+
+const invalidateMarks: Reducer<InvalidateMarks> = (state, invalidMarks) => {
+    const newMarks = [...state.invalidMarks];
+    invalidMarks.forEach(({ index, marks }) => {
+        newMarks[index].push(
+            ...marks.filter((n) => !newMarks[index].includes(n))
+        );
+    });
+
+    return {
+        ...state,
+        invalidMarks: newMarks,
+    };
+};
+
 export type SudokuAction =
     | SetValue
     | SetMarks
@@ -260,7 +314,9 @@ export type SudokuAction =
     | SetSolvers
     | SolveFromScratch
     | SetStepSolve
-    | SetRestrictions;
+    | SetRestrictions
+    | InvalidateMarks
+    | SetLookaheadSolve;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -296,6 +352,10 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setStepSolve(state, action.payload);
         case 'set-restrictions':
             return setRestrictions(state, action.payload);
+        case 'invalidate-marks':
+            return invalidateMarks(state, action.payload);
+        case 'set-lookahead-solve':
+            return setLookaheadSolve(state, action.payload);
         default:
             return state;
     }

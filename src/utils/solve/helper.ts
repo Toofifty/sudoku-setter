@@ -69,3 +69,6 @@ export const getIndex = (_: any, i: number) => i;
 
 export const isFilled = (cell: any): cell is FilledCell =>
     cell.value && cell.value > 0;
+
+export const hasEmptyCell = (board: ICell[]) =>
+    board.some((cell) => !isFilled(cell) && cell.marks.length === 0);

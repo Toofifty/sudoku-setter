@@ -12,11 +12,26 @@ import {
     solveAntiKnight,
     solveNonSeqNeighbors,
 } from './solvers';
-import { isFilled } from './helper';
+import { isFilled, hasEmptyCell } from './helper';
+import { ICell } from 'types';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SudokuState };
 
-type WorkerEvent = SolveBoard;
+type StartLookaheadSolve = {
+    type: 'start-lookahead-solve';
+    // key is used to stop old solves from
+    // continuing
+    key: number;
+    payload: SudokuState;
+};
+
+type StopLookaheadSolve = { type: 'stop-lookahead-solve'; payload: undefined };
+
+type WorkerEvent = SolveBoard | StartLookaheadSolve | StopLookaheadSolve;
+
+// use an object - so it won't get caught
+// in a closure and can be checked at anytime
+const lookaheadSolve = { enabled: false, key: 0 };
 
 const defaultInterCell: InterCell = {
     value: undefined,
@@ -138,15 +153,74 @@ const solveBoard = (sudoku: SudokuState) => {
     return updatedBoard;
 };
 
+const runLookaheadSolve = (sudoku: SudokuState, key: number) => {
+    console.time('lookahead solve');
+
+    sudoku.board.forEach((cell, i) => {
+        if (
+            isFilled(cell) ||
+            !lookaheadSolve.enabled ||
+            lookaheadSolve.key !== key
+        )
+            return;
+
+        const invalid = [];
+        for (let n of cell.marks.filter(
+            (n) => !sudoku.invalidMarks[i].includes(n)
+        )) {
+            if (!lookaheadSolve.enabled || lookaheadSolve.key !== key) continue;
+
+            const testBoard: ICell[] = JSON.parse(JSON.stringify(sudoku.board));
+            testBoard[i] = {
+                value: n,
+                given: false,
+            };
+            const solved = solveBoard({ ...sudoku, board: testBoard });
+
+            if (hasEmptyCell(solved)) {
+                // update marks to make future lookaheads smarter
+                cell.marks = cell.marks.filter((m) => m !== n);
+                invalid.push(n);
+            }
+        }
+
+        postMessage({
+            type: 'invalidate-marks',
+            payload: { index: i, marks: invalid },
+            key,
+        });
+    });
+
+    console.timeEnd('lookahead solve');
+};
+
 /* eslint-disable no-restricted-globals */
 addEventListener('message', ({ data }: { data: WorkerEvent }) => {
     switch (data.type) {
         case 'solve-board':
+            const updatedBoard = solveBoard(data.payload);
             postMessage({
                 type: 'solve-board-response',
-                payload: solveBoard(data.payload),
+                payload: updatedBoard,
                 key: data.key,
             });
+            if (lookaheadSolve.enabled) {
+                lookaheadSolve.key = data.key;
+                runLookaheadSolve(
+                    { ...data.payload, board: updatedBoard },
+                    data.key
+                );
+            }
+            return;
+        case 'start-lookahead-solve':
+            if (!lookaheadSolve.enabled) {
+                lookaheadSolve.enabled = true;
+                lookaheadSolve.key = data.key;
+                runLookaheadSolve(data.payload, data.key);
+            }
+            return;
+        case 'stop-lookahead-solve':
+            lookaheadSolve.enabled = false;
             return;
         default:
             postMessage({ type: 'noop' });
