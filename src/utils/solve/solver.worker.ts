@@ -10,6 +10,7 @@ import {
     solveKillerCages,
     solveAntiKing,
     solveAntiKnight,
+    solveNonSeqNeighbors,
 } from './solvers';
 import { isFilled } from './helper';
 
@@ -64,6 +65,10 @@ const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 
     if (solvers.antiKnight) {
         intermediate = intermediate.map(solveAntiKnight);
+    }
+
+    if (solvers.nonSeqNeighbors) {
+        intermediate = intermediate.map(solveNonSeqNeighbors);
     }
 
     // final cleanup & check for changes

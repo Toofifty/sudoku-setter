@@ -6,4 +6,5 @@ export { solveKillerCages } from './killer-cages';
 export { solveLockedCandidates } from './locked-candidates';
 export { solveNakedPairs } from './naked-pairs';
 export { solveNakedSingles } from './naked-singles';
+export { solveNonSeqNeighbors } from './non-seq-neighbors';
 export { solveThermos } from './thermos';

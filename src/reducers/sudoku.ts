@@ -21,6 +21,7 @@ export interface SudokuState {
         killerCages: boolean;
         antiKing: boolean;
         antiKnight: boolean;
+        nonSeqNeighbors: boolean;
     };
     stepSolve: boolean;
     restrictions: {
@@ -42,6 +43,7 @@ const defaultState = (): SudokuState => ({
         killerCages: true,
         antiKing: false,
         antiKnight: false,
+        nonSeqNeighbors: false,
     },
     stepSolve: false,
     restrictions: {

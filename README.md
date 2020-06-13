@@ -14,6 +14,7 @@ Solvers
 -   [ ] Box-locked candidates (eliminate in box)
 -   [ ] X wing
 -   [ ] Y wing
+-   [ ] Lookahead (trial and error) solver
 
 Extra restrictions
 
@@ -31,6 +32,7 @@ Features
 -   [x] Cell colouring
 -   [x] Step by step solve
 -   [x] Better URL encoding
+-   [ ] More responsive layout
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
 

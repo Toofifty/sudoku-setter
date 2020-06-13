@@ -192,7 +192,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={solvers.nonSeqNeighbors}
+                        onChange={() =>
+                            setSolvers({
+                                nonSeqNeighbors: !solvers.nonSeqNeighbors,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Non-sequential neighbors
                 </label>
             </li>
@@ -263,12 +271,6 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input type="checkbox" disabled />
                     <i className="form-icon" /> Unique diagonals
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input type="checkbox" disabled />
-                    <i className="form-icon" /> Non-sequential neighbors
                 </label>
             </li>
             <li className="divider" data-content="Puzzle" />
