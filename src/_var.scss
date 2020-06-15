@@ -7,6 +7,7 @@ $grey-900: rgb(39, 51, 58);
 
 $purple-100: rgb(241, 241, 252);
 $purple-200: rgb(212, 212, 242);
+$purple-400: rgb(128, 127, 226);
 $purple-600: rgb(87, 85, 217);
 
 $yellow-100: rgb(250, 235, 204);
@@ -42,3 +43,4 @@ $yellow-100-2: at-opacity($yellow-100, 0.2);
 $red-100-2: at-opacity($red-100, 0.2);
 $green-100-2: at-opacity($green-100, 0.2);
 $blue-100-2: at-opacity($blue-100, 0.2);
+$grey-900-2: at-opacity($grey-900, 0.9);

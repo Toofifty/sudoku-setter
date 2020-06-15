@@ -1,0 +1,53 @@
+@import '_var';
+
+// .nav-bar doesn't conflict with spectre
+// which tbh has shit navbar styling >.>
+.nav-bar {
+    background: $grey-900;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+
+    box-shadow: 0 1px 1px $grey-200-2, 0 2px 4px $grey-200-2,
+        0 4px 8px $grey-200-2, 0 8px 16px $grey-200-2, 0 16px 32px $grey-200-2;
+
+    &__section {
+        display: flex;
+        align-items: center;
+    }
+
+    &__brand {
+        text-transform: uppercase;
+        font-weight: bolder;
+        font-size: 20px;
+
+        padding: 8px;
+        margin-right: 8px;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+        }
+    }
+
+    &__link {
+        margin: 0 8px;
+        color: $purple-200;
+        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 2px;
+
+        &:visited {
+            color: $purple-200;
+        }
+
+        &:hover,
+        &:focus {
+            color: $purple-600;
+            background: $purple-200;
+            text-decoration: none;
+        }
+    }
+}

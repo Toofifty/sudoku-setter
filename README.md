@@ -23,7 +23,7 @@ Extra restrictions
 -   [x] Thermos
 -   [x] Killer boxes
 -   [x] Non-sequential neighbors
--   [ ] Diagonals
+-   [x] Diagonals
 -   [ ] Comparators
 -   [ ] Skyscrapers
 
