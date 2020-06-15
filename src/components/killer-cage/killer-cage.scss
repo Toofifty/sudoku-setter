@@ -32,17 +32,33 @@
         }
 
         &--has {
-            &-r::before {
-                border-right-color: transparent;
+            &-r {
+                padding-right: 1px;
+
+                &::before {
+                    border-right-width: 0;
+                }
             }
-            &-l::before {
-                border-left-color: transparent;
+            &-l {
+                padding-left: 1px;
+
+                &::before {
+                    border-left-width: 0;
+                }
             }
-            &-t::before {
-                border-top-color: transparent;
+            &-t {
+                padding-top: 1px;
+
+                &::before {
+                    border-top-width: 0;
+                }
             }
-            &-b::before {
-                border-bottom-color: transparent;
+            &-b {
+                padding-bottom: 1px;
+
+                &::before {
+                    border-bottom-width: 0;
+                }
             }
         }
     }
