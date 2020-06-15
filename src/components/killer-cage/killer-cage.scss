@@ -1,5 +1,20 @@
 @import '_var';
 
+$border: 3px;
+$padding: 4px;
+
+@mixin corner($vert, $horiz) {
+    content: '';
+    border: $border dashed $grey-900;
+    border-#{$vert}-width: 0;
+    border-#{$horiz}-width: 0;
+    position: absolute;
+    width: $padding + $border;
+    height: $padding + $border;
+    #{$vert}: 0;
+    #{$horiz}: 0;
+}
+
 .killer-cage {
     position: absolute;
     left: 0;
@@ -11,15 +26,15 @@
         position: absolute;
         top: 0;
         left: 0;
-        padding: 0 6px;
+        padding: 0 $padding;
         background: white;
         font-size: 16px;
         font-weight: bold;
-        // border: 2px dashed $grey-900;
     }
 
     &__cage {
-        padding: 6px;
+        $c: &;
+        padding: $padding;
         height: 100%;
         width: 100%;
         display: flex;
@@ -28,7 +43,7 @@
             content: '';
             height: 100%;
             width: 100%;
-            border: 3px dashed $grey-900;
+            border: $border dashed $grey-900;
         }
 
         &--has {
@@ -38,12 +53,28 @@
                 &::before {
                     border-right-width: 0;
                 }
+
+                &#{$c}--has-t:not(#{$c}--has-tr)::after {
+                    @include corner(top, right);
+                }
+
+                &#{$c}--has-b:not(#{$c}--has-br)::after {
+                    @include corner(bottom, right);
+                }
             }
             &-l {
                 padding-left: 1px;
 
                 &::before {
                     border-left-width: 0;
+                }
+
+                &#{$c}--has-t:not(#{$c}--has-tl)::after {
+                    @include corner(top, left);
+                }
+
+                &#{$c}--has-b:not(#{$c}--has-bl)::after {
+                    @include corner(bottom, left);
                 }
             }
             &-t {
