@@ -11,3 +11,9 @@ export type MarkedCell = {
 export type ICell = FilledCell | MarkedCell;
 
 export type Position = { x: number; y: number };
+
+export type SolutionCell = {
+    value?: number;
+    candidates: number[];
+    invalidCandidates: number[];
+};

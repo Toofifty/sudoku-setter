@@ -8,18 +8,19 @@ const ControlsMenu = () => {
     const setDebugMode = useAction('set-debug-mode');
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const setHideSolution = useAction('set-hide-solution');
-    const stepSolve = useSelector((state) => state.sudoku.stepSolve);
-    const setStepSolve = useAction('set-step-solve');
-    const lookaheadSolve = useSelector((state) => state.sudoku.lookaheadSolve);
-    const setLookaheadSolve = useAction('set-lookahead-solve');
 
-    const solvers = useSelector((state) => state.sudoku.solvers);
-    const setSolvers = useAction('set-solvers');
+    const stepSolve = useSelector((state) => state.solver.stepSolve);
+    const setStepSolve = useAction('solver/toggle-step-solve');
+    const lookahead = useSelector((state) => state.solver.lookahead);
+    const setLookahead = useAction('solver/toggle-lookahead');
+
+    const algorithms = useSelector((state) => state.solver.algorithms);
+    const setAlgorithms = useAction('solver/set-algorithms');
     const restrictions = useSelector((state) => state.sudoku.restrictions);
     const setRestrictions = useAction('set-restrictions');
 
-    const setShouldSolve = useAction('set-should-solve');
-    const solveFromScratch = useAction('solve-from-scratch');
+    const triggerSolve = useAction('solver/trigger-solve');
+
     const _reset = useAction('reset');
 
     const reset = () => {
@@ -50,7 +51,7 @@ const ControlsMenu = () => {
                     <i className="form-icon" /> Hide solution
                 </label>
             </li>
-            <li className="divider" data-content="Solvers" />
+            <li className="divider" data-content="Solving algorithms" />
             <li className="menu-item">
                 <label className="form-checkbox">
                     <input type="checkbox" checked disabled />
@@ -61,10 +62,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.hiddenSingles}
+                        checked={algorithms.hiddenSingles}
                         onChange={() =>
-                            setSolvers({
-                                hiddenSingles: !solvers.hiddenSingles,
+                            setAlgorithms({
+                                hiddenSingles: !algorithms.hiddenSingles,
                             })
                         }
                     />
@@ -75,10 +76,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.nakedPairs}
+                        checked={algorithms.nakedPairs}
                         onChange={() =>
-                            setSolvers({
-                                nakedPairs: !solvers.nakedPairs,
+                            setAlgorithms({
+                                nakedPairs: !algorithms.nakedPairs,
                             })
                         }
                     />
@@ -89,10 +90,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.hiddenPairs}
+                        checked={algorithms.hiddenPairs}
                         onChange={() =>
-                            setSolvers({
-                                hiddenPairs: !solvers.hiddenPairs,
+                            setAlgorithms({
+                                hiddenPairs: !algorithms.hiddenPairs,
                             })
                         }
                     />
@@ -103,10 +104,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.lockedCandidates}
+                        checked={algorithms.lockedCandidates}
                         onChange={() =>
-                            setSolvers({
-                                lockedCandidates: !solvers.lockedCandidates,
+                            setAlgorithms({
+                                lockedCandidates: !algorithms.lockedCandidates,
                             })
                         }
                     />
@@ -117,10 +118,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.thermos}
+                        checked={algorithms.thermos}
                         onChange={() =>
-                            setSolvers({
-                                thermos: !solvers.thermos,
+                            setAlgorithms({
+                                thermos: !algorithms.thermos,
                             })
                         }
                     />
@@ -131,10 +132,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.killerCages}
+                        checked={algorithms.killerCages}
                         onChange={() =>
-                            setSolvers({
-                                killerCages: !solvers.killerCages,
+                            setAlgorithms({
+                                killerCages: !algorithms.killerCages,
                             })
                         }
                     />
@@ -151,10 +152,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.antiKnight}
+                        checked={algorithms.antiKnight}
                         onChange={() =>
-                            setSolvers({
-                                antiKnight: !solvers.antiKnight,
+                            setAlgorithms({
+                                antiKnight: !algorithms.antiKnight,
                             })
                         }
                     />
@@ -165,10 +166,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.antiKing}
+                        checked={algorithms.antiKing}
                         onChange={() =>
-                            setSolvers({
-                                antiKing: !solvers.antiKing,
+                            setAlgorithms({
+                                antiKing: !algorithms.antiKing,
                             })
                         }
                     />
@@ -179,10 +180,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.uniqueDiagonals}
+                        checked={algorithms.uniqueDiagonals}
                         onChange={() =>
-                            setSolvers({
-                                uniqueDiagonals: !solvers.uniqueDiagonals,
+                            setAlgorithms({
+                                uniqueDiagonals: !algorithms.uniqueDiagonals,
                             })
                         }
                     />
@@ -193,10 +194,10 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={solvers.nonSeqNeighbors}
+                        checked={algorithms.nonSeqNeighbors}
                         onChange={() =>
-                            setSolvers({
-                                nonSeqNeighbors: !solvers.nonSeqNeighbors,
+                            setAlgorithms({
+                                nonSeqNeighbors: !algorithms.nonSeqNeighbors,
                             })
                         }
                     />
@@ -208,8 +209,8 @@ const ControlsMenu = () => {
                 <label className="form-checkbox">
                     <input
                         type="checkbox"
-                        checked={lookaheadSolve}
-                        onChange={() => setLookaheadSolve(!lookaheadSolve)}
+                        checked={lookahead}
+                        onChange={() => setLookahead(!lookahead)}
                     />
                     <i className="form-icon" /> Enable look-ahead solve
                 </label>
@@ -228,7 +229,7 @@ const ControlsMenu = () => {
                 <button
                     className="btn-fake-link"
                     disabled={!stepSolve}
-                    onClick={() => setShouldSolve(true)}
+                    onClick={() => triggerSolve()}
                 >
                     <i className="icon icon-time mr-1" /> Run solve step
                 </button>
@@ -236,7 +237,7 @@ const ControlsMenu = () => {
             <li className="menu-item">
                 <button
                     className="btn-fake-link"
-                    onClick={() => solveFromScratch()}
+                    onClick={() => triggerSolve(true)}
                 >
                     <i className="icon icon-refresh mr-1" /> Solve from scratch
                 </button>

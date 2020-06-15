@@ -35,6 +35,7 @@ Features
 -   [x] More responsive layout
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
+-   [ ] Undo/redo
 
 ### Scenarios
 

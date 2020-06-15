@@ -16,22 +16,7 @@ export interface SudokuState {
     invalidMarks: number[][];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
-    shouldSolve: boolean;
     colors: string[];
-    solvers: {
-        hiddenSingles: boolean;
-        nakedPairs: boolean;
-        hiddenPairs: boolean;
-        lockedCandidates: boolean;
-        thermos: boolean;
-        killerCages: boolean;
-        antiKing: boolean;
-        antiKnight: boolean;
-        uniqueDiagonals: boolean;
-        nonSeqNeighbors: boolean;
-    };
-    lookaheadSolve: boolean;
-    stepSolve: boolean;
     restrictions: {
         antiKing: boolean;
         antiKnight: boolean;
@@ -43,21 +28,6 @@ const defaultState = (): SudokuState => ({
     board: Array(81).fill(null).map(emptyCell),
     invalidMarks: emptyInvalidMarks(),
     colors: Array(81).fill('white'),
-    shouldSolve: false,
-    solvers: {
-        hiddenSingles: true,
-        nakedPairs: true,
-        hiddenPairs: true,
-        lockedCandidates: true,
-        thermos: true,
-        killerCages: true,
-        antiKing: false,
-        antiKnight: false,
-        uniqueDiagonals: false,
-        nonSeqNeighbors: false,
-    },
-    lookaheadSolve: false,
-    stepSolve: false,
     restrictions: {
         antiKing: false,
         antiKnight: false,
@@ -208,79 +178,24 @@ const setColor: Reducer<SetColor> = (state, { index, color }) => {
     return { ...state, colors };
 };
 
-type SetSolvers = {
-    type: 'set-solvers';
-    payload: Partial<SudokuState['solvers']>;
-};
-
-const setSolvers: Reducer<SetSolvers> = (state, solvers) => ({
-    ...solveFromScratch(state, undefined),
-    solvers: { ...state.solvers, ...solvers },
-    restrictions: {
-        ...state.restrictions,
-        ...Object.entries(solvers).reduce((acc, [solver, value]) => {
-            if (value && solver in state.restrictions) {
-                return { acc, [solver]: true };
-            }
-            return acc;
-        }, {} as any),
-    },
-});
-
-type SolveFromScratch = {
-    type: 'solve-from-scratch';
-    payload: undefined;
-};
-
-const solveFromScratch: Reducer<SolveFromScratch> = (state) => ({
-    ...state,
-    board: wipeSolution(state.board),
-    invalidMarks: emptyInvalidMarks(),
-    shouldSolve: !state.stepSolve,
-});
-
-type SetStepSolve = {
-    type: 'set-step-solve';
-    payload: boolean;
-};
-
-const setStepSolve: Reducer<SetStepSolve> = (state, stepSolve) => ({
-    ...state,
-    stepSolve,
-    board: wipeSolution(state.board),
-    invalidMarks: emptyInvalidMarks(),
-});
-
-type SetLookaheadSolve = {
-    type: 'set-lookahead-solve';
-    payload: boolean;
-};
-
-const setLookaheadSolve: Reducer<SetLookaheadSolve> = (
-    state,
-    lookaheadSolve
-) => ({
-    ...state,
-    lookaheadSolve,
-});
-
 type SetRestrictions = {
     type: 'set-restrictions';
     payload: Partial<SudokuState['restrictions']>;
 };
 
 const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
-    ...solveFromScratch(state, undefined),
+    // ...solveFromScratch(state, undefined),
+    ...state,
     restrictions: { ...state.restrictions, ...restrictions },
-    solvers: {
-        ...state.solvers,
-        ...Object.entries(restrictions).reduce((acc, [restriction, value]) => {
-            if (restriction in state.solvers) {
-                return { acc, [restriction]: value };
-            }
-            return acc;
-        }, {} as any),
-    },
+    // solvers: {
+    //     ...state.solvers,
+    //     ...Object.entries(restrictions).reduce((acc, [restriction, value]) => {
+    //         if (restriction in state.solvers) {
+    //             return { acc, [restriction]: value };
+    //         }
+    //         return acc;
+    //     }, {} as any),
+    // },
 });
 
 type InvalidateMarks = {
@@ -315,12 +230,8 @@ export type SudokuAction =
     | DeleteKillerCage
     | SetSudoku
     | SetColor
-    | SetSolvers
-    | SolveFromScratch
-    | SetStepSolve
     | SetRestrictions
-    | InvalidateMarks
-    | SetLookaheadSolve;
+    | InvalidateMarks;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
@@ -348,18 +259,10 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setSudoku(state, action.payload);
         case 'set-color':
             return setColor(state, action.payload);
-        case 'set-solvers':
-            return setSolvers(state, action.payload);
-        case 'solve-from-scratch':
-            return solveFromScratch(state, action.payload);
-        case 'set-step-solve':
-            return setStepSolve(state, action.payload);
         case 'set-restrictions':
             return setRestrictions(state, action.payload);
         case 'invalidate-marks':
             return invalidateMarks(state, action.payload);
-        case 'set-lookahead-solve':
-            return setLookaheadSolve(state, action.payload);
         default:
             return state;
     }

@@ -18,13 +18,10 @@ import {
 import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
-    const {
-        board,
-        thermos,
-        killerCages,
-        shouldSolve,
-        restrictions,
-    } = useSelector((state) => state.sudoku);
+    const { board, thermos, killerCages, restrictions } = useSelector(
+        (state) => state.sudoku
+    );
+    const { dirty } = useSelector((state) => state.solver);
     const setValue = useAction('set-value');
     const clearValue = useAction('clear-value');
     const setShouldSolve = useAction('set-should-solve');
@@ -51,11 +48,10 @@ const Board = () => {
     };
 
     useEffect(() => {
-        if (shouldSolve) {
-            setShouldSolve(false);
+        if (dirty) {
             solve();
         }
-    }, [shouldSolve, setShouldSolve, solve]);
+    }, [dirty, setShouldSolve, solve]);
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
@@ -150,7 +146,6 @@ const Board = () => {
                             key={i}
                             {...cell}
                             index={index}
-                            pos={pos}
                             focused={focused === index}
                             selection={selection}
                             highlighted={

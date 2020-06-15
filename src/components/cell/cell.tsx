@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
-import { Position } from 'types';
 import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
 import CellContextMenu from './cell-context-menu';
@@ -8,7 +7,6 @@ import './cell.scss';
 
 interface CellProps {
     index: number;
-    pos: Position;
     value?: number;
     marks?: number[];
     given: boolean;
@@ -32,7 +30,6 @@ const Cell = ({
     onMouseDown,
     onKeyDown,
     index,
-    pos,
     focused,
     highlighted,
     onFocus,
