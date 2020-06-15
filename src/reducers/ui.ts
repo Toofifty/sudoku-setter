@@ -3,14 +3,12 @@ interface UIState {
     contextVisible: boolean;
     debugMode: boolean;
     hideSolution: boolean;
-    placeOnClick: boolean;
 }
 
 const defaultState = (): UIState => ({
     debugMode: process.env.NODE_ENV === 'development',
     contextVisible: false,
     hideSolution: false,
-    placeOnClick: false,
 });
 
 type OpenContextMenu = {
@@ -47,13 +45,6 @@ const setHideSolution = (state: UIState, hideSolution: boolean) => ({
     hideSolution,
 });
 
-type SetPlaceOnClick = { type: 'set-place-on-click'; payload: boolean };
-
-const setPlaceOnClick = (state: UIState, placeOnClick: boolean) => ({
-    ...state,
-    placeOnClick,
-});
-
 type SetContextMenuVisible = {
     type: 'set-context-menu-visible';
     payload: boolean;
@@ -69,7 +60,6 @@ export type UIAction =
     | CloseContextMenu
     | SetDebugMode
     | SetHideSolution
-    | SetPlaceOnClick
     | SetContextMenuVisible;
 
 export default (state = defaultState(), action: UIAction) => {
@@ -82,8 +72,6 @@ export default (state = defaultState(), action: UIAction) => {
             return setDebugMode(state, action.payload);
         case 'set-hide-solution':
             return setHideSolution(state, action.payload);
-        case 'set-place-on-click':
-            return setPlaceOnClick(state, action.payload);
         case 'set-context-menu-visible':
             return setContextMenuVisible(state, action.payload);
         default:

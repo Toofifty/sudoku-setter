@@ -1,0 +1,20 @@
+@import '_var';
+
+.number-input {
+    display: flex;
+    width: calc(100% + 16px);
+    padding-top: 8px;
+    padding-bottom: 16px;
+    flex-wrap: wrap;
+    margin: 0 -8px;
+
+    > .btn {
+        flex: 1 1 calc(20% - 4px);
+        margin: 0 2px;
+        margin-bottom: 4px;
+    }
+
+    @media (max-width: 760px) {
+        flex-wrap: nowrap;
+    }
+}

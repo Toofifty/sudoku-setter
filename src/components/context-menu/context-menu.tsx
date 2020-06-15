@@ -7,7 +7,11 @@ import './context-menu.scss';
 const X_OFFSET = 4;
 const Y_OFFSET = 4;
 
-const Context = () => {
+interface ContextMenuProps {
+    isStatic?: boolean;
+}
+
+const ContextMenu = ({ isStatic }: ContextMenuProps) => {
     const content = useSelector((state) => state.ui.contextMenu);
     const isVisible = useSelector((state) => state.ui.contextVisible);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -44,22 +48,24 @@ const Context = () => {
 
     if (!content) return null;
 
-    return (
-        <>
-            <ul
-                className={cx(
-                    'context-menu menu',
-                    isVisible && 'context-menu--visible'
-                )}
-                style={style}
-            >
-                {content()}
-            </ul>
+    if (isStatic)
+        return (
             <ul className={cx('context-menu context-menu--mobile menu')}>
                 {content()}
             </ul>
-        </>
+        );
+
+    return (
+        <ul
+            className={cx(
+                'context-menu menu',
+                isVisible && 'context-menu--visible'
+            )}
+            style={style}
+        >
+            {content()}
+        </ul>
     );
 };
 
-export default Context;
+export default ContextMenu;

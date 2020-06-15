@@ -97,13 +97,6 @@
         border: $border solid transparent;
         margin: $margin;
 
-        &--can-click:hover {
-            border-color: $purple-600;
-            background: $purple-100;
-            color: $purple-600;
-            cursor: pointer;
-        }
-
         &--invalid {
             color: $red-600 !important;
         }

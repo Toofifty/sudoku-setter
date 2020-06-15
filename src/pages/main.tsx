@@ -41,11 +41,12 @@ const Main = () => {
                             <ControlsMenu />
                         </div>
                         <div className="column col-4 hide-desktop">
-                            <ContextMenu />
+                            <ContextMenu isStatic />
                         </div>
                     </div>
                 </div>
             </div>
+            <ContextMenu />
         </div>
     );
 };

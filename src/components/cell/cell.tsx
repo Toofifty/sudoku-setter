@@ -43,7 +43,6 @@ const Cell = ({
 }: CellProps) => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
-    const placeOnClick = useSelector((state) => state.ui.placeOnClick);
     const invalidMarks = useSelector(
         (state) => state.sudoku.invalidMarks[index]
     );
@@ -98,25 +97,10 @@ const Cell = ({
                             <span
                                 className={cx(
                                     `cell__mark mark-${i + 1}`,
-                                    placeOnClick &&
-                                        marks?.includes(i + 1) &&
-                                        'cell__mark--can-click',
                                     invalidMarks.includes(i + 1) &&
                                         'cell__mark--invalid'
                                 )}
                                 key={i}
-                                onClick={
-                                    placeOnClick && pos
-                                        ? capture(() => {
-                                              console.log('set valueee');
-                                              return setValue({
-                                                  cell: pos,
-                                                  value: i + 1,
-                                                  given: true,
-                                              });
-                                          })
-                                        : undefined
-                                }
                             >
                                 {marks?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
                             </span>

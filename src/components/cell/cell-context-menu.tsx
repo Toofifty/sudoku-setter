@@ -4,6 +4,8 @@ import useSelector from 'hooks/use-selector';
 import { getCellAt } from 'utils/sudoku';
 import useAction from 'hooks/use-action';
 import { isContiguous, isContiguousSequential } from 'utils/contiguous';
+import NumberInput from 'components/number-input';
+import { isFilled } from 'utils/solve/helper';
 
 interface CellContextMenuProps {
     selection: number[];
@@ -17,19 +19,35 @@ const CellContextMenu = ({
     onCreateKillerCage,
 }: CellContextMenuProps) => {
     const color = useSelector((state) => state.sudoku.colors[index]);
-    const { thermos, killerCages } = useSelector((state) => state.sudoku);
+    const { board, thermos, killerCages } = useSelector(
+        (state) => state.sudoku
+    );
     const setColor = useAction('set-color');
     const createThermo = useAction('create-thermo');
     const deleteThermo = useAction('delete-thermo');
     const deleteKillerCage = useAction('delete-killer-cage');
+    const setValue = useAction('set-value');
+    const clearValue = useAction('clear-value');
 
     const pos = getCellAt(index);
 
     const hasThermo = thermos?.some((thermo) => thermo.includes(index));
     const hasKillerCage = killerCages?.some(({ cage }) => cage.includes(index));
 
+    const cell = board[index];
+    const value = isFilled(cell) ? cell.value : undefined;
+
     return (
         <>
+            <li className="menu-item">
+                <NumberInput
+                    onSetNumber={(value) => {
+                        if (value === 0) return clearValue(index);
+                        return setValue({ cell: pos, value, given: true });
+                    }}
+                    selected={value}
+                />
+            </li>
             <li
                 className="divider"
                 data-content={`Set ${

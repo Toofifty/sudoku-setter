@@ -8,8 +8,6 @@ const ControlsMenu = () => {
     const setDebugMode = useAction('set-debug-mode');
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const setHideSolution = useAction('set-hide-solution');
-    const placeOnClick = useSelector((state) => state.ui.placeOnClick);
-    const setPlaceOnClick = useAction('set-place-on-click');
     const stepSolve = useSelector((state) => state.sudoku.stepSolve);
     const setStepSolve = useAction('set-step-solve');
     const lookaheadSolve = useSelector((state) => state.sudoku.lookaheadSolve);
@@ -50,16 +48,6 @@ const ControlsMenu = () => {
                         onChange={() => setHideSolution(!hideSolution)}
                     />
                     <i className="form-icon" /> Hide solution
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-switch">
-                    <input
-                        type="checkbox"
-                        checked={placeOnClick}
-                        onChange={() => setPlaceOnClick(!placeOnClick)}
-                    />
-                    <i className="form-icon" /> Place numbers on click
                 </label>
             </li>
             <li className="divider" data-content="Solvers" />
