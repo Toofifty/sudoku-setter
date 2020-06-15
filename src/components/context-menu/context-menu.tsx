@@ -32,14 +32,14 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
         const close = (e: MouseEvent) =>
             e.button !== 2 && setMenuVisible(false);
         if (isVisible) {
-            setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
             window.addEventListener('click', close);
+            setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
         }
         return () => {
             window.removeEventListener('click', close);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isVisible]);
+    }, [isVisible, content]);
 
     const style = {
         '--x': `${position.x}px`,

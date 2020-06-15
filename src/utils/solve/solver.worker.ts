@@ -14,6 +14,7 @@ import {
 } from './solvers';
 import { isFilled, hasEmptyCell } from './helper';
 import { ICell } from 'types';
+import { solveUniqueDiagonals } from './solvers/unique-diagonals';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SudokuState };
 
@@ -84,6 +85,10 @@ const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 
     if (solvers.nonSeqNeighbors) {
         intermediate = intermediate.map(solveNonSeqNeighbors);
+    }
+
+    if (solvers.uniqueDiagonals) {
+        intermediate = intermediate.map(solveUniqueDiagonals);
     }
 
     // final cleanup & check for changes

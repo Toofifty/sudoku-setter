@@ -76,7 +76,7 @@ export const diagonals = <T>(board: T[], pos: Position) => {
     return diagonals;
 };
 
-export const getValue = (cell: ICell) => {
+export const getValue = <T>(cell: T) => {
     if (isFilled(cell)) return cell.value;
     return 0;
 };

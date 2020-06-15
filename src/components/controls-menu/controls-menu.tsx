@@ -177,7 +177,15 @@ const ControlsMenu = () => {
             </li>
             <li className="menu-item">
                 <label className="form-checkbox">
-                    <input type="checkbox" disabled />
+                    <input
+                        type="checkbox"
+                        checked={solvers.uniqueDiagonals}
+                        onChange={() =>
+                            setSolvers({
+                                uniqueDiagonals: !solvers.uniqueDiagonals,
+                            })
+                        }
+                    />
                     <i className="form-icon" /> Unique diagonals
                 </label>
             </li>

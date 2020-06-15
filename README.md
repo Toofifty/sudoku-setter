@@ -22,7 +22,7 @@ Extra restrictions
 -   [x] Chess moves (King, Knight)
 -   [x] Thermos
 -   [x] Killer boxes
--   [ ] Non-sequential neighbors
+-   [x] Non-sequential neighbors
 -   [ ] Diagonals
 -   [ ] Comparators
 -   [ ] Skyscrapers
@@ -32,7 +32,7 @@ Features
 -   [x] Cell colouring
 -   [x] Step by step solve
 -   [x] Better URL encoding
--   [ ] More responsive layout
+-   [x] More responsive layout
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
 
