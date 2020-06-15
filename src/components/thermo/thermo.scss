@@ -1,5 +1,7 @@
 @import '_var';
 
+$thickness: var(--thickness, 12px);
+
 @mixin fill {
     position: absolute;
     left: 0;
@@ -13,11 +15,10 @@
     position: absolute;
     content: '';
     border: $thickness solid $grey-300;
-    border-radius: $thickness * 2;
+    border-radius: calc(#{$thickness} * 2);
     background: $grey-300;
 }
 
-$thickness: 12px;
 $straight-len: calc(100% + 2px);
 $straight-offset: calc(-50% - #{$thickness} - 2px);
 
@@ -25,6 +26,16 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
     @include fill;
     overflow: visible;
     z-index: -1;
+
+    --thickness: 12px;
+
+    @media (max-width: 800px) {
+        --thickness: 10px;
+    }
+
+    @media (max-width: 700px) {
+        --thickness: 7px;
+    }
 
     &__bulb::before {
         @include fill;

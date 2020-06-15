@@ -1,16 +1,16 @@
 @import '_var';
 
-$border: 3px;
-$padding: 4px;
+$border: var(--border-width, 3px) dotted $grey-900;
+$padding: var(--padding, 4px);
 
 @mixin corner($vert, $horiz) {
     content: '';
-    border: $border dashed $grey-900;
+    border: $border;
     border-#{$vert}-width: 0;
     border-#{$horiz}-width: 0;
     position: absolute;
-    width: $padding + $border;
-    height: $padding + $border;
+    width: calc(#{$padding} + var(--border-width, 3px));
+    height: calc(#{$padding} + var(--border-width, 3px));
     #{$vert}: 0;
     #{$horiz}: 0;
 }
@@ -21,6 +21,16 @@ $padding: 4px;
     top: 0;
     width: 100%;
     height: 100%;
+    --border-width: 3px;
+    --padding: 4px;
+
+    @media (max-width: 800px) {
+        --border-width: 2px;
+    }
+
+    @media (max-width: 500px) {
+        --padding: 2px;
+    }
 
     &__total {
         position: absolute;
@@ -30,6 +40,14 @@ $padding: 4px;
         background: white;
         font-size: 16px;
         font-weight: bold;
+
+        @media (max-width: 800px) {
+            font-size: 12px;
+        }
+
+        @media (max-width: 500px) {
+            font-size: 8px;
+        }
     }
 
     &__cage {
@@ -43,7 +61,7 @@ $padding: 4px;
             content: '';
             height: 100%;
             width: 100%;
-            border: $border dashed $grey-900;
+            border: $border;
         }
 
         &--has {

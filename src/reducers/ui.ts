@@ -1,5 +1,6 @@
 interface UIState {
     contextMenu?: () => React.ReactNode;
+    contextVisible: boolean;
     debugMode: boolean;
     hideSolution: boolean;
     placeOnClick: boolean;
@@ -7,12 +8,13 @@ interface UIState {
 
 const defaultState = (): UIState => ({
     debugMode: process.env.NODE_ENV === 'development',
+    contextVisible: false,
     hideSolution: false,
     placeOnClick: false,
 });
 
 type OpenContextMenu = {
-    type: 'open-context-menu';
+    type: 'set-context-menu';
     payload: () => React.ReactNode;
 };
 
@@ -52,16 +54,27 @@ const setPlaceOnClick = (state: UIState, placeOnClick: boolean) => ({
     placeOnClick,
 });
 
+type SetContextMenuVisible = {
+    type: 'set-context-menu-visible';
+    payload: boolean;
+};
+
+const setContextMenuVisible = (state: UIState, contextVisible: boolean) => ({
+    ...state,
+    contextVisible,
+});
+
 export type UIAction =
     | OpenContextMenu
     | CloseContextMenu
     | SetDebugMode
     | SetHideSolution
-    | SetPlaceOnClick;
+    | SetPlaceOnClick
+    | SetContextMenuVisible;
 
 export default (state = defaultState(), action: UIAction) => {
     switch (action.type) {
-        case 'open-context-menu':
+        case 'set-context-menu':
             return openContextMenu(state, action.payload);
         case 'close-context-menu':
             return closeContextMenu(state);
@@ -71,6 +84,8 @@ export default (state = defaultState(), action: UIAction) => {
             return setHideSolution(state, action.payload);
         case 'set-place-on-click':
             return setPlaceOnClick(state, action.payload);
+        case 'set-context-menu-visible':
+            return setContextMenuVisible(state, action.payload);
         default:
             return state;
     }

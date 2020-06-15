@@ -1,6 +1,7 @@
 import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
+import './controls-menu.scss';
 
 const ControlsMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -29,7 +30,7 @@ const ControlsMenu = () => {
     };
 
     return (
-        <ul className="menu">
+        <ul className="controls menu">
             <li className="divider" data-content="View" />
             <li className="menu-item">
                 <label className="form-switch">

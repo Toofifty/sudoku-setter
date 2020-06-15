@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useAction from './use-action';
 
-const useContextMenu = (contextMenuElement: React.ReactNode) => {
-    const openContextMenu = useAction('open-context-menu');
+const useContextMenu = (
+    focused: boolean,
+    contextMenuElement: React.ReactNode
+) => {
+    const setContent = useAction('set-context-menu');
+    const open = useAction('set-context-menu-visible');
+
+    useEffect(() => {
+        if (focused) setContent(() => contextMenuElement);
+    }, [focused, setContent, contextMenuElement]);
 
     return (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        openContextMenu(() => contextMenuElement);
+        open(true);
         return false;
     };
 };

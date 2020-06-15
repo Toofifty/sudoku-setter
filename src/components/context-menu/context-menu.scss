@@ -1,6 +1,6 @@
 .context-menu {
     width: min-content;
-    min-width: 200px;
+    min-width: 250px;
 
     position: fixed;
     left: var(--x, -10000px);
@@ -14,5 +14,14 @@
         opacity: 1;
         transition: opacity 0.25s;
         pointer-events: initial;
+    }
+
+    &--mobile {
+        position: relative;
+        left: unset;
+        top: unset;
+        opacity: 1;
+        pointer-events: initial;
+        width: 100%;
     }
 }

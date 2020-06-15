@@ -57,6 +57,7 @@ const Cell = ({
     }, [focused]);
 
     const onContextMenu = useContextMenu(
+        !!focused,
         <CellContextMenu
             index={index}
             selection={selection}
@@ -78,11 +79,14 @@ const Cell = ({
                 highlighted && 'cell--highlighted',
                 !value && marks?.length === 0 && 'cell--empty'
             )}
-            onMouseDown={onMouseDown}
             onContextMenu={onContextMenu}
             onKeyDown={onKeyDown}
             onFocus={onFocus}
-            onMouseEnter={onMouseEnter}
+            onPointerDown={onMouseDown}
+            onPointerMove={(e) => {
+                onMouseEnter?.(e);
+                (e.target as any).releasePointerCapture(e.pointerId);
+            }}
         >
             {(!hideSolution || given) &&
                 (value ? (

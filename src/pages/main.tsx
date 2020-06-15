@@ -20,18 +20,32 @@ const Main = () => {
     }, [hasLoadedFromHash, setSudoku]);
 
     return (
-        <div style={{ margin: 50, marginBottom: 200 }}>
+        <div style={{ margin: 50 }}>
             <div className="container">
                 <div className="columns">
-                    <div className="column">
+                    <div
+                        className="column"
+                        style={{ display: 'flex', justifyContent: 'center' }}
+                    >
                         <BoardContainer />
                     </div>
-                    <div className="column">
-                        <ControlsMenu />
+                    <div
+                        className="column columns control-columns"
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'flex-start',
+                        }}
+                    >
+                        <div className="column">
+                            <ControlsMenu />
+                        </div>
+                        <div className="column col-4 hide-desktop">
+                            <ContextMenu />
+                        </div>
                     </div>
                 </div>
             </div>
-            <ContextMenu />
         </div>
     );
 };

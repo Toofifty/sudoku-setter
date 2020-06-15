@@ -9,9 +9,10 @@ const Y_OFFSET = 4;
 
 const Context = () => {
     const content = useSelector((state) => state.ui.contextMenu);
+    const isVisible = useSelector((state) => state.ui.contextVisible);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const closeContextMenu = useAction('close-context-menu');
+    const setMenuVisible = useAction('set-context-menu-visible');
 
     useEffect(() => {
         const updateMousePos = (e: MouseEvent) => {
@@ -24,8 +25,9 @@ const Context = () => {
     }, []);
 
     useEffect(() => {
-        const close = (e: MouseEvent) => e.button !== 2 && closeContextMenu();
-        if (content) {
+        const close = (e: MouseEvent) =>
+            e.button !== 2 && setMenuVisible(false);
+        if (isVisible) {
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
             window.addEventListener('click', close);
         }
@@ -33,23 +35,30 @@ const Context = () => {
             window.removeEventListener('click', close);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [content]);
+    }, [isVisible]);
 
     const style = {
         '--x': `${position.x}px`,
         '--y': `${position.y}px`,
     } as React.CSSProperties;
 
+    if (!content) return null;
+
     return (
-        <ul
-            className={cx(
-                'context-menu menu',
-                content && 'context-menu--visible'
-            )}
-            style={style}
-        >
-            {content?.()}
-        </ul>
+        <>
+            <ul
+                className={cx(
+                    'context-menu menu',
+                    isVisible && 'context-menu--visible'
+                )}
+                style={style}
+            >
+                {content()}
+            </ul>
+            <ul className={cx('context-menu context-menu--mobile menu')}>
+                {content()}
+            </ul>
+        </>
     );
 };
 
