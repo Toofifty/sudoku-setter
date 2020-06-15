@@ -7,7 +7,14 @@ import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
 import { useSudokuSolver } from '../../utils/solve';
-import { row, column, box, king, knight } from '../../utils/solve/helper';
+import {
+    row,
+    column,
+    box,
+    king,
+    knight,
+    diagonals,
+} from '../../utils/solve/helper';
 import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
@@ -123,6 +130,11 @@ const Board = () => {
             ? knight(board, getCellAt(focused))
             : [];
 
+    const highlightedDiagonals =
+        focused !== null && restrictions.uniqueDiagonals
+            ? diagonals(board, getCellAt(focused)).flat()
+            : [];
+
     return (
         <div className="board">
             {killerCageModalOpen && (
@@ -148,7 +160,8 @@ const Board = () => {
                                 highlightedThermos.includes(index) ||
                                 highlightedKillerCages.includes(index) ||
                                 highlightedKingCells.includes(cell) ||
-                                highlightedKnightCells.includes(cell)
+                                highlightedKnightCells.includes(cell) ||
+                                highlightedDiagonals.includes(cell)
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {

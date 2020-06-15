@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { range } from 'utils';
 import { getBoxIndex } from 'utils/sudoku';
 import Box from 'components/box';
@@ -15,12 +16,17 @@ const boxes = range(0, 81).reduce(
 );
 
 const Background = () => {
-    const { colors, thermos, killerCages } = useSelector(
+    const { colors, thermos, killerCages, restrictions } = useSelector(
         (state) => state.sudoku
     );
 
     return (
-        <div className="background">
+        <div
+            className={cx(
+                'background',
+                restrictions.uniqueDiagonals && 'background--diagonals'
+            )}
+        >
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map((n) => (

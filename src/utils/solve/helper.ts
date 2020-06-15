@@ -55,6 +55,27 @@ export const knight = <T>(board: T[], pos: Position) => {
         .map((p) => board[getCellIndex(p)]);
 };
 
+export const diagonals = <T>(board: T[], pos: Position) => {
+    const diagonals = [];
+    if (pos.x === pos.y) {
+        diagonals.push(
+            board.filter((_, i) => {
+                const { x, y } = getCellAt(i);
+                return x === y;
+            })
+        );
+    }
+    if (pos.x + pos.y === 8) {
+        diagonals.push(
+            board.filter((_, i) => {
+                const { x, y } = getCellAt(i);
+                return x + y === 8;
+            })
+        );
+    }
+    return diagonals;
+};
+
 export const getValue = (cell: ICell) => {
     if (isFilled(cell)) return cell.value;
     return 0;

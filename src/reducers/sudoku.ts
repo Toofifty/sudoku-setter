@@ -27,6 +27,7 @@ export interface SudokuState {
         killerCages: boolean;
         antiKing: boolean;
         antiKnight: boolean;
+        uniqueDiagonals: boolean;
         nonSeqNeighbors: boolean;
     };
     lookaheadSolve: boolean;
@@ -34,6 +35,7 @@ export interface SudokuState {
     restrictions: {
         antiKing: boolean;
         antiKnight: boolean;
+        uniqueDiagonals: boolean;
     };
 }
 
@@ -51,6 +53,7 @@ const defaultState = (): SudokuState => ({
         killerCages: true,
         antiKing: false,
         antiKnight: false,
+        uniqueDiagonals: false,
         nonSeqNeighbors: false,
     },
     lookaheadSolve: false,
@@ -58,6 +61,7 @@ const defaultState = (): SudokuState => ({
     restrictions: {
         antiKing: false,
         antiKnight: false,
+        uniqueDiagonals: false,
     },
 });
 
