@@ -27,13 +27,19 @@ const Board = () => {
     const [selection, setSelection] = useState<number[]>([]);
     const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
-    const setFocused = (index: number, addToSelection = false) => {
+    const setFocused = (
+        index: number,
+        isKeyPress = false,
+        addToSelection = false
+    ) => {
         if (index >= 0 && index < 81) {
             if (!addToSelection) {
                 _setFocused(index);
                 setSelection([index]);
-            } else if (!selection.includes(index))
+            } else if (!selection.includes(index)) {
+                if (isKeyPress) _setFocused(index);
                 setSelection([...selection, index]);
+            }
         }
     };
 
@@ -146,7 +152,7 @@ const Board = () => {
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
-                                    setFocused(index, e.shiftKey);
+                                    setFocused(index, false, e.shiftKey);
                                 }
                                 if (
                                     e.button === 2 &&
@@ -175,13 +181,13 @@ const Board = () => {
                                     return;
                                 }
                                 if (key === 'ArrowUp') {
-                                    setFocused(index - 9, shiftKey);
+                                    setFocused(index - 9, true, shiftKey);
                                 } else if (key === 'ArrowDown') {
-                                    setFocused(index + 9, shiftKey);
+                                    setFocused(index + 9, true, shiftKey);
                                 } else if (key === 'ArrowLeft') {
-                                    setFocused(index - 1, shiftKey);
+                                    setFocused(index - 1, true, shiftKey);
                                 } else if (key === 'ArrowRight') {
-                                    setFocused(index + 1, shiftKey);
+                                    setFocused(index + 1, true, shiftKey);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
                                     selection.forEach(clearValue);
