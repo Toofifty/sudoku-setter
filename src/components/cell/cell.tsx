@@ -3,8 +3,6 @@ import cx from 'classnames';
 import { Position } from 'types';
 import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
-import useAction from 'hooks/use-action';
-import { capture } from 'utils';
 import CellContextMenu from './cell-context-menu';
 import './cell.scss';
 
@@ -46,7 +44,6 @@ const Cell = ({
     const invalidMarks = useSelector(
         (state) => state.sudoku.invalidMarks[index]
     );
-    const setValue = useAction('set-value');
     const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
