@@ -195,8 +195,8 @@ const runLookaheadSolve = (sudoku: SolvePayload, key: number) => {
         }
 
         postMessage({
-            type: 'invalidate-marks',
-            payload: { index: i, marks: invalid },
+            type: 'invalidate-candidates',
+            payload: { index: i, candidates: invalid },
             key,
         });
     });
