@@ -8,7 +8,8 @@ import './cell.scss';
 interface CellProps {
     index: number;
     value?: number;
-    marks?: number[];
+    marks: number[];
+    invalidMarks?: number[];
     given: boolean;
 
     selection: number[];
@@ -39,7 +40,7 @@ const Cell = ({
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
     const invalidMarks = useSelector(
-        (state) => state.sudoku.invalidMarks[index]
+        (state) => state.solver.solution[index].invalidCandidates
     );
     const btn = useRef<HTMLButtonElement>(null!);
 

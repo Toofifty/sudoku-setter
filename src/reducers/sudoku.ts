@@ -1,19 +1,11 @@
-import { ICell, Position } from '../types';
-import { isFilled } from 'utils/solve/helper';
+import { ICell, Position, PuzzleCell } from '../types';
 
 const emptyCell = () => ({
-    marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     given: false,
 });
 
-const emptyInvalidMarks = () =>
-    Array(81)
-        .fill(null)
-        .map(() => []);
-
 export interface SudokuState {
-    board: ICell[];
-    invalidMarks: number[][];
+    board: PuzzleCell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
     colors: string[];
@@ -26,7 +18,6 @@ export interface SudokuState {
 
 const defaultState = (): SudokuState => ({
     board: Array(81).fill(null).map(emptyCell),
-    invalidMarks: emptyInvalidMarks(),
     colors: Array(81).fill('white'),
     restrictions: {
         antiKing: false,
@@ -42,25 +33,15 @@ type Reducer<T extends { payload: any }> = (
 
 const posToIndex = (pos: Position) => pos.x + pos.y * 9;
 
-const wipeSolution = (board: ICell[]) => [
-    ...board.map((c) => (c.given ? c : emptyCell())),
-];
-
-type SetValue = {
-    type: 'set-value';
-    payload: { cell: Position; value: number; given?: boolean };
+type SetGiven = {
+    type: 'puzzle/set-given';
+    payload: { index: number; value?: number };
 };
 
-const setValue: Reducer<SetValue> = (state, { cell, value, given }) => {
+const setGiven: Reducer<SetGiven> = (state, { index, value }) => {
     let board = [...state.board];
-    let invalidMarks = state.invalidMarks;
-    const target = board[posToIndex(cell)];
-    if (isFilled(target) && target.value !== value) {
-        board = wipeSolution(board);
-        invalidMarks = emptyInvalidMarks();
-    }
-    board[posToIndex(cell)] = { value, given: given ?? false };
-    return { ...state, shouldSolve: true, board, invalidMarks };
+    board[index] = { value, given: true };
+    return { ...state, shouldSolve: true, board };
 };
 
 type ClearValue = {
@@ -69,25 +50,14 @@ type ClearValue = {
 };
 
 const clearValue: Reducer<ClearValue> = (state, pos) => {
-    let board = wipeSolution(state.board);
+    // TODO: re-solve when a value is cleared
+    let board = [...state.board];
     board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
     return {
         ...state,
         board,
-        invalidMarks: emptyInvalidMarks(),
         shouldSolve: true,
     };
-};
-
-type SetMarks = {
-    type: 'set-marks';
-    payload: { cell: Position; marks: number[] };
-};
-
-const setMarks: Reducer<SetMarks> = (state, { cell, marks }) => {
-    const board = [...state.board];
-    board[posToIndex(cell)] = { marks, given: false };
-    return { ...state, board };
 };
 
 type SetBoard = {
@@ -128,8 +98,7 @@ type DeleteThermo = { type: 'delete-thermo'; payload: number };
 
 const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     ...state,
-    board: wipeSolution(state.board),
-    invalidMarks: emptyInvalidMarks(),
+    // TODO: wipe solution
     thermos: (state.thermos ?? []).filter(
         (thermo) => !thermo.includes(cellIndex)
     ),
@@ -151,8 +120,7 @@ type DeleteKillerCage = { type: 'delete-killer-cage'; payload: number };
 
 const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
     ...state,
-    board: wipeSolution(state.board),
-    invalidMarks: emptyInvalidMarks(),
+    // TODO: wipe solution
     killerCages: (state.killerCages ?? []).filter(
         ({ cage }) => !cage.includes(cellIndex)
     ),
@@ -198,28 +166,8 @@ const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
     // },
 });
 
-type InvalidateMarks = {
-    type: 'invalidate-marks';
-    payload: { index: number; marks: number[] }[];
-};
-
-const invalidateMarks: Reducer<InvalidateMarks> = (state, invalidMarks) => {
-    const newMarks = [...state.invalidMarks];
-    invalidMarks.forEach(({ index, marks }) => {
-        newMarks[index].push(
-            ...marks.filter((n) => !newMarks[index].includes(n))
-        );
-    });
-
-    return {
-        ...state,
-        invalidMarks: newMarks,
-    };
-};
-
 export type SudokuAction =
-    | SetValue
-    | SetMarks
+    | SetGiven
     | SetShouldSolve
     | SetBoard
     | ClearValue
@@ -230,15 +178,12 @@ export type SudokuAction =
     | DeleteKillerCage
     | SetSudoku
     | SetColor
-    | SetRestrictions
-    | InvalidateMarks;
+    | SetRestrictions;
 
 export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
-        case 'set-value':
-            return setValue(state, action.payload);
-        case 'set-marks':
-            return setMarks(state, action.payload);
+        case 'puzzle/set-given':
+            return setGiven(state, action.payload);
         case 'set-should-solve':
             return setShouldSolve(state, action.payload);
         case 'set-board':
@@ -261,8 +206,6 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setColor(state, action.payload);
         case 'set-restrictions':
             return setRestrictions(state, action.payload);
-        case 'invalidate-marks':
-            return invalidateMarks(state, action.payload);
         default:
             return state;
     }

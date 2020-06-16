@@ -1,13 +1,46 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { createBrowserHistory } from 'history';
-import createReducers from './reducers';
+import createReducers, { RootActionType } from './reducers';
+import { RouterState } from 'connected-react-router';
+import { SudokuState } from 'reducers/sudoku';
+import { UIState } from 'reducers/ui';
+import { SolverState } from 'reducers/solver';
 
 export const history = createBrowserHistory();
 
+export const queueDispatchMiddleware = (store: any) => (next: any) => (
+    action: RootActionType
+) => {
+    const queue: RootActionType[] = [];
+
+    const flush = () => {
+        queue.forEach(store.dispatch);
+    };
+
+    const dispatch = (action: RootActionType) => {
+        queue.push(action);
+    };
+
+    const res = next({ ...action, dispatch });
+    flush();
+
+    return res;
+};
+
+export type DispatchFn = (action: RootActionType) => void;
+export type WithDispatch = { dispatch: DispatchFn };
+
 export const store = createStore(
     createReducers(history),
-    // @ts-ignore
-    window.__REDUX_DEVTOOLS_EXTENSION__?.()
+    compose(
+        applyMiddleware(queueDispatchMiddleware),
+        (window as any).__REDUX_DEVTOOLS_EXTENSION__?.()
+    )
 );
 
-export type RootState = ReturnType<ReturnType<typeof createReducers>>;
+export type RootState = {
+    router: RouterState<any>;
+    sudoku: SudokuState;
+    solver: SolverState;
+    ui: UIState;
+};

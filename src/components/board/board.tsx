@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './board.scss';
 import useSelector from '../../hooks/use-selector';
-import { ICell, Position } from '../../types';
+import { ICell, Position, PuzzleCell, SolutionCell } from '../../types';
 import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
@@ -21,8 +21,8 @@ const Board = () => {
     const { board, thermos, killerCages, restrictions } = useSelector(
         (state) => state.sudoku
     );
-    const { dirty } = useSelector((state) => state.solver);
-    const setValue = useAction('set-value');
+    const { dirty, solution } = useSelector((state) => state.solver);
+    const setValue = useAction('shared/set-cell-value');
     const clearValue = useAction('clear-value');
     const setShouldSolve = useAction('set-should-solve');
     const solve = useSudokuSolver();
@@ -84,11 +84,17 @@ const Board = () => {
             if (!boxes[index]) {
                 boxes[index] = [];
             }
-            boxes[index].push({ cell, pos, index: i });
+            boxes[index].push({
+                cell,
+                solutionCell: solution[i],
+                pos,
+                index: i,
+            });
             return boxes;
         },
         [[], [], [], [], [], [], [], [], []] as {
-            cell: ICell;
+            cell: PuzzleCell;
+            solutionCell: SolutionCell;
             pos: Position;
             index: number;
         }[][]
@@ -141,11 +147,13 @@ const Board = () => {
             )}
             {boxes.map((box, i) => (
                 <Box key={i}>
-                    {box.map(({ cell, pos, index }, i) => (
+                    {box.map(({ cell, solutionCell, pos, index }, i) => (
                         <Cell
                             key={i}
-                            {...cell}
                             index={index}
+                            {...cell}
+                            marks={solutionCell.candidates}
+                            invalidMarks={solutionCell.invalidCandidates}
                             focused={focused === index}
                             selection={selection}
                             highlighted={
@@ -182,9 +190,8 @@ const Board = () => {
                                 const n = Number(key);
                                 if (!isNaN(n) && n > 0 && n < 10) {
                                     setValue({
-                                        cell: pos,
+                                        index,
                                         value: n,
-                                        given: true,
                                     });
                                     return;
                                 }

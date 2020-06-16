@@ -1,4 +1,5 @@
 import { SolutionCell } from 'types';
+import { RootState } from 'store';
 
 export interface SolverState {
     solution: SolutionCell[];
@@ -111,12 +112,34 @@ const toggleStepSolve: Reducer<ToggleStepSolve> = (state, stepSolve) => ({
     stepSolve,
 });
 
+type InvalidateCandidates = {
+    type: 'solver/invalidate-candidates';
+    payload: { index: number; candidates: number[] }[];
+};
+
+const invalidateCandidates: Reducer<InvalidateCandidates> = (
+    state,
+    candidateLists
+) => {
+    const newSolution = [...state.solution];
+    candidateLists.forEach(({ index, candidates }) => {
+        newSolution[index].invalidCandidates.push(
+            ...candidates.filter(
+                (n) => !newSolution[index].invalidCandidates.includes(n)
+            )
+        );
+    });
+
+    return { ...state, solution: newSolution };
+};
+
 export type SolverAction =
     | SetSolution
     | SetAlgorithms
     | TriggerSolve
     | ToggleLookahead
-    | ToggleStepSolve;
+    | ToggleStepSolve
+    | InvalidateCandidates;
 
 export default (state = defaultState(), action: SolverAction) => {
     switch (action.type) {
@@ -130,6 +153,8 @@ export default (state = defaultState(), action: SolverAction) => {
             return toggleLookahead(state, action.payload);
         case 'solver/toggle-step-solve':
             return toggleStepSolve(state, action.payload);
+        case 'solver/invalidate-candidates':
+            return invalidateCandidates(state, action.payload);
         default:
             return state;
     }

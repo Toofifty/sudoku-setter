@@ -1,5 +1,5 @@
 import { SudokuState } from 'reducers/sudoku';
-import { ICell } from '../types';
+import { PuzzleCell } from '../types';
 import { isFilled } from './solve/helper';
 
 type EncodedData = {
@@ -9,7 +9,7 @@ type EncodedData = {
 };
 
 type DecodedData = {
-    board?: ICell[];
+    board?: PuzzleCell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
 };
@@ -23,10 +23,9 @@ const encodeGivens = (givens: number[]) =>
         .join(',');
 
 const decodeGivens = (encoded: string) => {
-    const board: ICell[] = Array(81)
+    const board: PuzzleCell[] = Array(81)
         .fill({})
         .map(() => ({
-            marks: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             given: false,
         }));
     encoded.split(',').forEach((part) => {

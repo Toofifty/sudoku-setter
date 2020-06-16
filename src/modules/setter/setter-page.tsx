@@ -8,16 +8,17 @@ import ControlsMenu from 'components/controls-menu';
 const SetterPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
     const setSudoku = useAction('set-sudoku');
+    const triggerSolve = useAction('solver/trigger-solve');
 
     useEffect(() => {
         if (!hasLoadedFromHash && window.location.hash) {
             setSudoku({
                 ...decode(window.location.hash.slice(1)),
-                shouldSolve: true,
             });
+            triggerSolve();
         }
         setHasLoadedFromHash(true);
-    }, [hasLoadedFromHash, setSudoku]);
+    }, [hasLoadedFromHash, setSudoku, triggerSolve]);
 
     return (
         <div style={{ margin: 50 }}>

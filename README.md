@@ -14,14 +14,17 @@ Solvers
 -   [ ] Box-locked candidates (eliminate in box)
 -   [ ] X wing
 -   [ ] Y wing
--   [ ] Lookahead (trial and error) solver
+-   [x] Lookahead (trial and error) solver
 
 Extra restrictions
 
 -   [ ] Sandwich
 -   [x] Chess moves (King, Knight)
 -   [x] Thermos
--   [x] Killer boxes
+-   [x] Killer cages
+    -   [ ] Remove candidates forced into a cage from the box/column/row
+    -   [ ] Solve by box/column/row totals
+    -   [ ] Solve by multi box/column/row totals
 -   [x] Non-sequential neighbors
 -   [x] Diagonals
 -   [ ] Comparators
@@ -35,6 +38,8 @@ Features
 -   [x] More responsive layout
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
+    -   [ ] Save puzzles
+    -   [ ] Puzzle browser
 -   [ ] Undo/redo
 
 ### Scenarios

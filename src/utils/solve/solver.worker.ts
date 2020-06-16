@@ -1,5 +1,4 @@
-import { SudokuState } from 'reducers/sudoku';
-import { InterCell } from './types';
+import { InterCell, SolvePayload } from './types';
 import {
     solveNakedSingles,
     solveHiddenSingles,
@@ -16,14 +15,14 @@ import { isFilled, hasEmptyCell } from './helper';
 import { ICell } from 'types';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
 
-type SolveBoard = { type: 'solve-board'; key: number; payload: SudokuState };
+type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };
 
 type StartLookaheadSolve = {
     type: 'start-lookahead-solve';
     // key is used to stop old solves from
     // continuing
     key: number;
-    payload: SudokuState;
+    payload: SolvePayload;
 };
 
 type StopLookaheadSolve = { type: 'stop-lookahead-solve'; payload: undefined };
@@ -46,7 +45,12 @@ const SOLVE_PASSES = 20;
 
 const noop = (a: any) => a;
 
-const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
+const solveStep = ({
+    board,
+    thermos,
+    killerCages,
+    algorithms,
+}: SolvePayload) => {
     let hasChanged = false;
     console.time('solve step');
 
@@ -61,33 +65,33 @@ const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 
     intermediate = intermediate
         .map(solveNakedSingles(true))
-        .map(solvers.hiddenSingles ? solveHiddenSingles : noop)
-        .map(solvers.nakedPairs ? solveNakedPairs : noop)
-        .map(solvers.hiddenPairs ? solveHiddenPairs : noop)
-        .map(solvers.lockedCandidates ? solveLockedCandidates : noop);
+        .map(algorithms.hiddenSingles ? solveHiddenSingles : noop)
+        .map(algorithms.nakedPairs ? solveNakedPairs : noop)
+        .map(algorithms.hiddenPairs ? solveHiddenPairs : noop)
+        .map(algorithms.lockedCandidates ? solveLockedCandidates : noop);
 
     // solve particular sudokus
-    if (thermos && solvers.thermos) {
+    if (thermos && algorithms.thermos) {
         intermediate = intermediate.map(solveThermos(thermos));
     }
 
-    if (killerCages && solvers.killerCages) {
+    if (killerCages && algorithms.killerCages) {
         intermediate = intermediate.map(solveKillerCages(killerCages));
     }
 
-    if (solvers.antiKing) {
+    if (algorithms.antiKing) {
         intermediate = intermediate.map(solveAntiKing);
     }
 
-    if (solvers.antiKnight) {
+    if (algorithms.antiKnight) {
         intermediate = intermediate.map(solveAntiKnight);
     }
 
-    if (solvers.nonSeqNeighbors) {
+    if (algorithms.nonSeqNeighbors) {
         intermediate = intermediate.map(solveNonSeqNeighbors);
     }
 
-    if (solvers.uniqueDiagonals) {
+    if (algorithms.uniqueDiagonals) {
         intermediate = intermediate.map(solveUniqueDiagonals);
     }
 
@@ -134,16 +138,12 @@ const solveStep = ({ board, thermos, killerCages, solvers }: SudokuState) => {
 
     console.timeEnd('solve step');
     return {
-        updatedBoard: intermediate.map((cell) =>
-            isFilled(cell)
-                ? { value: cell.value, given: cell.given }
-                : { marks: cell.marks, given: false }
-        ),
+        updatedBoard: intermediate,
         hasChanged,
     };
 };
 
-const solveBoard = (sudoku: SudokuState) => {
+const solveBoard = (sudoku: SolvePayload) => {
     let { updatedBoard, hasChanged } = solveStep(sudoku);
     const maxTries = sudoku.stepSolve ? 1 : SOLVE_PASSES;
 
@@ -158,7 +158,7 @@ const solveBoard = (sudoku: SudokuState) => {
     return updatedBoard;
 };
 
-const runLookaheadSolve = (sudoku: SudokuState, key: number) => {
+const runLookaheadSolve = (sudoku: SolvePayload, key: number) => {
     console.time('lookahead solve');
 
     sudoku.board.forEach((cell, i) => {
@@ -171,14 +171,19 @@ const runLookaheadSolve = (sudoku: SudokuState, key: number) => {
 
         const invalid = [];
         for (let n of cell.marks.filter(
-            (n) => !sudoku.invalidMarks[i].includes(n)
+            (n) => !cell.invalidMarks?.includes(n)
         )) {
             if (!lookaheadSolve.enabled || lookaheadSolve.key !== key) continue;
 
-            const testBoard: ICell[] = JSON.parse(JSON.stringify(sudoku.board));
+            const testBoard: InterCell[] = JSON.parse(
+                JSON.stringify(sudoku.board)
+            );
             testBoard[i] = {
                 value: n,
                 given: false,
+                marks: [n],
+                initialMarks: [n],
+                index: i,
             };
             const solved = solveBoard({ ...sudoku, board: testBoard });
 

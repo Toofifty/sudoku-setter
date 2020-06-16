@@ -1,4 +1,4 @@
-interface UIState {
+export interface UIState {
     contextMenu?: () => React.ReactNode;
     contextVisible: boolean;
     debugMode: boolean;

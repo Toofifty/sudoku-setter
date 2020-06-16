@@ -9,19 +9,19 @@ interface KillerCageModalProps {
 }
 
 const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
-    const board = useSelector((state) => state.sudoku.board);
+    const solution = useSelector((state) => state.solver.solution);
     const createCage = useAction('create-killer-cage');
 
     const minimum = (() => {
         const minimums: number[] = [];
         for (let index of selection) {
-            const cell = board[index];
+            const cell = solution[index];
             if (isFilled(cell)) {
                 minimums.push(cell.value);
             } else {
                 minimums.push(
                     Math.min(
-                        ...cell.marks.filter((mark) => !minimums.includes(mark))
+                        ...cell.candidates.filter((c) => !minimums.includes(c))
                     )
                 );
             }
@@ -32,13 +32,13 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
     const maximum = (() => {
         const maximums: number[] = [];
         for (let index of selection) {
-            const cell = board[index];
+            const cell = solution[index];
             if (isFilled(cell)) {
                 maximums.push(cell.value);
             } else {
                 maximums.push(
                     Math.max(
-                        ...cell.marks.filter((mark) => !maximums.includes(mark))
+                        ...cell.candidates.filter((c) => !maximums.includes(c))
                     )
                 );
             }
