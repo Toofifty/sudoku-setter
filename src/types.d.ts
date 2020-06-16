@@ -13,7 +13,7 @@ export type Position = { x: number; y: number };
 export type PuzzleCell = {
     value?: number;
     given: boolean;
-    color?: string;
+    color: string;
 };
 
 export type SolutionCell = {

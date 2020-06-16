@@ -18,7 +18,7 @@ export interface PuzzleState {
 const defaultState = (): PuzzleState => ({
     board: Array(81)
         .fill(null)
-        .map(() => ({ given: false })),
+        .map(() => ({ given: false, color: 'white' })),
     restrictions: {
         antiKing: false,
         antiKnight: false,
@@ -62,7 +62,7 @@ const setGiven = action(
     'puzzle/set-given',
     (state, { index, value }) => {
         let board = [...state.board];
-        board[index] = { value, given: !!value };
+        board[index] = { value, given: !!value, color: board[index].color };
         return { ...state, board };
     },
     saveHistory
@@ -136,7 +136,7 @@ const setColor = action(
     'puzzle/set-color',
     (state, { index, color }) => {
         if (typeof index === 'number') index = [index];
-        const board = [...state.board];
+        const board = JSON.parse(JSON.stringify(state.board));
         index.forEach((i) => (board[i].color = color));
         return { ...state, board };
     },

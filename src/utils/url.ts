@@ -27,12 +27,14 @@ const decodeGivens = (encoded: string) => {
         .fill({})
         .map(() => ({
             given: false,
+            color: 'white',
         }));
     encoded.split(',').forEach((part) => {
         const [index, value] = part.split(':');
         board[parseInt(index, RADIX)] = {
             value: Number(value),
             given: true,
+            color: 'white',
         };
     });
     return board;
