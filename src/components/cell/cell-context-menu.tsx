@@ -6,6 +6,7 @@ import useAction from 'hooks/use-action';
 import { isContiguous, isContiguousSequential } from 'utils/contiguous';
 import NumberInput from 'components/number-input';
 import { isFilled } from 'utils/solve/helper';
+import UndoRedo from 'components/undo-redo';
 
 interface CellContextMenuProps {
     selection: number[];
@@ -46,6 +47,7 @@ const CellContextMenu = ({
                     selected={value}
                 />
             </li>
+            <UndoRedo />
             <li
                 className="divider"
                 data-content={`Set ${

@@ -14,10 +14,11 @@ export const action = <TState, TType extends string, TPayload>(
     stateType: TState,
     payloadType: TPayload,
     type: TType,
-    action: (state: TState, payload: TPayload, dispatch: any) => TState
+    action: (state: TState, payload: TPayload, dispatch: any) => TState,
+    decorator?: any
 ) => ({
     type,
-    action,
+    action: decorator ? decorator(action) : action,
 });
 
 export type GetAction<TFrom extends ActionObject<any, any, any>> = Action<

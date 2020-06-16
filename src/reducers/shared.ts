@@ -138,6 +138,30 @@ const reset = action(
     }
 );
 
+const undo = action(
+    _ as RootState,
+    _ as undefined,
+    'shared/undo',
+    (state, _, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/undo', payload: undefined });
+        dispatch({ type: 'solver/trigger-solve', payload: true });
+
+        return state;
+    }
+);
+
+const redo = action(
+    _ as RootState,
+    _ as undefined,
+    'shared/redo',
+    (state, _, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/redo', payload: undefined });
+        dispatch({ type: 'solver/trigger-solve', payload: true });
+
+        return state;
+    }
+);
+
 export type SharedAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setRestrictions>
@@ -146,7 +170,9 @@ export type SharedAction =
     | GetAction<typeof deleteThermo>
     | GetAction<typeof createKillerCage>
     | GetAction<typeof deleteKillerCage>
-    | GetAction<typeof reset>;
+    | GetAction<typeof reset>
+    | GetAction<typeof undo>
+    | GetAction<typeof redo>;
 
 export default merge<RootState>(
     undefined,
@@ -157,5 +183,7 @@ export default merge<RootState>(
     deleteThermo,
     createKillerCage,
     deleteKillerCage,
-    reset
+    reset,
+    undo,
+    redo
 );

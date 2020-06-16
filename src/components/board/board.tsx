@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './board.scss';
 import useSelector from '../../hooks/use-selector';
-import { ICell, Position, PuzzleCell, SolutionCell } from '../../types';
+import { PuzzleCell, SolutionCell } from '../../types';
 import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
@@ -25,6 +25,8 @@ const Board = () => {
     const setValue = useAction('shared/set-cell-value');
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
+    const undo = useAction('shared/undo');
+    const redo = useAction('shared/redo');
 
     const [focused, _setFocused] = useState<number | null>(null);
     const [selection, setSelection] = useState<number[]>([]);
@@ -135,8 +137,14 @@ const Board = () => {
             ? diagonals(board, getCellAt(focused)).flat()
             : [];
 
+    const onKeyDown = (e: React.KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'z')
+            return redo();
+        if ((e.metaKey || e.ctrlKey) && e.key === 'z') return undo();
+    };
+
     return (
-        <div className="board">
+        <div className="board" onKeyDown={onKeyDown}>
             {killerCageModalOpen && (
                 <KillerCageModal
                     selection={selection}

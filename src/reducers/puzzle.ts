@@ -1,15 +1,18 @@
 import { PuzzleCell } from 'types';
 import { _, action, merge, GetAction } from './merge';
 
+type WithHistory<TState> = { history: { items: TState[]; current: number } };
+
 export interface PuzzleState {
     board: PuzzleCell[];
-    thermos?: number[][];
-    killerCages?: { total: number; cage: number[] }[];
+    thermos: number[][];
+    killerCages: { total: number; cage: number[] }[];
     restrictions: {
         antiKing: boolean;
         antiKnight: boolean;
         uniqueDiagonals: boolean;
     };
+    history: { items: Omit<PuzzleState, 'history'>[]; current: number };
 }
 
 const defaultState = (): PuzzleState => ({
@@ -21,7 +24,37 @@ const defaultState = (): PuzzleState => ({
         antiKnight: false,
         uniqueDiagonals: false,
     },
+    thermos: [],
+    killerCages: [],
+    history: { items: [], current: 0 },
 });
+
+const saveHistory = <TParams>(
+    fn: (state: PuzzleState, ...args: TParams[]) => PuzzleState
+) => (state: PuzzleState, ...args: TParams[]) => {
+    // save base state
+    const { history: _history, ...saveableBaseState } = state;
+
+    const newState = fn(state, ...args);
+    const { history, ...saveableState } = newState;
+    let items = history?.items ?? [];
+    if (history?.current !== items.length - 1) {
+        // delete redo history once an action is done
+        items = items.slice(0, (history?.current ?? 0) + 1);
+    }
+
+    if (items.length === 0) {
+        items = [saveableBaseState];
+    }
+
+    return {
+        ...newState,
+        history: {
+            items: [...items, saveableState],
+            current: (history?.current ?? 0) + 1,
+        },
+    };
+};
 
 const setGiven = action(
     _ as PuzzleState,
@@ -30,8 +63,9 @@ const setGiven = action(
     (state, { index, value }) => {
         let board = [...state.board];
         board[index] = { value, given: true };
-        return { ...state, shouldSolve: true, board };
-    }
+        return { ...state, board };
+    },
+    saveHistory
 );
 
 const reset = action(_ as PuzzleState, _ as undefined, 'puzzle/reset', () =>
@@ -45,7 +79,8 @@ const createThermo = action(
     (state, thermo) => ({
         ...state,
         thermos: [...(state.thermos ?? []), thermo],
-    })
+    }),
+    saveHistory
 );
 
 const deleteThermo = action(
@@ -57,7 +92,8 @@ const deleteThermo = action(
         thermos: (state.thermos ?? []).filter(
             (thermo) => !thermo.includes(cellIndex)
         ),
-    })
+    }),
+    saveHistory
 );
 
 const createKillerCage = action(
@@ -67,7 +103,8 @@ const createKillerCage = action(
     (state, killerCage) => ({
         ...state,
         killerCages: [...(state.killerCages ?? []), killerCage],
-    })
+    }),
+    saveHistory
 );
 
 const deleteKillerCage = action(
@@ -79,7 +116,8 @@ const deleteKillerCage = action(
         killerCages: (state.killerCages ?? []).filter(
             ({ cage }) => !cage.includes(cellIndex)
         ),
-    })
+    }),
+    saveHistory
 );
 
 const setSudoku = action(
@@ -101,7 +139,8 @@ const setColor = action(
         const board = [...state.board];
         index.forEach((i) => (board[i].color = color));
         return { ...state, board };
-    }
+    },
+    saveHistory
 );
 
 const setRestrictions = action(
@@ -114,6 +153,51 @@ const setRestrictions = action(
     })
 );
 
+const undo = action(
+    _ as PuzzleState,
+    _ as undefined,
+    'puzzle/undo',
+    (state) => {
+        const { history, ...rest } = state;
+        if (!history || (history.current ?? 0) < 1) return state;
+
+        const current = history.current - 1;
+        return {
+            ...rest,
+            ...history.items[current],
+            // don't need to undo restrictions
+            restrictions: rest.restrictions,
+            history: {
+                items: history.items,
+                current,
+            },
+        };
+    }
+);
+
+const redo = action(
+    _ as PuzzleState,
+    _ as undefined,
+    'puzzle/redo',
+    (state) => {
+        const { history, ...rest } = state;
+        if (!history || (history.current ?? 0) === history.items.length)
+            return state;
+
+        const current = history.current + 1;
+        return {
+            ...rest,
+            ...history.items[current],
+            // don't need to redo restrictions
+            restrictions: rest.restrictions,
+            history: {
+                items: history.items,
+                current,
+            },
+        };
+    }
+);
+
 export type PuzzleAction =
     | GetAction<typeof setGiven>
     | GetAction<typeof reset>
@@ -123,7 +207,9 @@ export type PuzzleAction =
     | GetAction<typeof deleteKillerCage>
     | GetAction<typeof setSudoku>
     | GetAction<typeof setColor>
-    | GetAction<typeof setRestrictions>;
+    | GetAction<typeof setRestrictions>
+    | GetAction<typeof undo>
+    | GetAction<typeof redo>;
 
 export default merge<PuzzleState>(
     defaultState(),
@@ -135,5 +221,7 @@ export default merge<PuzzleState>(
     deleteKillerCage,
     setSudoku,
     setColor,
-    setRestrictions
+    setRestrictions,
+    undo,
+    redo
 );
