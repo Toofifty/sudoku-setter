@@ -1,10 +1,14 @@
 import { RootState, WithDispatch, DispatchFn } from 'store';
 import { RootActionType } from 'reducers';
 
+// put reducers here if:
+// - they require reading root state (or state from another slice)
+// - they dispatch actions into two or more slices
+
 type Reducer<T extends { payload: any }> = (
     state: RootState,
-    dispatch: DispatchFn,
-    payload: T['payload']
+    payload: T['payload'],
+    dispatch: DispatchFn
 ) => RootState;
 
 type SetCellValue = {
@@ -14,8 +18,8 @@ type SetCellValue = {
 
 const setCellValue: Reducer<SetCellValue> = (
     state,
-    dispatch,
-    { index, value }
+    { index, value },
+    dispatch
 ) => {
     // TODO: switch where to place the digit based on sudoku mode
     dispatch({ type: 'puzzle/set-given', payload: { index, value } });
@@ -36,8 +40,8 @@ type SetRestrictions = {
 
 const setRestrictions: Reducer<SetRestrictions> = (
     state,
-    dispatch,
-    restrictions
+    restrictions,
+    dispatch
 ) => {
     dispatch({ type: 'puzzle/set-restrictions', payload: restrictions });
 
@@ -63,7 +67,7 @@ type SetAlgorithms = {
     payload: Partial<RootState['solver']['algorithms']>;
 };
 
-const setAlgorithms: Reducer<SetAlgorithms> = (state, dispatch, algorithms) => {
+const setAlgorithms: Reducer<SetAlgorithms> = (state, algorithms, dispatch) => {
     dispatch({ type: 'solver/set-algorithms', payload: algorithms });
 
     // enable relevant restrictions automatically
@@ -82,7 +86,29 @@ const setAlgorithms: Reducer<SetAlgorithms> = (state, dispatch, algorithms) => {
     return state;
 };
 
-export type SharedAction = SetCellValue | SetRestrictions | SetAlgorithms;
+type Reset = {
+    type: 'shared/reset';
+    payload: undefined;
+};
+
+const reset: Reducer<Reset> = (state, _, dispatch) => {
+    // TODO: if in player mode, don't reset the puzzle
+    dispatch({ type: 'puzzle/reset', payload: undefined });
+    dispatch(() => {
+        window.location.hash = '';
+    });
+
+    // reset solution
+    dispatch({ type: 'solver/reset-solution', payload: undefined });
+
+    return state;
+};
+
+export type SharedAction =
+    | SetCellValue
+    | SetRestrictions
+    | SetAlgorithms
+    | Reset;
 
 export default (
     state: RootState | undefined,
@@ -91,11 +117,13 @@ export default (
     if (!state) return state;
     switch (action.type) {
         case 'shared/set-cell-value':
-            return setCellValue(state, action.dispatch, action.payload);
+            return setCellValue(state, action.payload, action.dispatch);
         case 'shared/set-restrictions':
-            return setRestrictions(state, action.dispatch, action.payload);
+            return setRestrictions(state, action.payload, action.dispatch);
         case 'shared/set-algorithms':
-            return setAlgorithms(state, action.dispatch, action.payload);
+            return setAlgorithms(state, action.payload, action.dispatch);
+        case 'shared/reset':
+            return reset(state, action.payload, action.dispatch);
         default:
             return state;
     }

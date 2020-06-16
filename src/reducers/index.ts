@@ -1,5 +1,5 @@
 import { connectRouter } from 'connected-react-router';
-import { RootState } from 'store';
+import { RootState, WithDispatch } from 'store';
 import sudoku, { SudokuAction } from './sudoku';
 import solver, { SolverAction } from './solver';
 import ui, { UIAction } from './ui';
@@ -13,7 +13,7 @@ export type RootActionType =
 
 export default (history: any) => (
     state: RootState | undefined,
-    action: RootActionType & { dispatch: (action: RootActionType) => void }
+    action: RootActionType & WithDispatch
 ) => ({
     ...shared(state, action),
     router: connectRouter(history)(state?.router, action as any),

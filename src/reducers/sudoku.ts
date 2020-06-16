@@ -31,8 +31,6 @@ type Reducer<T extends { payload: any }> = (
     payload: T['payload']
 ) => SudokuState;
 
-const posToIndex = (pos: Position) => pos.x + pos.y * 9;
-
 type SetGiven = {
     type: 'puzzle/set-given';
     payload: { index: number; value?: number };
@@ -44,22 +42,6 @@ const setGiven: Reducer<SetGiven> = (state, { index, value }) => {
     return { ...state, shouldSolve: true, board };
 };
 
-type ClearValue = {
-    type: 'clear-value';
-    payload: Position | number;
-};
-
-const clearValue: Reducer<ClearValue> = (state, pos) => {
-    // TODO: re-solve when a value is cleared
-    let board = [...state.board];
-    board[typeof pos === 'number' ? pos : posToIndex(pos)] = emptyCell();
-    return {
-        ...state,
-        board,
-        shouldSolve: true,
-    };
-};
-
 type SetBoard = {
     type: 'set-board';
     payload: ICell[];
@@ -69,18 +51,8 @@ const setBoard: Reducer<SetBoard> = (state, board) => {
     return { ...state, board };
 };
 
-type SetShouldSolve = {
-    type: 'set-should-solve';
-    payload: boolean;
-};
-
-const setShouldSolve: Reducer<SetShouldSolve> = (state, shouldSolve) => ({
-    ...state,
-    shouldSolve,
-});
-
 type Reset = {
-    type: 'reset';
+    type: 'puzzle/reset';
     payload: undefined;
 };
 
@@ -158,9 +130,7 @@ const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
 
 export type SudokuAction =
     | SetGiven
-    | SetShouldSolve
     | SetBoard
-    | ClearValue
     | Reset
     | CreateThermo
     | DeleteThermo
@@ -174,13 +144,9 @@ export default (state = defaultState(), action: SudokuAction) => {
     switch (action.type) {
         case 'puzzle/set-given':
             return setGiven(state, action.payload);
-        case 'set-should-solve':
-            return setShouldSolve(state, action.payload);
         case 'set-board':
             return setBoard(state, action.payload);
-        case 'clear-value':
-            return clearValue(state, action.payload);
-        case 'reset':
+        case 'puzzle/reset':
             return reset();
         case 'create-thermo':
             return createThermo(state, action.payload);

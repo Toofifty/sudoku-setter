@@ -11,13 +11,16 @@ export const history = createBrowserHistory();
 export const queueDispatchMiddleware = (store: any) => (next: any) => (
     action: RootActionType
 ) => {
-    const queue: RootActionType[] = [];
+    const queue: (RootActionType | (() => void))[] = [];
 
     const flush = () => {
-        queue.forEach((action) => store.dispatch(action));
+        queue.forEach((action) => {
+            if (typeof action === 'function') return action();
+            return store.dispatch(action);
+        });
     };
 
-    const dispatch = (action: RootActionType) => {
+    const dispatch = (action: RootActionType | (() => void)) => {
         queue.push(action);
     };
 
@@ -27,7 +30,7 @@ export const queueDispatchMiddleware = (store: any) => (next: any) => (
     return res;
 };
 
-export type DispatchFn = (action: RootActionType) => void;
+export type DispatchFn = (action: RootActionType | (() => void)) => void;
 export type WithDispatch = { dispatch: DispatchFn };
 
 export const store = createStore(

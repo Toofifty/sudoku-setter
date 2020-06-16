@@ -21,7 +21,7 @@ const ControlsMenu = () => {
 
     const triggerSolve = useAction('solver/trigger-solve');
 
-    const _reset = useAction('reset');
+    const _reset = useAction('shared/reset');
 
     const reset = () => {
         _reset();

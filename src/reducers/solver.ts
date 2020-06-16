@@ -1,5 +1,5 @@
 import { SolutionCell } from 'types';
-import { RootState } from 'store';
+import { RootState, WithDispatch, DispatchFn } from 'store';
 
 export interface SolverState {
     solution: SolutionCell[];
@@ -68,6 +68,13 @@ const setSolution: Reducer<SetSolution> = (state, solution) => ({
     ...state,
     solution,
     dirty: false,
+});
+
+type ResetSolution = { type: 'solver/reset-solution'; payload: undefined };
+
+const resetSolution: Reducer<ResetSolution> = (state) => ({
+    ...state,
+    ...clear(),
 });
 
 type SetAlgorithms = {
@@ -142,6 +149,7 @@ const invalidateCandidates: Reducer<InvalidateCandidates> = (
 
 export type SolverAction =
     | SetSolution
+    | ResetSolution
     | SetAlgorithms
     | TriggerSolve
     | SetSolved
@@ -153,6 +161,8 @@ export default (state = defaultState(), action: SolverAction) => {
     switch (action.type) {
         case 'solver/set-solution':
             return setSolution(state, action.payload);
+        case 'solver/reset-solution':
+            return resetSolution(state, action.payload);
         case 'solver/set-algorithms':
             return setAlgorithms(state, action.payload);
         case 'solver/trigger-solve':

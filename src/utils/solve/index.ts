@@ -78,14 +78,22 @@ export const useSudokuSolver = () => {
     }, [invalidateCandidates, key]);
 
     useEffect(() => {
+        const board = prepareBoard(sudoku.board, solver.solution);
         worker.postMessage({
             type: solver.lookahead
                 ? 'start-lookahead-solve'
                 : 'stop-lookahead-solve',
-            payload: sudoku,
+            payload: {
+                board,
+                thermos: sudoku.thermos,
+                killerCages: sudoku.killerCages,
+                stepSolve: solver.stepSolve,
+                algorithms: solver.algorithms,
+            },
             key,
         });
-    }, [solver.lookahead, sudoku, key]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [solver.lookahead, key]);
 
     return () => {
         // TODO: move to thunk
