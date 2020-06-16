@@ -23,9 +23,9 @@ const CellContextMenu = ({
         (state) => state.sudoku
     );
     const setColor = useAction('set-color');
-    const createThermo = useAction('create-thermo');
-    const deleteThermo = useAction('delete-thermo');
-    const deleteKillerCage = useAction('delete-killer-cage');
+    const createThermo = useAction('shared/create-thermo');
+    const deleteThermo = useAction('shared/delete-thermo');
+    const deleteKillerCage = useAction('shared/delete-killer-cage');
     const setValue = useAction('shared/set-cell-value');
 
     const pos = getCellAt(index);

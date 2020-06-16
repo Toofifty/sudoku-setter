@@ -1,5 +1,4 @@
 import { SolutionCell } from 'types';
-import { RootState, WithDispatch, DispatchFn } from 'store';
 
 export interface SolverState {
     solution: SolutionCell[];

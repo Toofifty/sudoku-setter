@@ -1,4 +1,4 @@
-import { ICell, Position, PuzzleCell } from '../types';
+import { ICell, PuzzleCell } from '../types';
 
 const emptyCell = () => ({
     given: false,
@@ -58,45 +58,39 @@ type Reset = {
 
 const reset = () => defaultState();
 
-type CreateThermo = { type: 'create-thermo'; payload: number[] };
+type CreateThermo = { type: 'puzzle/create-thermo'; payload: number[] };
 
 const createThermo: Reducer<CreateThermo> = (state, thermo) => ({
     ...state,
     thermos: [...(state.thermos ?? []), thermo],
-    shouldSolve: true,
 });
 
-type DeleteThermo = { type: 'delete-thermo'; payload: number };
+type DeleteThermo = { type: 'puzzle/delete-thermo'; payload: number };
 
 const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
     ...state,
-    // TODO: wipe solution
     thermos: (state.thermos ?? []).filter(
         (thermo) => !thermo.includes(cellIndex)
     ),
-    shouldSolve: true,
 });
 
 type CreateKillerCage = {
-    type: 'create-killer-cage';
+    type: 'puzzle/create-killer-cage';
     payload: { total: number; cage: number[] };
 };
 
 const createKillerCage: Reducer<CreateKillerCage> = (state, killerCage) => ({
     ...state,
     killerCages: [...(state.killerCages ?? []), killerCage],
-    shouldSolve: true,
 });
 
-type DeleteKillerCage = { type: 'delete-killer-cage'; payload: number };
+type DeleteKillerCage = { type: 'puzzle/delete-killer-cage'; payload: number };
 
 const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
     ...state,
-    // TODO: wipe solution
     killerCages: (state.killerCages ?? []).filter(
         ({ cage }) => !cage.includes(cellIndex)
     ),
-    shouldSolve: true,
 });
 
 type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
@@ -148,13 +142,13 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setBoard(state, action.payload);
         case 'puzzle/reset':
             return reset();
-        case 'create-thermo':
+        case 'puzzle/create-thermo':
             return createThermo(state, action.payload);
-        case 'delete-thermo':
+        case 'puzzle/delete-thermo':
             return deleteThermo(state, action.payload);
-        case 'create-killer-cage':
+        case 'puzzle/create-killer-cage':
             return createKillerCage(state, action.payload);
-        case 'delete-killer-cage':
+        case 'puzzle/delete-killer-cage':
             return deleteKillerCage(state, action.payload);
         case 'set-sudoku':
             return setSudoku(state, action.payload);

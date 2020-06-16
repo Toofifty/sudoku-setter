@@ -39,7 +39,7 @@ const prepareBoard = (
         const solutionCell = solution[i];
         return {
             ...defaultInterCell,
-            value: cell.value,
+            value: cell.value ?? solutionCell.value,
             given: cell.given,
             index: i,
             marks: solutionCell.candidates,

@@ -10,7 +10,7 @@ interface KillerCageModalProps {
 
 const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
     const solution = useSelector((state) => state.solver.solution);
-    const createCage = useAction('create-killer-cage');
+    const createCage = useAction('shared/create-killer-cage');
 
     const minimum = (() => {
         const minimums: number[] = [];

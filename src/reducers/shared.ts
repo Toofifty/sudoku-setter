@@ -72,6 +72,54 @@ const setAlgorithms = action(
     }
 );
 
+const createThermo = action(
+    _ as RootState,
+    _ as number[],
+    'shared/create-thermo',
+    (state, thermo, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/create-thermo', payload: thermo });
+        dispatch({ type: 'solver/trigger-solve', payload: false });
+
+        return state;
+    }
+);
+
+const deleteThermo = action(
+    _ as RootState,
+    _ as number,
+    'shared/delete-thermo',
+    (state, index, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/delete-thermo', payload: index });
+        dispatch({ type: 'solver/trigger-solve', payload: true });
+
+        return state;
+    }
+);
+
+const createKillerCage = action(
+    _ as RootState,
+    _ as { total: number; cage: number[] },
+    'shared/create-killer-cage',
+    (state, killerCage, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/create-killer-cage', payload: killerCage });
+        dispatch({ type: 'solver/trigger-solve', payload: false });
+
+        return state;
+    }
+);
+
+const deleteKillerCage = action(
+    _ as RootState,
+    _ as number,
+    'shared/delete-killer-cage',
+    (state, index, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/delete-killer-cage', payload: index });
+        dispatch({ type: 'solver/trigger-solve', payload: true });
+
+        return state;
+    }
+);
+
 const reset = action(
     _ as RootState,
     _ as undefined,
@@ -94,6 +142,10 @@ export type SharedAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setRestrictions>
     | GetAction<typeof setAlgorithms>
+    | GetAction<typeof createThermo>
+    | GetAction<typeof deleteThermo>
+    | GetAction<typeof createKillerCage>
+    | GetAction<typeof deleteKillerCage>
     | GetAction<typeof reset>;
 
 export default merge<RootState>(
@@ -101,5 +153,9 @@ export default merge<RootState>(
     setCellValue,
     setRestrictions,
     setAlgorithms,
+    createThermo,
+    deleteThermo,
+    createKillerCage,
+    deleteKillerCage,
     reset
 );
