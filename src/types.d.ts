@@ -8,8 +8,6 @@ export type MarkedCell = {
     given: boolean;
 };
 
-export type ICell = FilledCell | MarkedCell;
-
 export type Position = { x: number; y: number };
 
 export type PuzzleCell = {

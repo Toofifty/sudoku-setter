@@ -5,12 +5,12 @@ const useContextMenu = (
     focused: boolean,
     contextMenuElement: React.ReactNode
 ) => {
-    const setContent = useAction('set-context-menu');
-    const open = useAction('set-context-menu-visible');
+    const setContextMenu = useAction('ui/set-context-menu');
+    const open = useAction('ui/toggle-context-menu');
 
     useEffect(() => {
-        if (focused) setContent(() => contextMenuElement);
-    }, [focused, setContent, contextMenuElement]);
+        if (focused) setContextMenu(() => contextMenuElement);
+    }, [focused, setContextMenu, contextMenuElement]);
 
     return (e: React.MouseEvent) => {
         e.preventDefault();

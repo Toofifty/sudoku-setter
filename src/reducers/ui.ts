@@ -1,3 +1,5 @@
+import { _, action, merge, GetAction } from './merge';
+
 export interface UIState {
     contextMenu?: () => React.ReactNode;
     contextVisible: boolean;
@@ -11,70 +13,53 @@ const defaultState = (): UIState => ({
     hideSolution: false,
 });
 
-type OpenContextMenu = {
-    type: 'set-context-menu';
-    payload: () => React.ReactNode;
-};
+const setContextMenu = action(
+    _ as UIState,
+    _ as () => React.ReactNode | undefined,
+    'ui/set-context-menu',
+    (state, contextMenu) => ({ ...state, contextMenu })
+);
 
-const openContextMenu = (
-    state: UIState,
-    contextMenu: () => React.ReactNode
-) => ({
-    ...state,
-    contextMenu,
-});
+const toggleContextMenu = action(
+    _ as UIState,
+    _ as boolean | undefined,
+    'ui/toggle-context-menu',
+    (state, contextVisible) => ({
+        ...state,
+        contextVisible: contextVisible ?? !state.contextVisible,
+    })
+);
 
-type CloseContextMenu = { type: 'close-context-menu'; payload: undefined };
+const toggleDebugMode = action(
+    _ as UIState,
+    _ as boolean | undefined,
+    'ui/toggle-debug-mode',
+    (state, debugMode) => ({
+        ...state,
+        debugMode: debugMode ?? !state.debugMode,
+    })
+);
 
-const closeContextMenu = (state: UIState) => ({
-    ...state,
-    contextMenu: undefined,
-});
-
-type SetDebugMode = { type: 'set-debug-mode'; payload: boolean };
-
-const setDebugMode = (state: UIState, debugMode: boolean) => ({
-    ...state,
-    debugMode,
-});
-
-type SetHideSolution = { type: 'set-hide-solution'; payload: boolean };
-
-const setHideSolution = (state: UIState, hideSolution: boolean) => ({
-    ...state,
-    hideSolution,
-});
-
-type SetContextMenuVisible = {
-    type: 'set-context-menu-visible';
-    payload: boolean;
-};
-
-const setContextMenuVisible = (state: UIState, contextVisible: boolean) => ({
-    ...state,
-    contextVisible,
-});
+const toggleHideSolution = action(
+    _ as UIState,
+    _ as boolean | undefined,
+    'ui/toggle-hide-solution',
+    (state, hideSolution) => ({
+        ...state,
+        hideSolution: hideSolution ?? !state.hideSolution,
+    })
+);
 
 export type UIAction =
-    | OpenContextMenu
-    | CloseContextMenu
-    | SetDebugMode
-    | SetHideSolution
-    | SetContextMenuVisible;
+    | GetAction<typeof setContextMenu>
+    | GetAction<typeof toggleContextMenu>
+    | GetAction<typeof toggleDebugMode>
+    | GetAction<typeof toggleHideSolution>;
 
-export default (state = defaultState(), action: UIAction) => {
-    switch (action.type) {
-        case 'set-context-menu':
-            return openContextMenu(state, action.payload);
-        case 'close-context-menu':
-            return closeContextMenu(state);
-        case 'set-debug-mode':
-            return setDebugMode(state, action.payload);
-        case 'set-hide-solution':
-            return setHideSolution(state, action.payload);
-        case 'set-context-menu-visible':
-            return setContextMenuVisible(state, action.payload);
-        default:
-            return state;
-    }
-};
+export default merge(
+    defaultState(),
+    setContextMenu,
+    toggleContextMenu,
+    toggleDebugMode,
+    toggleHideSolution
+);

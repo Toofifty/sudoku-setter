@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import './board.scss';
 import useSelector from '../../hooks/use-selector';
 import { PuzzleCell, SolutionCell } from '../../types';
 import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
+import { isEventOver } from 'utils';
 import { useSudokuSolver } from '../../utils/solve';
 import {
     row,
@@ -16,6 +16,7 @@ import {
     diagonals,
 } from '../../utils/solve/helper';
 import KillerCageModal from 'components/killer-cage-modal';
+import './board.scss';
 
 const Board = () => {
     const { board, thermos, killerCages, restrictions } = useSelector(
@@ -55,18 +56,10 @@ const Board = () => {
         }
     }, [dirty, setSolved, solve]);
 
+    // remove selection on click-away
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (
-                !e
-                    .composedPath()
-                    .some(
-                        (el: any) =>
-                            el.classList?.contains('board') ||
-                            el.classList?.contains('menu') ||
-                            el.classList?.contains('modal')
-                    )
-            ) {
+            if (!isEventOver(e, 'board', 'menu', 'modal')) {
                 _setFocused(null);
                 setSelection([]);
             }

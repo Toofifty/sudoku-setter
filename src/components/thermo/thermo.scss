@@ -27,14 +27,14 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
     overflow: visible;
     z-index: -1;
 
-    --thickness: 12px;
+    --thickness: 16px;
 
     @media (max-width: 800px) {
-        --thickness: 10px;
+        --thickness: 12px;
     }
 
     @media (max-width: 700px) {
-        --thickness: 7px;
+        --thickness: 8px;
     }
 
     &__bulb::before {

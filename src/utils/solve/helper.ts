@@ -1,5 +1,6 @@
-import { ICell, Position, FilledCell } from '../../types';
+import { Position, FilledCell } from '../../types';
 import { getBoxIndex, getCellAt, getCellIndex } from '../sudoku';
+import { InterCell } from './types';
 
 export const row = <T>(board: T[], pos: Position, includeSelf = false) => {
     const row = board.slice(pos.y * 9, (pos.y + 1) * 9);
@@ -81,7 +82,7 @@ export const getValue = <T>(cell: T) => {
     return 0;
 };
 
-export const getMarks = (cell: ICell) => {
+export const getMarks = (cell: InterCell) => {
     if (isFilled(cell)) return [];
     return cell.marks;
 };
@@ -91,5 +92,5 @@ export const getIndex = (_: any, i: number) => i;
 export const isFilled = (cell: any): cell is FilledCell =>
     cell.value && cell.value > 0;
 
-export const hasEmptyCell = (board: ICell[]) =>
+export const hasEmptyCell = (board: InterCell[]) =>
     board.some((cell) => !isFilled(cell) && cell.marks.length === 0);

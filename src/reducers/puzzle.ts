@@ -29,9 +29,9 @@ const defaultState = (): PuzzleState => ({
     history: { items: [], current: 0 },
 });
 
-const saveHistory = <TParams>(
-    fn: (state: PuzzleState, ...args: TParams[]) => PuzzleState
-) => (state: PuzzleState, ...args: TParams[]) => {
+const saveHistory = (
+    fn: (state: PuzzleState, ...args: unknown[]) => PuzzleState
+) => (state: PuzzleState, ...args: unknown[]) => {
     // save base state
     const { history: _history, ...saveableBaseState } = state;
 
@@ -62,7 +62,7 @@ const setGiven = action(
     'puzzle/set-given',
     (state, { index, value }) => {
         let board = [...state.board];
-        board[index] = { value, given: true };
+        board[index] = { value, given: !!value };
         return { ...state, board };
     },
     saveHistory

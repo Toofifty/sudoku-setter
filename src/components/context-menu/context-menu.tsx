@@ -3,6 +3,7 @@ import cx from 'classnames';
 import useSelector from '../../hooks/use-selector';
 import useAction from '../../hooks/use-action';
 import './context-menu.scss';
+import { isEventOver } from 'utils';
 
 const X_OFFSET = 4;
 const Y_OFFSET = 4;
@@ -16,7 +17,7 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
     const isVisible = useSelector((state) => state.ui.contextVisible);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const setMenuVisible = useAction('set-context-menu-visible');
+    const toggleContextMenu = useAction('ui/toggle-context-menu');
 
     useEffect(() => {
         const updateMousePos = (e: MouseEvent) => {
@@ -30,16 +31,26 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
 
     useEffect(() => {
         const close = (e: MouseEvent) =>
-            e.button !== 2 && setMenuVisible(false);
+            !isEventOver(e, 'context-menu') &&
+            e.button !== 2 &&
+            toggleContextMenu(false);
+
+        const closeAfterClick = (e: MouseEvent) =>
+            isEventOver(e, 'context-menu') &&
+            e.button !== 2 &&
+            toggleContextMenu(false);
+
         if (isVisible) {
-            window.addEventListener('click', close);
+            window.addEventListener('mousedown', close);
+            window.addEventListener('click', closeAfterClick);
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });
         }
         return () => {
-            window.removeEventListener('click', close);
+            window.removeEventListener('mousedown', close);
+            window.removeEventListener('click', closeAfterClick);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isVisible, content]);
+    }, [isVisible]);
 
     const style = {
         '--x': `${position.x}px`,

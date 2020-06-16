@@ -5,9 +5,9 @@ import './controls-menu.scss';
 
 const ControlsMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
-    const setDebugMode = useAction('set-debug-mode');
+    const toggleDebugMode = useAction('ui/toggle-debug-mode');
     const hideSolution = useSelector((state) => state.ui.hideSolution);
-    const setHideSolution = useAction('set-hide-solution');
+    const toggleHideSolution = useAction('ui/toggle-hide-solution');
 
     const stepSolve = useSelector((state) => state.solver.stepSolve);
     const setStepSolve = useAction('solver/toggle-step-solve');
@@ -36,7 +36,7 @@ const ControlsMenu = () => {
                     <input
                         type="checkbox"
                         checked={debugMode}
-                        onChange={() => setDebugMode(!debugMode)}
+                        onChange={() => toggleDebugMode()}
                     />
                     <i className="form-icon" /> Debug mode
                 </label>
@@ -46,7 +46,7 @@ const ControlsMenu = () => {
                     <input
                         type="checkbox"
                         checked={hideSolution}
-                        onChange={() => setHideSolution(!hideSolution)}
+                        onChange={() => toggleHideSolution()}
                     />
                     <i className="form-icon" /> Hide solution
                 </label>

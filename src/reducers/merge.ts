@@ -18,7 +18,13 @@ export const action = <TState, TType extends string, TPayload>(
     decorator?: any
 ) => ({
     type,
-    action: decorator ? decorator(action) : action,
+    action: decorator
+        ? (decorator(action) as (
+              state: TState,
+              payload: TPayload,
+              dispatch: any
+          ) => TState)
+        : action,
 });
 
 export type GetAction<TFrom extends ActionObject<any, any, any>> = Action<

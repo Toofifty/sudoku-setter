@@ -12,7 +12,6 @@ import {
     solveNonSeqNeighbors,
 } from './solvers';
 import { isFilled, hasEmptyCell } from './helper';
-import { ICell } from 'types';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };

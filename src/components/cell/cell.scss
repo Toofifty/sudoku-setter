@@ -2,7 +2,7 @@
 
 .cell {
     $b: &;
-    border: 0.5px solid $grey-300;
+    border: 0.5px solid $grey-900;
     background: transparent;
     outline: none;
     color: $purple-600;
@@ -88,7 +88,7 @@
         $border: 1px;
         $margin: 2px;
         font-size: 14px;
-        color: $grey-500;
+        color: $purple-600;
         display: flex;
         align-items: center;
         justify-content: center;
