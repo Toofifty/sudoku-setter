@@ -1,12 +1,12 @@
 import { connectRouter } from 'connected-react-router';
 import { RootState, WithDispatch } from 'store';
-import puzzle, { SudokuAction } from './puzzle';
+import puzzle, { PuzzleAction } from './puzzle';
 import solver, { SolverAction } from './solver';
 import ui, { UIAction } from './ui';
 import shared, { SharedAction } from './shared';
 
 export type RootActionType =
-    | SudokuAction
+    | PuzzleAction
     | SolverAction
     | UIAction
     | SharedAction;

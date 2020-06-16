@@ -29,7 +29,8 @@ export const merge = <TState>(
     defaultState?: TState,
     ...actions: ActionObject<TState, string, any>[]
 ) => (state = defaultState, action: any) => {
-    if (!state) return state;
     const target = actions.find(({ type }) => type === action.type);
-    if (target) return target.action(state, action.payload, action.dispatch);
+    if (target)
+        return target.action(state as any, action.payload, action.dispatch);
+    return state!;
 };

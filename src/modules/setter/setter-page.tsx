@@ -7,7 +7,7 @@ import ControlsMenu from 'components/controls-menu';
 
 const SetterPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
-    const setSudoku = useAction('set-sudoku');
+    const setSudoku = useAction('puzzle/set-sudoku');
     const triggerSolve = useAction('solver/trigger-solve');
 
     useEffect(() => {

@@ -22,7 +22,7 @@ const CellContextMenu = ({
     const { board, thermos, killerCages } = useSelector(
         (state) => state.puzzle
     );
-    const setColor = useAction('set-color');
+    const setColor = useAction('puzzle/set-color');
     const createThermo = useAction('shared/create-thermo');
     const deleteThermo = useAction('shared/delete-thermo');
     const deleteKillerCage = useAction('shared/delete-killer-cage');

@@ -1,4 +1,5 @@
-import { ICell, PuzzleCell } from '../types';
+import { PuzzleCell } from 'types';
+import { _, action, merge, GetAction } from './merge';
 
 export interface PuzzleState {
     board: PuzzleCell[];
@@ -24,137 +25,117 @@ const defaultState = (): PuzzleState => ({
     },
 });
 
-type Reducer<T extends { payload: any }> = (
-    state: PuzzleState,
-    payload: T['payload']
-) => PuzzleState;
-
-type SetGiven = {
-    type: 'puzzle/set-given';
-    payload: { index: number; value?: number };
-};
-
-const setGiven: Reducer<SetGiven> = (state, { index, value }) => {
-    let board = [...state.board];
-    board[index] = { value, given: true };
-    return { ...state, shouldSolve: true, board };
-};
-
-type SetBoard = {
-    type: 'set-board';
-    payload: ICell[];
-};
-
-const setBoard: Reducer<SetBoard> = (state, board) => {
-    return { ...state, board };
-};
-
-type Reset = {
-    type: 'puzzle/reset';
-    payload: undefined;
-};
-
-const reset = () => defaultState();
-
-type CreateThermo = { type: 'puzzle/create-thermo'; payload: number[] };
-
-const createThermo: Reducer<CreateThermo> = (state, thermo) => ({
-    ...state,
-    thermos: [...(state.thermos ?? []), thermo],
-});
-
-type DeleteThermo = { type: 'puzzle/delete-thermo'; payload: number };
-
-const deleteThermo: Reducer<DeleteThermo> = (state, cellIndex) => ({
-    ...state,
-    thermos: (state.thermos ?? []).filter(
-        (thermo) => !thermo.includes(cellIndex)
-    ),
-});
-
-type CreateKillerCage = {
-    type: 'puzzle/create-killer-cage';
-    payload: { total: number; cage: number[] };
-};
-
-const createKillerCage: Reducer<CreateKillerCage> = (state, killerCage) => ({
-    ...state,
-    killerCages: [...(state.killerCages ?? []), killerCage],
-});
-
-type DeleteKillerCage = { type: 'puzzle/delete-killer-cage'; payload: number };
-
-const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
-    ...state,
-    killerCages: (state.killerCages ?? []).filter(
-        ({ cage }) => !cage.includes(cellIndex)
-    ),
-});
-
-type SetSudoku = { type: 'set-sudoku'; payload: Partial<PuzzleState> };
-
-const setSudoku: Reducer<SetSudoku> = (state, sudoku) => ({
-    ...state,
-    ...sudoku,
-});
-
-type SetColor = {
-    type: 'set-color';
-    payload: { index: number | number[]; color: string };
-};
-
-const setColor: Reducer<SetColor> = (state, { index, color }) => {
-    if (typeof index === 'number') index = [index];
-    const colors = [...state.colors];
-    index.forEach((i) => (colors[i] = color));
-    return { ...state, colors };
-};
-
-type SetRestrictions = {
-    type: 'puzzle/set-restrictions';
-    payload: Partial<PuzzleState['restrictions']>;
-};
-
-const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
-    ...state,
-    restrictions: { ...state.restrictions, ...restrictions },
-});
-
-export type SudokuAction =
-    | SetGiven
-    | SetBoard
-    | Reset
-    | CreateThermo
-    | DeleteThermo
-    | CreateKillerCage
-    | DeleteKillerCage
-    | SetSudoku
-    | SetColor
-    | SetRestrictions;
-
-export default (state = defaultState(), action: SudokuAction) => {
-    switch (action.type) {
-        case 'puzzle/set-given':
-            return setGiven(state, action.payload);
-        case 'set-board':
-            return setBoard(state, action.payload);
-        case 'puzzle/reset':
-            return reset();
-        case 'puzzle/create-thermo':
-            return createThermo(state, action.payload);
-        case 'puzzle/delete-thermo':
-            return deleteThermo(state, action.payload);
-        case 'puzzle/create-killer-cage':
-            return createKillerCage(state, action.payload);
-        case 'puzzle/delete-killer-cage':
-            return deleteKillerCage(state, action.payload);
-        case 'set-sudoku':
-            return setSudoku(state, action.payload);
-        case 'set-color':
-            return setColor(state, action.payload);
-        case 'puzzle/set-restrictions':
-            return setRestrictions(state, action.payload);
-        default:
-            return state;
+const setGiven = action(
+    _ as PuzzleState,
+    _ as { index: number; value?: number },
+    'puzzle/set-given',
+    (state, { index, value }) => {
+        let board = [...state.board];
+        board[index] = { value, given: true };
+        return { ...state, shouldSolve: true, board };
     }
-};
+);
+
+const reset = action(_ as PuzzleState, _ as undefined, 'puzzle/reset', () =>
+    defaultState()
+);
+
+const createThermo = action(
+    _ as PuzzleState,
+    _ as number[],
+    'puzzle/create-thermo',
+    (state, thermo) => ({
+        ...state,
+        thermos: [...(state.thermos ?? []), thermo],
+    })
+);
+
+const deleteThermo = action(
+    _ as PuzzleState,
+    _ as number,
+    'puzzle/delete-thermo',
+    (state, cellIndex) => ({
+        ...state,
+        thermos: (state.thermos ?? []).filter(
+            (thermo) => !thermo.includes(cellIndex)
+        ),
+    })
+);
+
+const createKillerCage = action(
+    _ as PuzzleState,
+    _ as { total: number; cage: number[] },
+    'puzzle/create-killer-cage',
+    (state, killerCage) => ({
+        ...state,
+        killerCages: [...(state.killerCages ?? []), killerCage],
+    })
+);
+
+const deleteKillerCage = action(
+    _ as PuzzleState,
+    _ as number,
+    'puzzle/delete-killer-cage',
+    (state, cellIndex) => ({
+        ...state,
+        killerCages: (state.killerCages ?? []).filter(
+            ({ cage }) => !cage.includes(cellIndex)
+        ),
+    })
+);
+
+const setSudoku = action(
+    _ as PuzzleState,
+    _ as Partial<PuzzleState>,
+    'puzzle/set-sudoku',
+    (state, sudoku) => ({
+        ...state,
+        ...sudoku,
+    })
+);
+
+const setColor = action(
+    _ as PuzzleState,
+    _ as { index: number | number[]; color: string },
+    'puzzle/set-color',
+    (state, { index, color }) => {
+        if (typeof index === 'number') index = [index];
+        const colors = [...state.colors];
+        index.forEach((i) => (colors[i] = color));
+        return { ...state, colors };
+    }
+);
+
+const setRestrictions = action(
+    _ as PuzzleState,
+    _ as Partial<PuzzleState['restrictions']>,
+    'puzzle/set-restrictions',
+    (state, restrictions) => ({
+        ...state,
+        restrictions: { ...state.restrictions, ...restrictions },
+    })
+);
+
+export type PuzzleAction =
+    | GetAction<typeof setGiven>
+    | GetAction<typeof reset>
+    | GetAction<typeof createThermo>
+    | GetAction<typeof deleteThermo>
+    | GetAction<typeof createKillerCage>
+    | GetAction<typeof deleteKillerCage>
+    | GetAction<typeof setSudoku>
+    | GetAction<typeof setColor>
+    | GetAction<typeof setRestrictions>;
+
+export default merge<PuzzleState>(
+    defaultState(),
+    setGiven,
+    reset,
+    createThermo,
+    deleteThermo,
+    createKillerCage,
+    deleteKillerCage,
+    setSudoku,
+    setColor,
+    setRestrictions
+);

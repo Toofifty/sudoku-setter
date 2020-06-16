@@ -7,7 +7,7 @@ import ControlsMenu from 'components/controls-menu';
 
 const Main = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
-    const setSudoku = useAction('set-sudoku');
+    const setSudoku = useAction('puzzle/set-sudoku');
 
     useEffect(() => {
         if (!hasLoadedFromHash && window.location.hash) {
