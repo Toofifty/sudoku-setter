@@ -18,9 +18,9 @@ const CellContextMenu = ({
     index,
     onCreateKillerCage,
 }: CellContextMenuProps) => {
-    const color = useSelector((state) => state.sudoku.colors[index]);
+    const color = useSelector((state) => state.puzzle.colors[index]);
     const { board, thermos, killerCages } = useSelector(
-        (state) => state.sudoku
+        (state) => state.puzzle
     );
     const setColor = useAction('set-color');
     const createThermo = useAction('shared/create-thermo');

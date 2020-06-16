@@ -14,7 +14,7 @@ const setCellValue = action(
         dispatch({ type: 'puzzle/set-given', payload: { index, value } });
 
         // TODO: check if solving enabled
-        const prevValue = state.sudoku.board[index].value;
+        const prevValue = state.puzzle.board[index].value;
         // solve from scratch if value changed (or deleted)
         const fromScratch = !!prevValue && value !== prevValue;
         dispatch({ type: 'solver/trigger-solve', payload: fromScratch });
@@ -25,7 +25,7 @@ const setCellValue = action(
 
 const setRestrictions = action(
     _ as RootState,
-    _ as Partial<RootState['sudoku']['restrictions']>,
+    _ as Partial<RootState['puzzle']['restrictions']>,
     'shared/set-restrictions',
     (state, restrictions, dispatch: DispatchFn) => {
         dispatch({ type: 'puzzle/set-restrictions', payload: restrictions });
@@ -58,7 +58,7 @@ const setAlgorithms = action(
         // enable relevant restrictions automatically
         const restrictions = Object.entries(algorithms).reduce(
             (acc, [algorithm, value]) => {
-                if (value && algorithm in state.sudoku.restrictions) {
+                if (value && algorithm in state.puzzle.restrictions) {
                     return { acc, [algorithm]: true };
                 }
                 return acc;

@@ -1,6 +1,6 @@
 import { connectRouter } from 'connected-react-router';
 import { RootState, WithDispatch } from 'store';
-import sudoku, { SudokuAction } from './sudoku';
+import puzzle, { SudokuAction } from './puzzle';
 import solver, { SolverAction } from './solver';
 import ui, { UIAction } from './ui';
 import shared, { SharedAction } from './shared';
@@ -17,7 +17,7 @@ export default (history: any) => (
 ) => ({
     ...shared(state, action),
     router: connectRouter(history)(state?.router, action as any),
-    sudoku: sudoku(state?.sudoku, action as any),
+    puzzle: puzzle(state?.puzzle, action as any),
     solver: solver(state?.solver, action as any),
     ui: ui(state?.ui, action as any),
 });

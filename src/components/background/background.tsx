@@ -17,7 +17,7 @@ const boxes = range(0, 81).reduce(
 
 const Background = () => {
     const { colors, thermos, killerCages, restrictions } = useSelector(
-        (state) => state.sudoku
+        (state) => state.puzzle
     );
 
     return (

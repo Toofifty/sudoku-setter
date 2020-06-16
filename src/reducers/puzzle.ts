@@ -1,10 +1,6 @@
 import { ICell, PuzzleCell } from '../types';
 
-const emptyCell = () => ({
-    given: false,
-});
-
-export interface SudokuState {
+export interface PuzzleState {
     board: PuzzleCell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
@@ -16,8 +12,10 @@ export interface SudokuState {
     };
 }
 
-const defaultState = (): SudokuState => ({
-    board: Array(81).fill(null).map(emptyCell),
+const defaultState = (): PuzzleState => ({
+    board: Array(81)
+        .fill(null)
+        .map(() => ({ given: false })),
     colors: Array(81).fill('white'),
     restrictions: {
         antiKing: false,
@@ -27,9 +25,9 @@ const defaultState = (): SudokuState => ({
 });
 
 type Reducer<T extends { payload: any }> = (
-    state: SudokuState,
+    state: PuzzleState,
     payload: T['payload']
-) => SudokuState;
+) => PuzzleState;
 
 type SetGiven = {
     type: 'puzzle/set-given';
@@ -93,7 +91,7 @@ const deleteKillerCage: Reducer<DeleteKillerCage> = (state, cellIndex) => ({
     ),
 });
 
-type SetSudoku = { type: 'set-sudoku'; payload: Partial<SudokuState> };
+type SetSudoku = { type: 'set-sudoku'; payload: Partial<PuzzleState> };
 
 const setSudoku: Reducer<SetSudoku> = (state, sudoku) => ({
     ...state,
@@ -114,7 +112,7 @@ const setColor: Reducer<SetColor> = (state, { index, color }) => {
 
 type SetRestrictions = {
     type: 'puzzle/set-restrictions';
-    payload: Partial<SudokuState['restrictions']>;
+    payload: Partial<PuzzleState['restrictions']>;
 };
 
 const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({

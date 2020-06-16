@@ -1,4 +1,4 @@
-import { SudokuState } from 'reducers/sudoku';
+import { PuzzleState } from 'reducers/puzzle';
 import { PuzzleCell } from '../types';
 import { isFilled } from './solve/helper';
 
@@ -38,7 +38,7 @@ const decodeGivens = (encoded: string) => {
     return board;
 };
 
-export const encode = ({ board, thermos, killerCages }: SudokuState) => {
+export const encode = ({ board, thermos, killerCages }: PuzzleState) => {
     const data: EncodedData = {
         givens: encodeGivens(
             board.map((cell) => (isFilled(cell) && cell.given ? cell.value : 0))

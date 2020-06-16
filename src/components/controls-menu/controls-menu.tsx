@@ -16,7 +16,7 @@ const ControlsMenu = () => {
 
     const algorithms = useSelector((state) => state.solver.algorithms);
     const setAlgorithms = useAction('shared/set-algorithms');
-    const restrictions = useSelector((state) => state.sudoku.restrictions);
+    const restrictions = useSelector((state) => state.puzzle.restrictions);
     const setRestrictions = useAction('shared/set-restrictions');
 
     const triggerSolve = useAction('solver/trigger-solve');

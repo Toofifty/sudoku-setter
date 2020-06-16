@@ -19,7 +19,7 @@ import KillerCageModal from 'components/killer-cage-modal';
 
 const Board = () => {
     const { board, thermos, killerCages, restrictions } = useSelector(
-        (state) => state.sudoku
+        (state) => state.puzzle
     );
     const { dirty, solution } = useSelector((state) => state.solver);
     const setValue = useAction('shared/set-cell-value');

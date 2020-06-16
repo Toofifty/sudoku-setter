@@ -56,7 +56,7 @@ const prepareSolutionData = (board: InterCell[]): SolutionCell[] =>
     }));
 
 export const useSudokuSolver = () => {
-    const sudoku = useSelector((state) => state.sudoku);
+    const sudoku = useSelector((state) => state.puzzle);
     const solver = useSelector((state) => state.solver);
     const setSolution = useAction('solver/set-solution');
     const invalidateCandidates = useAction('solver/invalidate-candidates');

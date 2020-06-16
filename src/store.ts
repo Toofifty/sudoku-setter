@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { createBrowserHistory } from 'history';
 import createReducers, { RootActionType } from './reducers';
 import { RouterState } from 'connected-react-router';
-import { SudokuState } from 'reducers/sudoku';
+import { PuzzleState } from 'reducers/puzzle';
 import { UIState } from 'reducers/ui';
 import { SolverState } from 'reducers/solver';
 
@@ -43,7 +43,7 @@ export const store = createStore(
 
 export type RootState = {
     router: RouterState<any>;
-    sudoku: SudokuState;
+    puzzle: PuzzleState;
     solver: SolverState;
     ui: UIState;
 };
