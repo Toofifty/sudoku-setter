@@ -14,7 +14,10 @@ export const queueDispatchMiddleware = (store: any) => (next: any) => (
     const queue: RootActionType[] = [];
 
     const flush = () => {
-        queue.forEach(store.dispatch);
+        queue.forEach((action) => {
+            console.log('queued action', action);
+            return store.dispatch(action);
+        });
     };
 
     const dispatch = (action: RootActionType) => {

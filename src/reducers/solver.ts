@@ -101,6 +101,13 @@ const toggleLookahead: Reducer<ToggleLookahead> = (state, lookahead) => ({
     lookahead,
 });
 
+type SetSolved = {
+    type: 'solver/set-solved';
+    payload: undefined;
+};
+
+const setSolved: Reducer<SetSolved> = (state) => ({ ...state, dirty: false });
+
 type ToggleStepSolve = {
     type: 'solver/toggle-step-solve';
     payload: boolean;
@@ -137,6 +144,7 @@ export type SolverAction =
     | SetSolution
     | SetAlgorithms
     | TriggerSolve
+    | SetSolved
     | ToggleLookahead
     | ToggleStepSolve
     | InvalidateCandidates;
@@ -149,6 +157,8 @@ export default (state = defaultState(), action: SolverAction) => {
             return setAlgorithms(state, action.payload);
         case 'solver/trigger-solve':
             return triggerSolve(state, action.payload);
+        case 'solver/set-solved':
+            return setSolved(state, action.payload);
         case 'solver/toggle-lookahead':
             return toggleLookahead(state, action.payload);
         case 'solver/toggle-step-solve':

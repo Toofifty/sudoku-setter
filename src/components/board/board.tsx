@@ -23,8 +23,7 @@ const Board = () => {
     );
     const { dirty, solution } = useSelector((state) => state.solver);
     const setValue = useAction('shared/set-cell-value');
-    const clearValue = useAction('clear-value');
-    const setShouldSolve = useAction('set-should-solve');
+    const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
 
     const [focused, _setFocused] = useState<number | null>(null);
@@ -50,8 +49,9 @@ const Board = () => {
     useEffect(() => {
         if (dirty) {
             solve();
+            setSolved();
         }
-    }, [dirty, setShouldSolve, solve]);
+    }, [dirty, setSolved, solve]);
 
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
@@ -87,7 +87,6 @@ const Board = () => {
             boxes[index].push({
                 cell,
                 solutionCell: solution[i],
-                pos,
                 index: i,
             });
             return boxes;
@@ -95,7 +94,6 @@ const Board = () => {
         [[], [], [], [], [], [], [], [], []] as {
             cell: PuzzleCell;
             solutionCell: SolutionCell;
-            pos: Position;
             index: number;
         }[][]
     );
@@ -147,11 +145,12 @@ const Board = () => {
             )}
             {boxes.map((box, i) => (
                 <Box key={i}>
-                    {box.map(({ cell, solutionCell, pos, index }, i) => (
+                    {box.map(({ cell, solutionCell, index }, i) => (
                         <Cell
                             key={i}
                             index={index}
-                            {...cell}
+                            value={cell.value ?? solutionCell.value}
+                            given={cell.given}
                             marks={solutionCell.candidates}
                             invalidMarks={solutionCell.invalidCandidates}
                             focused={focused === index}
@@ -205,7 +204,9 @@ const Board = () => {
                                     setFocused(index + 1, true, shiftKey);
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
-                                    selection.forEach(clearValue);
+                                    selection.forEach((i) =>
+                                        setValue({ index: i })
+                                    );
                                 }
                             }}
                             onCreateKillerCage={() =>

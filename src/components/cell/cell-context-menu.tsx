@@ -27,7 +27,6 @@ const CellContextMenu = ({
     const deleteThermo = useAction('delete-thermo');
     const deleteKillerCage = useAction('delete-killer-cage');
     const setValue = useAction('shared/set-cell-value');
-    const clearValue = useAction('clear-value');
 
     const pos = getCellAt(index);
 
@@ -41,10 +40,9 @@ const CellContextMenu = ({
         <>
             <li className="menu-item">
                 <NumberInput
-                    onSetNumber={(value) => {
-                        if (value === 0) return clearValue(index);
-                        return setValue({ index, value });
-                    }}
+                    onSetNumber={(value) =>
+                        setValue({ index, value: value || undefined })
+                    }
                     selected={value}
                 />
             </li>

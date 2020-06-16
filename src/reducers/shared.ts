@@ -17,9 +17,14 @@ const setCellValue: Reducer<SetCellValue> = (
     dispatch,
     { index, value }
 ) => {
+    // TODO: switch where to place the digit based on sudoku mode
     dispatch({ type: 'puzzle/set-given', payload: { index, value } });
 
-    // TODO: trigger solve if board is changed
+    // TODO: check if solving enabled
+    const prevValue = state.sudoku.board[index].value;
+    // solve from scratch if value changed (or deleted)
+    const fromScratch = !!prevValue && value !== prevValue;
+    dispatch({ type: 'solver/trigger-solve', payload: fromScratch });
 
     return state;
 };
