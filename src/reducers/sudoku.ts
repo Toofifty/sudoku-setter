@@ -147,23 +147,13 @@ const setColor: Reducer<SetColor> = (state, { index, color }) => {
 };
 
 type SetRestrictions = {
-    type: 'set-restrictions';
+    type: 'puzzle/set-restrictions';
     payload: Partial<SudokuState['restrictions']>;
 };
 
 const setRestrictions: Reducer<SetRestrictions> = (state, restrictions) => ({
-    // ...solveFromScratch(state, undefined),
     ...state,
     restrictions: { ...state.restrictions, ...restrictions },
-    // solvers: {
-    //     ...state.solvers,
-    //     ...Object.entries(restrictions).reduce((acc, [restriction, value]) => {
-    //         if (restriction in state.solvers) {
-    //             return { acc, [restriction]: value };
-    //         }
-    //         return acc;
-    //     }, {} as any),
-    // },
 });
 
 export type SudokuAction =
@@ -204,7 +194,7 @@ export default (state = defaultState(), action: SudokuAction) => {
             return setSudoku(state, action.payload);
         case 'set-color':
             return setColor(state, action.payload);
-        case 'set-restrictions':
+        case 'puzzle/set-restrictions':
             return setRestrictions(state, action.payload);
         default:
             return state;

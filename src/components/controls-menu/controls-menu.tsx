@@ -15,9 +15,9 @@ const ControlsMenu = () => {
     const setLookahead = useAction('solver/toggle-lookahead');
 
     const algorithms = useSelector((state) => state.solver.algorithms);
-    const setAlgorithms = useAction('solver/set-algorithms');
+    const setAlgorithms = useAction('shared/set-algorithms');
     const restrictions = useSelector((state) => state.sudoku.restrictions);
-    const setRestrictions = useAction('set-restrictions');
+    const setRestrictions = useAction('shared/set-restrictions');
 
     const triggerSolve = useAction('solver/trigger-solve');
 
