@@ -5,7 +5,6 @@ export interface PuzzleState {
     board: PuzzleCell[];
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
-    colors: string[];
     restrictions: {
         antiKing: boolean;
         antiKnight: boolean;
@@ -17,7 +16,6 @@ const defaultState = (): PuzzleState => ({
     board: Array(81)
         .fill(null)
         .map(() => ({ given: false })),
-    colors: Array(81).fill('white'),
     restrictions: {
         antiKing: false,
         antiKnight: false,
@@ -100,9 +98,9 @@ const setColor = action(
     'puzzle/set-color',
     (state, { index, color }) => {
         if (typeof index === 'number') index = [index];
-        const colors = [...state.colors];
-        index.forEach((i) => (colors[i] = color));
-        return { ...state, colors };
+        const board = [...state.board];
+        index.forEach((i) => (board[i].color = color));
+        return { ...state, board };
     }
 );
 

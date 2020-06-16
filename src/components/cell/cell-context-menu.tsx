@@ -18,7 +18,7 @@ const CellContextMenu = ({
     index,
     onCreateKillerCage,
 }: CellContextMenuProps) => {
-    const color = useSelector((state) => state.puzzle.colors[index]);
+    const color = useSelector((state) => state.puzzle.board[index].color);
     const { board, thermos, killerCages } = useSelector(
         (state) => state.puzzle
     );
@@ -56,7 +56,7 @@ const CellContextMenu = ({
             />
             <li className="menu-item">
                 <ColorPicker
-                    color={color}
+                    color={color ?? 'white'}
                     onSelect={(color) => setColor({ index: selection, color })}
                 />
             </li>

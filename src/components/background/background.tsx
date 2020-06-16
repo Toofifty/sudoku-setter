@@ -16,7 +16,7 @@ const boxes = range(0, 81).reduce(
 );
 
 const Background = () => {
-    const { colors, thermos, killerCages, restrictions } = useSelector(
+    const { board, thermos, killerCages, restrictions } = useSelector(
         (state) => state.puzzle
     );
 
@@ -33,7 +33,7 @@ const Background = () => {
                         <BackgroundCell
                             key={n}
                             index={n}
-                            color={colors[n]}
+                            color={board[n].color ?? 'white'}
                             thermos={thermos}
                             killerCages={killerCages}
                         />
