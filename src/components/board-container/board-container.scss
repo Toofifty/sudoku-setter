@@ -1,6 +1,6 @@
 @import '_var';
 
-$extra: 10px + 40px + 16px;
+$extra: 10px + 40px;
 
 .board-container {
     position: relative;
@@ -9,7 +9,7 @@ $extra: 10px + 40px + 16px;
     width: var(--size);
     height: var(--size);
 
-    @for $i from 0 through 10 {
+    @for $i from 0.5 through 10 {
         $j: 10 - $i;
         @media (max-width: $j * 100px + $extra) {
             --size: #{($j - 1) * 100px};
@@ -26,7 +26,7 @@ $extra: 10px + 40px + 16px;
         height: 1000px;
         border: 2px solid $grey-900;
 
-        @for $i from 0 through 10 {
+        @for $i from 0.5 through 10 {
             $j: 10 - $i;
             $scale: ($j - 1) / 10;
             @media (max-width: $j * 100px + $extra) {

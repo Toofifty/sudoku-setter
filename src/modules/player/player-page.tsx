@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
-import ControlsMenu from 'components/controls-menu';
-import ContextMenu from 'components/context-menu';
 import ControlBox from 'components/control-box';
 
 const PlayerPage = () => {
