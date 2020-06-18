@@ -1,16 +1,14 @@
 import React from 'react';
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
+import { canUndoSelector, canRedoSelector } from 'utils/selectors';
 import './undo-redo.scss';
 
 const UndoRedo = () => {
     const undo = useAction('shared/undo');
     const redo = useAction('shared/redo');
-    const canUndo = useSelector(({ puzzle }) => puzzle.history.current > 0);
-    const canRedo = useSelector(
-        ({ puzzle }) =>
-            puzzle.history.current !== puzzle.history.items.length - 1
-    );
+    const canUndo = useSelector(canUndoSelector('puzzle'));
+    const canRedo = useSelector(canRedoSelector('player'));
 
     return (
         <li className="menu-item undo-redo">

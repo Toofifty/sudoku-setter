@@ -16,4 +16,10 @@
     @media (max-width: 1036px) {
         --size: calc(100vw - 36px);
     }
+
+    transform: scale(1);
+
+    @media (max-width: 1000px) {
+        transform: scale(0.9);
+    }
 }

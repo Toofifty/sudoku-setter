@@ -151,7 +151,12 @@ const undo = action(
     _ as undefined,
     'shared/undo',
     (state, _, dispatch: DispatchFn) => {
-        dispatch({ type: 'puzzle/undo', payload: undefined });
+        const isPlayMode = isPlayModeSelector(state);
+        if (isPlayMode) {
+            dispatch({ type: 'player/undo', payload: undefined });
+        } else {
+            dispatch({ type: 'puzzle/undo', payload: undefined });
+        }
         dispatch({ type: 'solver/trigger-solve', payload: true });
 
         return state;
@@ -163,7 +168,12 @@ const redo = action(
     _ as undefined,
     'shared/redo',
     (state, _, dispatch: DispatchFn) => {
-        dispatch({ type: 'puzzle/redo', payload: undefined });
+        const isPlayMode = isPlayModeSelector(state);
+        if (isPlayMode) {
+            dispatch({ type: 'player/redo', payload: undefined });
+        } else {
+            dispatch({ type: 'puzzle/redo', payload: undefined });
+        }
         dispatch({ type: 'solver/trigger-solve', payload: true });
 
         return state;

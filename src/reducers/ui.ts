@@ -8,7 +8,7 @@ export interface UIState {
 }
 
 const defaultState = (): UIState => ({
-    debugMode: process.env.NODE_ENV === 'development',
+    debugMode: false,
     contextVisible: false,
     hideSolution: false,
 });

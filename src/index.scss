@@ -90,6 +90,57 @@ code {
     }
 }
 
+.btn.btn {
+    &-light {
+        background: $purple-100;
+        border: 2px solid transparent;
+
+        &:hover,
+        &:focus {
+            color: $purple-600;
+            background: $purple-200;
+        }
+
+        &:active {
+            background: $purple-300;
+        }
+
+        &.btn-active {
+            border: 2px solid $purple-600;
+        }
+
+        &.btn-error {
+            border: 2px solid transparent;
+            background: $red-100;
+            color: $red-600 !important;
+
+            &:hover,
+            &:focus {
+                background: $red-200;
+            }
+
+            &:active {
+                background: $red-300;
+            }
+        }
+
+        &.btn-success {
+            border: 2px solid transparent;
+            background: $green-100;
+            color: $green-600 !important;
+
+            &:hover,
+            &:focus {
+                background: $green-200;
+            }
+
+            &:active {
+                background: $green-300;
+            }
+        }
+    }
+}
+
 .form-checkbox,
 .form-switch {
     cursor: pointer;

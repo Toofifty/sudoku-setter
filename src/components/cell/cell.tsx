@@ -31,6 +31,8 @@ const Cell = ({
     value,
     candidates = [],
     invalidCandidates = [],
+    cornerMarks = [],
+    centreMarks = [],
     given,
     selection,
     onMouseDown,
@@ -92,6 +94,8 @@ const Cell = ({
                     <Marks
                         candidates={candidates}
                         invalidCandidates={invalidCandidates}
+                        cornerMarks={cornerMarks}
+                        centreMarks={centreMarks}
                     />
                 ))}
             {debugMode && <span className="cell__num">{index}</span>}

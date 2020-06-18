@@ -76,13 +76,31 @@ const setCellValue = action(
     'player/set-cell-value',
     (state, cells) => {
         let board = [...state.board];
+        const mode = state.inputMode;
         cells.forEach(({ index, value }) => {
-            board[index] = {
-                value,
-                color: board[index].color,
-                centreMarks: [],
-                cornerMarks: [],
-            };
+            const { color, centreMarks, cornerMarks } = board[index];
+            if (mode === 'digit' || !value) {
+                board[index] = {
+                    value,
+                    color,
+                    centreMarks: [],
+                    cornerMarks: [],
+                };
+            } else {
+                // add/remove marks
+                let marks =
+                    mode === 'centre' ? [...centreMarks] : [...cornerMarks];
+                if (marks.includes(value)) {
+                    marks = marks.filter((n) => n !== value);
+                } else {
+                    marks = [...marks, value].sort();
+                }
+                board[index] = {
+                    color,
+                    centreMarks: mode === 'centre' ? marks : centreMarks,
+                    cornerMarks: mode === 'corner' ? marks : cornerMarks,
+                };
+            }
         });
         return { ...state, board };
     },
