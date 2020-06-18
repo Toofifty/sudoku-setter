@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useSelector from '../../hooks/use-selector';
-import { PuzzleCell, SolutionCell } from '../../types';
+import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
 import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
@@ -17,12 +17,15 @@ import {
 } from '../../utils/solve/helper';
 import KillerCageModal from 'components/killer-cage-modal';
 import './board.scss';
+import { isSetModeSelector } from 'utils/selectors';
 
 const Board = () => {
     const { board, thermos, killerCages, restrictions } = useSelector(
         (state) => state.puzzle
     );
+    const isSetMode = useSelector(isSetModeSelector);
     const { dirty, solution } = useSelector((state) => state.solver);
+    const { board: playerBoard } = useSelector((state) => state.player);
     const setValue = useAction('shared/set-cell-value');
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
@@ -81,14 +84,16 @@ const Board = () => {
             }
             boxes[index].push({
                 cell,
-                solutionCell: solution[i],
+                solutionCell: isSetMode ? solution[i] : undefined,
+                playerCell: playerBoard[i],
                 index: i,
             });
             return boxes;
         },
         [[], [], [], [], [], [], [], [], []] as {
             cell: PuzzleCell;
-            solutionCell: SolutionCell;
+            solutionCell?: SolutionCell;
+            playerCell?: PlayerCell;
             index: number;
         }[][]
     );
@@ -146,14 +151,20 @@ const Board = () => {
             )}
             {boxes.map((box, i) => (
                 <Box key={i}>
-                    {box.map(({ cell, solutionCell, index }, i) => (
+                    {box.map(({ cell, solutionCell, playerCell, index }, i) => (
                         <Cell
                             key={i}
                             index={index}
-                            value={cell.value ?? solutionCell.value}
+                            value={
+                                cell.value ??
+                                playerCell?.value ??
+                                solutionCell?.value
+                            }
                             given={cell.given}
-                            marks={solutionCell.candidates}
-                            invalidMarks={solutionCell.invalidCandidates}
+                            candidates={solutionCell?.candidates}
+                            invalidCandidates={solutionCell?.invalidCandidates}
+                            cornerMarks={playerCell?.cornerMarks}
+                            centreMarks={playerCell?.centreMarks}
                             focused={focused === index}
                             selection={selection}
                             highlighted={

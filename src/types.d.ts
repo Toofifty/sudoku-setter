@@ -21,3 +21,11 @@ export type SolutionCell = {
     candidates: number[];
     invalidCandidates: number[];
 };
+
+export type PlayerCell = {
+    value?: number;
+    cornerMarks: number[];
+    centreMarks: number[];
+    invalid?: boolean;
+    color: string;
+};

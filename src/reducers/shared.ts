@@ -1,5 +1,6 @@
 import { RootState, DispatchFn } from 'store';
 import { _, action, merge, GetAction } from './merge';
+import { isPlayModeSelector } from 'utils/selectors';
 
 // put reducers here if:
 // - they require reading root state (or state from another slice)
@@ -10,8 +11,15 @@ const setCellValue = action(
     _ as { index: number; value?: number },
     'shared/set-cell-value',
     (state, { index, value }, dispatch: DispatchFn) => {
-        // TODO: switch where to place the digit based on sudoku mode
-        dispatch({ type: 'puzzle/set-given', payload: { index, value } });
+        const isPlayMode = isPlayModeSelector(state);
+        if (isPlayMode) {
+            dispatch({
+                type: 'player/set-cell-value',
+                payload: { index, value },
+            });
+        } else {
+            dispatch({ type: 'puzzle/set-given', payload: { index, value } });
+        }
 
         // TODO: check if solving enabled
         const prevValue = state.puzzle.board[index].value;

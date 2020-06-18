@@ -4,9 +4,11 @@ import puzzle, { PuzzleAction } from './puzzle';
 import solver, { SolverAction } from './solver';
 import ui, { UIAction } from './ui';
 import shared, { SharedAction } from './shared';
+import player, { PlayerAction } from './player';
 
 export type RootActionType =
     | PuzzleAction
+    | PlayerAction
     | SolverAction
     | UIAction
     | SharedAction;
@@ -18,6 +20,7 @@ export default (history: any) => (
     ...shared(state, action),
     router: connectRouter(history)(state?.router, action as any),
     puzzle: puzzle(state?.puzzle, action as any),
+    player: player(state?.player, action as any),
     solver: solver(state?.solver, action as any),
     ui: ui(state?.ui, action as any),
 });

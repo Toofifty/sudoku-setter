@@ -30,6 +30,11 @@ const ControlsMenu = () => {
 
     return (
         <ul className="controls menu">
+            <li className="menu-item">
+                <a href={`puzzle/${window.location.hash}`} target="blank">
+                    <i className="icon icon-share mr-1" /> Test puzzle
+                </a>
+            </li>
             <li className="divider" data-content="View" />
             <li className="menu-item">
                 <label className="form-switch">

@@ -5,6 +5,7 @@ import { RouterState } from 'connected-react-router';
 import { PuzzleState } from 'reducers/puzzle';
 import { UIState } from 'reducers/ui';
 import { SolverState } from 'reducers/solver';
+import { PlayerState } from 'reducers/player';
 
 export const history = createBrowserHistory();
 
@@ -44,6 +45,7 @@ export const store = createStore(
 export type RootState = {
     router: RouterState<any>;
     puzzle: PuzzleState;
+    player: PlayerState;
     solver: SolverState;
     ui: UIState;
 };

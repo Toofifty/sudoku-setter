@@ -4,12 +4,16 @@ import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
 import CellContextMenu from './cell-context-menu';
 import './cell.scss';
+import { isSetModeSelector } from 'utils/selectors';
+import Marks from './marks';
 
 interface CellProps {
     index: number;
     value?: number;
-    marks: number[];
-    invalidMarks?: number[];
+    candidates?: number[];
+    invalidCandidates?: number[];
+    cornerMarks?: number[];
+    centreMarks?: number[];
     given: boolean;
 
     selection: number[];
@@ -25,7 +29,8 @@ interface CellProps {
 
 const Cell = ({
     value,
-    marks,
+    candidates = [],
+    invalidCandidates = [],
     given,
     selection,
     onMouseDown,
@@ -37,11 +42,9 @@ const Cell = ({
     onMouseEnter,
     onCreateKillerCage,
 }: CellProps) => {
+    const isSetMode = useSelector(isSetModeSelector);
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
-    const invalidMarks = useSelector(
-        (state) => state.solver.solution[index].invalidCandidates
-    );
     const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
@@ -71,7 +74,7 @@ const Cell = ({
                 (selected || focused) && 'cell--selected',
                 focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
-                !value && marks?.length === 0 && 'cell--empty'
+                isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
             onContextMenu={onContextMenu}
             onKeyDown={onKeyDown}
@@ -86,20 +89,10 @@ const Cell = ({
                 (value ? (
                     <span className="cell__value">{value}</span>
                 ) : (
-                    Array(9)
-                        .fill(0)
-                        .map((_, i) => (
-                            <span
-                                className={cx(
-                                    `cell__mark mark-${i + 1}`,
-                                    invalidMarks.includes(i + 1) &&
-                                        'cell__mark--invalid'
-                                )}
-                                key={i}
-                            >
-                                {marks?.includes(i + 1) ? i + 1 : <>&nbsp;</>}
-                            </span>
-                        ))
+                    <Marks
+                        candidates={candidates}
+                        invalidCandidates={invalidCandidates}
+                    />
                 ))}
             {debugMode && <span className="cell__num">{index}</span>}
         </button>
