@@ -57,32 +57,43 @@ const defaultState = (): PlayerState => ({
     board: Array(81).fill(null).map(emptyCell),
     history: { items: [], current: 0 },
     inputMode: 'digit',
-    settings: load('player.settings', {
-        multiInputMode: 'corner',
-        highlightSudokuRestrictions: true,
-        highlightMiscRestrictions: true,
-        highlightMatchingNumbers: true,
-        autoFixPencilMarks: true,
-        showIncorrectMoves: false,
-        showInvalidMoves: true,
+    ...load('player.settings', {
+        settings: {
+            multiInputMode: 'corner',
+            highlightSudokuRestrictions: true,
+            highlightMiscRestrictions: true,
+            highlightMatchingNumbers: true,
+            autoFixPencilMarks: true,
+            showIncorrectMoves: false,
+            showInvalidMoves: true,
+        },
     }),
 });
 
 const setCellValue = action(
     _ as PlayerState,
-    _ as { index: number; value?: number },
+    _ as { index: number; value?: number }[],
     'player/set-cell-value',
-    (state, { index, value }) => {
+    (state, cells) => {
         let board = [...state.board];
-        board[index] = {
-            value,
-            color: board[index].color,
-            centreMarks: [],
-            cornerMarks: [],
-        };
+        cells.forEach(({ index, value }) => {
+            board[index] = {
+                value,
+                color: board[index].color,
+                centreMarks: [],
+                cornerMarks: [],
+            };
+        });
         return { ...state, board };
     },
     saveHistory<PlayerState>(...trackHistoryOf)
+);
+
+const setInputMode = action(
+    _ as PlayerState,
+    _ as InputMode,
+    'player/set-input-mode',
+    (state, inputMode) => ({ ...state, inputMode })
 );
 
 const setSettings = action(
@@ -115,6 +126,7 @@ const redo = action(
 
 export type PlayerAction =
     | GetAction<typeof setCellValue>
+    | GetAction<typeof setInputMode>
     | GetAction<typeof setSettings>
     | GetAction<typeof undo>
     | GetAction<typeof redo>;
@@ -122,6 +134,7 @@ export type PlayerAction =
 export default merge<PlayerState>(
     defaultState(),
     setCellValue,
+    setInputMode,
     setSettings,
     undo,
     redo

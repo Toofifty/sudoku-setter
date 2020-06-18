@@ -15,7 +15,7 @@ const setCellValue = action(
         if (isPlayMode) {
             dispatch({
                 type: 'player/set-cell-value',
-                payload: { index, value },
+                payload: [{ index, value }],
             });
         } else {
             dispatch({ type: 'puzzle/set-given', payload: { index, value } });
