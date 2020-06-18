@@ -5,8 +5,10 @@ import './board-container.scss';
 
 const BoardContainer = () => (
     <div className="board-container">
-        <Background />
-        <Board />
+        <div className="board-sizer">
+            <Background />
+            <Board />
+        </div>
     </div>
 );
 

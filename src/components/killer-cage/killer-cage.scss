@@ -24,14 +24,6 @@ $padding: var(--padding, 4px);
     --border-width: 3px;
     --padding: 4px;
 
-    @media (max-width: 800px) {
-        --border-width: 2px;
-    }
-
-    @media (max-width: 500px) {
-        --padding: 2px;
-    }
-
     &__total {
         position: absolute;
         top: 0;
@@ -40,14 +32,6 @@ $padding: var(--padding, 4px);
         background: white;
         font-size: 16px;
         font-weight: bold;
-
-        @media (max-width: 800px) {
-            font-size: 12px;
-        }
-
-        @media (max-width: 500px) {
-            font-size: 8px;
-        }
     }
 
     &__cage {

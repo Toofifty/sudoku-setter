@@ -24,7 +24,7 @@ const PlayerPage = () => {
     }, [hasLoadedFromHash, setSudoku, triggerSolve]);
 
     return (
-        <div style={{ margin: 50 }}>
+        <div style={{ margin: 20 }}>
             <div className="container">
                 <div className="columns">
                     <div

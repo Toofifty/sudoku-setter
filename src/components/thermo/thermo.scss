@@ -1,6 +1,6 @@
 @import '_var';
 
-$thickness: var(--thickness, 12px);
+$thickness: 12px;
 
 @mixin fill {
     position: absolute;
@@ -26,16 +26,6 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
     @include fill;
     overflow: visible;
     z-index: -1;
-
-    --thickness: 16px;
-
-    @media (max-width: 800px) {
-        --thickness: 12px;
-    }
-
-    @media (max-width: 700px) {
-        --thickness: 8px;
-    }
 
     &__bulb::before {
         @include fill;
