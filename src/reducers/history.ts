@@ -1,11 +1,8 @@
+import { pick } from 'utils';
+
 export type WithHistory<TState> = {
     history: { items: Omit<TState, 'history'>[]; current: number };
 };
-
-const pick = <T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> =>
-    Object.fromEntries(
-        Object.entries(obj).filter(([key]) => keys.includes(key as any))
-    ) as any;
 
 export const saveHistory = <TState extends WithHistory<any>>(
     ...keys: (keyof Omit<TState, 'history'>)[]
