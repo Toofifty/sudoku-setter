@@ -1,9 +1,11 @@
 import { PuzzleCell } from 'types';
 import { _, action, merge, GetAction } from './merge';
+import { undoHistory, redoHistory, saveHistory } from './history';
 
-type WithHistory<TState> = { history: { items: TState[]; current: number } };
+export type GameMode = 'set' | 'play';
 
 export interface PuzzleState {
+    mode: GameMode;
     board: PuzzleCell[];
     thermos: number[][];
     killerCages: { total: number; cage: number[] }[];
@@ -15,7 +17,14 @@ export interface PuzzleState {
     history: { items: Omit<PuzzleState, 'history'>[]; current: number };
 }
 
+const trackHistoryOf: (keyof Omit<PuzzleState, 'history'>)[] = [
+    'board',
+    'thermos',
+    'killerCages',
+];
+
 const defaultState = (): PuzzleState => ({
+    mode: 'play',
     board: Array(81)
         .fill(null)
         .map(() => ({ given: false, color: 'white' })),
@@ -29,33 +38,6 @@ const defaultState = (): PuzzleState => ({
     history: { items: [], current: 0 },
 });
 
-const saveHistory = (
-    fn: (state: PuzzleState, ...args: unknown[]) => PuzzleState
-) => (state: PuzzleState, ...args: unknown[]) => {
-    // save base state
-    const { history: _history, ...saveableBaseState } = state;
-
-    const newState = fn(state, ...args);
-    const { history, ...saveableState } = newState;
-    let items = history?.items ?? [];
-    if (history?.current !== items.length - 1) {
-        // delete redo history once an action is done
-        items = items.slice(0, (history?.current ?? 0) + 1);
-    }
-
-    if (items.length === 0) {
-        items = [saveableBaseState];
-    }
-
-    return {
-        ...newState,
-        history: {
-            items: [...items, saveableState],
-            current: (history?.current ?? 0) + 1,
-        },
-    };
-};
-
 const setGiven = action(
     _ as PuzzleState,
     _ as { index: number; value?: number },
@@ -65,7 +47,7 @@ const setGiven = action(
         board[index] = { value, given: !!value, color: board[index].color };
         return { ...state, board };
     },
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const reset = action(_ as PuzzleState, _ as undefined, 'puzzle/reset', () =>
@@ -80,7 +62,7 @@ const createThermo = action(
         ...state,
         thermos: [...(state.thermos ?? []), thermo],
     }),
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const deleteThermo = action(
@@ -93,7 +75,7 @@ const deleteThermo = action(
             (thermo) => !thermo.includes(cellIndex)
         ),
     }),
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const createKillerCage = action(
@@ -104,7 +86,7 @@ const createKillerCage = action(
         ...state,
         killerCages: [...(state.killerCages ?? []), killerCage],
     }),
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const deleteKillerCage = action(
@@ -117,7 +99,7 @@ const deleteKillerCage = action(
             ({ cage }) => !cage.includes(cellIndex)
         ),
     }),
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const setSudoku = action(
@@ -140,7 +122,7 @@ const setColor = action(
         index.forEach((i) => (board[i].color = color));
         return { ...state, board };
     },
-    saveHistory
+    saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
 const setRestrictions = action(
@@ -157,45 +139,14 @@ const undo = action(
     _ as PuzzleState,
     _ as undefined,
     'puzzle/undo',
-    (state) => {
-        const { history, ...rest } = state;
-        if (!history || (history.current ?? 0) < 1) return state;
-
-        const current = history.current - 1;
-        return {
-            ...rest,
-            ...history.items[current],
-            // don't need to undo restrictions
-            restrictions: rest.restrictions,
-            history: {
-                items: history.items,
-                current,
-            },
-        };
-    }
+    undoHistory(...trackHistoryOf)
 );
 
 const redo = action(
     _ as PuzzleState,
     _ as undefined,
     'puzzle/redo',
-    (state) => {
-        const { history, ...rest } = state;
-        if (!history || (history.current ?? 0) === history.items.length)
-            return state;
-
-        const current = history.current + 1;
-        return {
-            ...rest,
-            ...history.items[current],
-            // don't need to redo restrictions
-            restrictions: rest.restrictions,
-            history: {
-                items: history.items,
-                current,
-            },
-        };
-    }
+    redoHistory(...trackHistoryOf)
 );
 
 export type PuzzleAction =
