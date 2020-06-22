@@ -25,26 +25,31 @@
         #{$b}__mark {
             color: $purple-600;
         }
-
-        &::after {
-            $gap: 0px;
-            content: '';
-            position: absolute;
-            left: $gap;
-            top: $gap;
-            bottom: $gap;
-            right: $gap;
-            border: 0 solid $purple-600;
-            pointer-events: none;
-        }
     }
 
     &--focused::after {
-        border-width: 2px;
+        $gap: 0px;
+        content: '';
+        position: absolute;
+        left: $gap;
+        top: $gap;
+        bottom: $gap;
+        right: $gap;
+        border: 2px solid $purple-600;
+        pointer-events: none;
+    }
+
+    &--matches {
+        background: $blue-200-2;
     }
 
     &--given {
         color: #27343b;
+    }
+
+    &--incorrect {
+        color: $red-600;
+        background: $red-100-2;
     }
 
     &--empty::after {

@@ -49,8 +49,8 @@ const setSelectionValue = action(
                 const prevValue = state.puzzle.board[index].value;
                 return !!prevValue && value !== prevValue;
             });
-        } else if (state.ui.focused) {
-            if (!state.ui.focused) return state;
+        } else {
+            if (state.ui.focused === undefined) return state;
 
             dispatch({
                 type: 'puzzle/set-given',

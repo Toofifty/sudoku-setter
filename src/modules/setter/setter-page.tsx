@@ -23,7 +23,7 @@ const SetterPage = () => {
     }, [hasLoadedFromHash, setSudoku, triggerSolve]);
 
     return (
-        <div style={{ margin: 20 }}>
+        <div>
             <div className="container">
                 <div className="columns">
                     <div
@@ -48,8 +48,8 @@ const SetterPage = () => {
                         </div>
                     </div>
                 </div>
+                <ContextMenu />
             </div>
-            <ContextMenu />
         </div>
     );
 };

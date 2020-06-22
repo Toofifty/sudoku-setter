@@ -9,17 +9,16 @@ import { isFilled } from 'utils/solve/helper';
 import UndoRedo from 'components/undo-redo';
 
 interface CellContextMenuProps {
-    selection: number[];
     index: number;
     onCreateKillerCage: () => void;
 }
 
 const CellContextMenu = ({
-    selection,
     index,
     onCreateKillerCage,
 }: CellContextMenuProps) => {
     const color = useSelector((state) => state.puzzle.board[index].color);
+    const selection = useSelector((state) => state.ui.selection);
     const { board, thermos, killerCages } = useSelector(
         (state) => state.puzzle
     );

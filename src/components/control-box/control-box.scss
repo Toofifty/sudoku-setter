@@ -3,6 +3,9 @@
 .control-box {
     display: flex;
     flex-direction: column;
+    box-shadow: none;
+    border: 2px solid $grey-200;
+    border-radius: 16px;
 
     .btn {
         padding: 10px 16px;

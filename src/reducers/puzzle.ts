@@ -44,7 +44,11 @@ const setGiven = action(
     'puzzle/set-given',
     (state, { index, value }) => {
         let board = [...state.board];
-        board[index] = { value, given: !!value, color: board[index].color };
+        board[index] = {
+            value,
+            given: value !== undefined,
+            color: board[index].color,
+        };
         return { ...state, board };
     },
     saveHistory<PuzzleState>(...trackHistoryOf)

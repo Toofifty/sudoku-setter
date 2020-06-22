@@ -19,6 +19,7 @@ interface CellProps {
     selection: number[];
     highlighted?: boolean;
     focused?: boolean;
+    targetValue: number;
     onFocus?: () => void;
     onMouseEnter?: (e: React.MouseEvent) => void;
     onMouseDown: (e: React.MouseEvent) => void;
@@ -38,6 +39,7 @@ const Cell = ({
     index,
     focused,
     highlighted,
+    targetValue,
     onFocus,
     onMouseEnter,
     onCreateKillerCage,
@@ -57,12 +59,19 @@ const Cell = ({
         !!focused,
         <CellContextMenu
             index={index}
-            selection={selection}
             onCreateKillerCage={onCreateKillerCage}
         />
     );
 
     const selected = selection.includes(index);
+    const matches =
+        value === targetValue ||
+        (isSetMode && candidates.includes(targetValue)) ||
+        (!isSetMode &&
+            (cornerMarks.includes(targetValue) ||
+                centreMarks.includes(targetValue)));
+
+    const incorrect = value && !candidates.includes(value);
 
     return (
         <button
@@ -74,6 +83,8 @@ const Cell = ({
                 selected && 'cell--selected',
                 isSetMode && focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
+                matches && 'cell--matches',
+                incorrect && 'cell--incorrect',
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
             onContextMenu={onContextMenu}

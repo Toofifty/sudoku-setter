@@ -66,7 +66,10 @@ const Board = () => {
             }
             boxes[index].push({
                 cell,
-                solutionCell: isSetMode ? solution[i] : undefined,
+                solutionCell: {
+                    ...solution[i],
+                    ...(isSetMode ? {} : { value: undefined }),
+                },
                 playerCell: playerBoard[i],
                 index: i,
             });
@@ -74,7 +77,7 @@ const Board = () => {
         },
         [[], [], [], [], [], [], [], [], []] as {
             cell: PuzzleCell;
-            solutionCell?: SolutionCell;
+            solutionCell: SolutionCell;
             playerCell?: PlayerCell;
             index: number;
         }[][]
@@ -117,6 +120,14 @@ const Board = () => {
             ? diagonals(board, getCellAt(focused)).flat()
             : [];
 
+    const target = selection.length === 1 ? selection[0] : focused;
+    const targetValue =
+        (target &&
+            (board[target].value ??
+                (isSetMode ? solution[target].value : undefined) ??
+                playerBoard[target].value)) ??
+        0;
+
     return (
         <div className="board" id="board">
             {killerCageModalOpen && (
@@ -143,6 +154,7 @@ const Board = () => {
                             centreMarks={playerCell?.centreMarks}
                             focused={focused === index}
                             selection={selection}
+                            targetValue={targetValue}
                             highlighted={
                                 highlightedRow.includes(cell) ||
                                 highlightedColumn.includes(cell) ||

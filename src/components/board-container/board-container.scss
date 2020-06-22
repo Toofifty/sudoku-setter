@@ -1,16 +1,16 @@
 @import '_var';
 
-$extra: 10px + 40px;
+$extra: 10px;
 
 .board-container {
     position: relative;
-    margin: 10px;
+    margin: 6px;
     --size: 1000px;
     width: var(--size);
     height: var(--size);
 
-    @for $i from 0.5 through 10 {
-        $j: 10 - $i;
+    @for $i from 1 through 50 {
+        $j: 10 - ($i / 5);
         @media (max-width: $j * 100px + $extra) {
             --size: #{($j - 1) * 100px};
         }
@@ -26,8 +26,8 @@ $extra: 10px + 40px;
         height: 1000px;
         border: 2px solid $grey-900;
 
-        @for $i from 0.5 through 10 {
-            $j: 10 - $i;
+        @for $i from 1 through 50 {
+            $j: 10 - ($i / 5);
             $scale: ($j - 1) / 10;
             @media (max-width: $j * 100px + $extra) {
                 transform: translate(-50%, -50%) scale($scale);
