@@ -6,6 +6,10 @@ import './control-box.scss';
 import useAction from 'hooks/use-action';
 import { canUndoSelector, canRedoSelector } from 'utils/selectors';
 
+const preventFocus = (e: React.MouseEvent) => {
+    e.preventDefault();
+};
+
 const ControlBox = () => {
     const inputMode = useSelector((state) => state.player.inputMode);
     const setInputMode = useAction('player/set-input-mode');
@@ -14,6 +18,8 @@ const ControlBox = () => {
     const canUndo = useSelector(canUndoSelector('player'));
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('player'));
+
+    const setSelectionValue = useAction('shared/set-selection-value');
 
     return (
         <div className="control-box menu">
@@ -25,6 +31,7 @@ const ControlBox = () => {
                             inputMode === 'digit' && 'btn-active'
                         )}
                         onClick={() => setInputMode('digit')}
+                        onMouseDown={preventFocus}
                     >
                         1
                     </button>
@@ -34,6 +41,7 @@ const ControlBox = () => {
                             inputMode === 'corner' && 'btn-active'
                         )}
                         onClick={() => setInputMode('corner')}
+                        onMouseDown={preventFocus}
                     >
                         <span>1</span>
                         <span>2</span>
@@ -45,6 +53,7 @@ const ControlBox = () => {
                             inputMode === 'centre' && 'btn-active'
                         )}
                         onClick={() => setInputMode('centre')}
+                        onMouseDown={preventFocus}
                     >
                         123
                     </button>
@@ -54,6 +63,8 @@ const ControlBox = () => {
                         <button
                             className="btn btn-primary control-box__number-btn"
                             key={n}
+                            onClick={() => setSelectionValue(n)}
+                            onMouseDown={preventFocus}
                         >
                             {n}
                         </button>
@@ -64,6 +75,7 @@ const ControlBox = () => {
                         className="btn btn-light"
                         disabled={!canUndo}
                         onClick={() => undo()}
+                        onMouseDown={preventFocus}
                     >
                         <i className="icon icon-refresh flip-horiz" />
                     </button>
@@ -71,10 +83,15 @@ const ControlBox = () => {
                         className="btn btn-light"
                         disabled={!canRedo}
                         onClick={() => redo()}
+                        onMouseDown={preventFocus}
                     >
                         <i className="icon icon-refresh" />
                     </button>
-                    <button className="btn btn-light btn-error">
+                    <button
+                        className="btn btn-light btn-error"
+                        onClick={() => setSelectionValue(undefined)}
+                        onMouseDown={preventFocus}
+                    >
                         <i className="icon icon-delete" />
                     </button>
                 </div>

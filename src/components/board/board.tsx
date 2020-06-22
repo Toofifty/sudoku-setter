@@ -118,7 +118,7 @@ const Board = () => {
             : [];
 
     return (
-        <div className="board">
+        <div className="board" id="board">
             {killerCageModalOpen && (
                 <KillerCageModal
                     selection={selection}
