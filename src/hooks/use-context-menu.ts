@@ -10,7 +10,8 @@ const useContextMenu = (
 
     useEffect(() => {
         if (focused) setContextMenu(() => contextMenuElement);
-    }, [focused, setContextMenu, contextMenuElement]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [focused, setContextMenu]);
 
     return (e: React.MouseEvent) => {
         e.preventDefault();

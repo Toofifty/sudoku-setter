@@ -5,12 +5,16 @@ export interface UIState {
     contextVisible: boolean;
     debugMode: boolean;
     hideSolution: boolean;
+    focused?: number;
+    selection: number[];
 }
 
 const defaultState = (): UIState => ({
     debugMode: false,
     contextVisible: false,
     hideSolution: false,
+    selection: [],
+    focused: undefined,
 });
 
 const setContextMenu = action(
@@ -50,16 +54,56 @@ const toggleHideSolution = action(
     })
 );
 
+const setFocus = action(
+    _ as UIState,
+    _ as { index: number; isKeyPress?: boolean; addToSelection?: boolean },
+    'ui/set-focus',
+    (state, { index, isKeyPress, addToSelection }) => {
+        console.log('setFocus', { index, isKeyPress, addToSelection });
+
+        if (index !== undefined && (index < 0 || index >= 81)) return state;
+        let { focused, selection } = state;
+        if (!addToSelection) {
+            focused = index;
+            selection = [index];
+        } else if (!selection.includes(index)) {
+            if (isKeyPress) focused = index;
+            selection = [...selection, index];
+        }
+
+        return {
+            ...state,
+            focused,
+            selection,
+        };
+    }
+);
+
+const clearFocus = action(
+    _ as UIState,
+    _ as undefined,
+    'ui/clear-focus',
+    (state) => ({
+        ...state,
+        focused: undefined,
+        selection: [],
+    })
+);
+
 export type UIAction =
     | GetAction<typeof setContextMenu>
     | GetAction<typeof toggleContextMenu>
     | GetAction<typeof toggleDebugMode>
-    | GetAction<typeof toggleHideSolution>;
+    | GetAction<typeof toggleHideSolution>
+    | GetAction<typeof setFocus>
+    | GetAction<typeof clearFocus>;
 
 export default merge(
     defaultState(),
     setContextMenu,
     toggleContextMenu,
     toggleDebugMode,
-    toggleHideSolution
+    toggleHideSolution,
+    setFocus,
+    clearFocus
 );

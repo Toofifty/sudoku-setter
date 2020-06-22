@@ -31,6 +31,38 @@ const setCellValue = action(
     }
 );
 
+const setSelectionValue = action(
+    _ as RootState,
+    _ as number | undefined,
+    'shared/set-selection-value',
+    (state, value, dispatch: DispatchFn) => {
+        const isPlayMode = isPlayModeSelector(state);
+        let fromScratchSolve = false;
+        if (isPlayMode) {
+            dispatch({
+                type: 'player/set-cell-value',
+                payload: state.ui.selection.map((index) => ({ index, value })),
+            });
+            fromScratchSolve = state.ui.selection.some((index) => {
+                const prevValue = state.puzzle.board[index].value;
+                return !!prevValue && value !== prevValue;
+            });
+        } else if (state.ui.focused) {
+            dispatch({
+                type: 'puzzle/set-given',
+                payload: { index: state.ui.focused, value },
+            });
+            const prevValue = state.puzzle.board[state.ui.focused].value;
+            fromScratchSolve = !!prevValue && value !== prevValue;
+        }
+
+        // TODO: check if solving enabled
+        dispatch({ type: 'solver/trigger-solve', payload: fromScratchSolve });
+
+        return state;
+    }
+);
+
 const setRestrictions = action(
     _ as RootState,
     _ as Partial<RootState['puzzle']['restrictions']>,
@@ -182,6 +214,7 @@ const redo = action(
 
 export type SharedAction =
     | GetAction<typeof setCellValue>
+    | GetAction<typeof setSelectionValue>
     | GetAction<typeof setRestrictions>
     | GetAction<typeof setAlgorithms>
     | GetAction<typeof createThermo>
@@ -195,6 +228,7 @@ export type SharedAction =
 export default merge<RootState>(
     undefined,
     setCellValue,
+    setSelectionValue,
     setRestrictions,
     setAlgorithms,
     createThermo,

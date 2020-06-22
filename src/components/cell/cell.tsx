@@ -73,8 +73,8 @@ const Cell = ({
                 'cell',
                 given && 'cell--given',
                 value && 'cell--filled',
-                (selected || focused) && 'cell--selected',
-                focused && 'cell--focused',
+                selected && 'cell--selected',
+                isSetMode && focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}

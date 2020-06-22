@@ -76,7 +76,10 @@ const setCellValue = action(
     'player/set-cell-value',
     (state, cells) => {
         let board = [...state.board];
-        const mode = state.inputMode;
+        let mode = state.inputMode;
+        if (cells.length > 1 && mode === 'digit') {
+            mode = state.settings.multiInputMode;
+        }
         cells.forEach(({ index, value }) => {
             const { color, centreMarks, cornerMarks } = board[index];
             if (mode === 'digit' || !value) {

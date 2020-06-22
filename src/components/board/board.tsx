@@ -26,31 +26,17 @@ const Board = () => {
     const isSetMode = useSelector(isSetModeSelector);
     const { dirty, solution } = useSelector((state) => state.solver);
     const { board: playerBoard } = useSelector((state) => state.player);
-    const setValue = useAction('shared/set-cell-value');
+    const { selection, focused } = useSelector((state) => state.ui);
+    const setSelectionValue = useAction('shared/set-selection-value');
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
     const undo = useAction('shared/undo');
     const redo = useAction('shared/redo');
 
-    const [focused, _setFocused] = useState<number | null>(null);
-    const [selection, setSelection] = useState<number[]>([]);
     const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
-    const setFocused = (
-        index: number,
-        isKeyPress = false,
-        addToSelection = false
-    ) => {
-        if (index >= 0 && index < 81) {
-            if (!addToSelection) {
-                _setFocused(index);
-                setSelection([index]);
-            } else if (!selection.includes(index)) {
-                if (isKeyPress) _setFocused(index);
-                setSelection([...selection, index]);
-            }
-        }
-    };
+    const setFocus = useAction('ui/set-focus');
+    const clearFocus = useAction('ui/clear-focus');
 
     useEffect(() => {
         if (dirty) {
@@ -63,8 +49,7 @@ const Board = () => {
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
             if (!isEventOver(e, 'board', 'menu', 'modal')) {
-                _setFocused(null);
-                setSelection([]);
+                clearFocus();
             }
         };
 
@@ -73,7 +58,7 @@ const Board = () => {
         return () => {
             window.removeEventListener('click', onClick);
         };
-    }, [selection]);
+    }, [clearFocus]);
 
     const boxes = board.reduce(
         (boxes, cell, i) => {
@@ -99,21 +84,21 @@ const Board = () => {
     );
 
     const highlightedRow =
-        focused !== null ? row(board, getCellAt(focused)) : [];
+        focused !== undefined ? row(board, getCellAt(focused)) : [];
 
     const highlightedColumn =
-        focused !== null ? column(board, getCellAt(focused)) : [];
+        focused !== undefined ? column(board, getCellAt(focused)) : [];
 
     const highlightedBox =
-        focused !== null ? box(board, getCellAt(focused)) : [];
+        focused !== undefined ? box(board, getCellAt(focused)) : [];
 
     const highlightedThermos =
-        focused !== null && thermos
+        focused !== undefined && thermos
             ? thermos.filter((thermo) => thermo.includes(focused)).flat()
             : [];
 
     const highlightedKillerCages =
-        focused !== null && killerCages
+        focused !== undefined && killerCages
             ? killerCages
                   .filter(({ cage }) => cage.includes(focused))
                   .map(({ cage }) => cage)
@@ -121,17 +106,17 @@ const Board = () => {
             : [];
 
     const highlightedKingCells =
-        focused !== null && restrictions.antiKing
+        focused !== undefined && restrictions.antiKing
             ? king(board, getCellAt(focused))
             : [];
 
     const highlightedKnightCells =
-        focused !== null && restrictions.antiKnight
+        focused !== undefined && restrictions.antiKnight
             ? knight(board, getCellAt(focused))
             : [];
 
     const highlightedDiagonals =
-        focused !== null && restrictions.uniqueDiagonals
+        focused !== undefined && restrictions.uniqueDiagonals
             ? diagonals(board, getCellAt(focused)).flat()
             : [];
 
@@ -179,14 +164,16 @@ const Board = () => {
                             }
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
-                                    setFocused(index, false, e.shiftKey);
+                                    setFocus({
+                                        index,
+                                        addToSelection: e.shiftKey,
+                                    });
                                 }
                                 if (
                                     e.button === 2 &&
                                     !selection.includes(index)
                                 ) {
-                                    setFocused(index);
-                                    setSelection([]);
+                                    setFocus({ index });
                                 }
                             }}
                             onMouseEnter={({ buttons }) => {
@@ -194,31 +181,45 @@ const Board = () => {
                                     buttons === 1 &&
                                     !selection.includes(index)
                                 ) {
-                                    setSelection([...selection, index]);
+                                    setFocus({
+                                        index,
+                                        addToSelection: true,
+                                    });
                                 }
                             }}
                             onKeyDown={({ key, shiftKey }) => {
                                 const n = Number(key);
                                 if (!isNaN(n) && n > 0 && n < 10) {
-                                    setValue({
-                                        index,
-                                        value: n,
-                                    });
+                                    setSelectionValue(n);
                                     return;
                                 }
                                 if (key === 'ArrowUp') {
-                                    setFocused(index - 9, true, shiftKey);
+                                    setFocus({
+                                        index: index - 9,
+                                        isKeyPress: true,
+                                        addToSelection: shiftKey,
+                                    });
                                 } else if (key === 'ArrowDown') {
-                                    setFocused(index + 9, true, shiftKey);
+                                    setFocus({
+                                        index: index + 9,
+                                        isKeyPress: true,
+                                        addToSelection: shiftKey,
+                                    });
                                 } else if (key === 'ArrowLeft') {
-                                    setFocused(index - 1, true, shiftKey);
+                                    setFocus({
+                                        index: index - 1,
+                                        isKeyPress: true,
+                                        addToSelection: shiftKey,
+                                    });
                                 } else if (key === 'ArrowRight') {
-                                    setFocused(index + 1, true, shiftKey);
+                                    setFocus({
+                                        index: index + 1,
+                                        isKeyPress: true,
+                                        addToSelection: shiftKey,
+                                    });
                                 }
                                 if (['Backspace', 'Delete'].includes(key)) {
-                                    selection.forEach((i) =>
-                                        setValue({ index: i })
-                                    );
+                                    setSelectionValue(undefined);
                                 }
                             }}
                             onCreateKillerCage={() =>
