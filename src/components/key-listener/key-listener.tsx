@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
+import { isEventOver } from 'utils';
 
 interface KeyListenerProps {
     children: React.ReactNode;
@@ -16,7 +17,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
 
     useEffect(() => {
         const keyListener = (e: KeyboardEvent) => {
-            // TODO: ignore keypress if focused over some other input
+            if (isEventOver(e, 'form-input', 'form-group')) return;
 
             // handle undo/redo
             if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'z')
@@ -70,6 +71,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
         return () => {
             window.removeEventListener('keydown', keyListener);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return <>{children}</>;

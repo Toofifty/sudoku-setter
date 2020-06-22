@@ -59,9 +59,8 @@ const setFocus = action(
     _ as { index: number; isKeyPress?: boolean; addToSelection?: boolean },
     'ui/set-focus',
     (state, { index, isKeyPress, addToSelection }) => {
-        console.log('setFocus', { index, isKeyPress, addToSelection });
-
         if (index !== undefined && (index < 0 || index >= 81)) return state;
+
         let { focused, selection } = state;
         if (!addToSelection) {
             focused = index;
