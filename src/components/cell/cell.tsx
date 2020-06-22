@@ -22,7 +22,6 @@ interface CellProps {
     onFocus?: () => void;
     onMouseEnter?: (e: React.MouseEvent) => void;
     onMouseDown: (e: React.MouseEvent) => void;
-    onKeyDown: (e: React.KeyboardEvent) => void;
 
     onCreateKillerCage: () => void;
 }
@@ -36,7 +35,6 @@ const Cell = ({
     given,
     selection,
     onMouseDown,
-    onKeyDown,
     index,
     focused,
     highlighted,
@@ -79,7 +77,6 @@ const Cell = ({
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
             onContextMenu={onContextMenu}
-            onKeyDown={onKeyDown}
             onFocus={onFocus}
             onPointerDown={onMouseDown}
             onPointerMove={(e) => {

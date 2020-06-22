@@ -39,6 +39,8 @@ const setSelectionValue = action(
         const isPlayMode = isPlayModeSelector(state);
         let fromScratchSolve = false;
         if (isPlayMode) {
+            if (state.ui.selection.length === 0) return state;
+
             dispatch({
                 type: 'player/set-cell-value',
                 payload: state.ui.selection.map((index) => ({ index, value })),
@@ -48,6 +50,8 @@ const setSelectionValue = action(
                 return !!prevValue && value !== prevValue;
             });
         } else if (state.ui.focused) {
+            if (!state.ui.focused) return state;
+
             dispatch({
                 type: 'puzzle/set-given',
                 payload: { index: state.ui.focused, value },

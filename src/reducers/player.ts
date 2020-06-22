@@ -4,6 +4,7 @@ import { undoHistory, redoHistory, saveHistory } from './history';
 import { load, persist } from './persist';
 
 type InputMode = 'digit' | 'corner' | 'centre';
+const inputModes: InputMode[] = ['digit', 'corner', 'centre'];
 
 type PlayerSettings = {
     /**
@@ -117,6 +118,18 @@ const setInputMode = action(
     (state, inputMode) => ({ ...state, inputMode })
 );
 
+const cycleInputMode = action(
+    _ as PlayerState,
+    _ as boolean,
+    'player/cycle-input-mode',
+    (state, backwards) => {
+        const d = backwards ? -1 : 1;
+        const imIndex = inputModes.indexOf(state.inputMode);
+        const inputMode = inputModes[(imIndex + d) % inputModes.length];
+        return { ...state, inputMode };
+    }
+);
+
 const setSettings = action(
     _ as PlayerState,
     _ as Partial<PlayerSettings>,
@@ -148,6 +161,7 @@ const redo = action(
 export type PlayerAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setInputMode>
+    | GetAction<typeof cycleInputMode>
     | GetAction<typeof setSettings>
     | GetAction<typeof undo>
     | GetAction<typeof redo>;
@@ -156,6 +170,7 @@ export default merge<PlayerState>(
     defaultState(),
     setCellValue,
     setInputMode,
+    cycleInputMode,
     setSettings,
     undo,
     redo

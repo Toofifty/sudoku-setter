@@ -27,11 +27,8 @@ const Board = () => {
     const { dirty, solution } = useSelector((state) => state.solver);
     const { board: playerBoard } = useSelector((state) => state.player);
     const { selection, focused } = useSelector((state) => state.ui);
-    const setSelectionValue = useAction('shared/set-selection-value');
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
-    const undo = useAction('shared/undo');
-    const redo = useAction('shared/redo');
 
     const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
@@ -120,14 +117,8 @@ const Board = () => {
             ? diagonals(board, getCellAt(focused)).flat()
             : [];
 
-    const onKeyDown = (e: React.KeyboardEvent) => {
-        if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'z')
-            return redo();
-        if ((e.metaKey || e.ctrlKey) && e.key === 'z') return undo();
-    };
-
     return (
-        <div className="board" onKeyDown={onKeyDown}>
+        <div className="board">
             {killerCageModalOpen && (
                 <KillerCageModal
                     selection={selection}
@@ -185,41 +176,6 @@ const Board = () => {
                                         index,
                                         addToSelection: true,
                                     });
-                                }
-                            }}
-                            onKeyDown={({ key, shiftKey }) => {
-                                const n = Number(key);
-                                if (!isNaN(n) && n > 0 && n < 10) {
-                                    setSelectionValue(n);
-                                    return;
-                                }
-                                if (key === 'ArrowUp') {
-                                    setFocus({
-                                        index: index - 9,
-                                        isKeyPress: true,
-                                        addToSelection: shiftKey,
-                                    });
-                                } else if (key === 'ArrowDown') {
-                                    setFocus({
-                                        index: index + 9,
-                                        isKeyPress: true,
-                                        addToSelection: shiftKey,
-                                    });
-                                } else if (key === 'ArrowLeft') {
-                                    setFocus({
-                                        index: index - 1,
-                                        isKeyPress: true,
-                                        addToSelection: shiftKey,
-                                    });
-                                } else if (key === 'ArrowRight') {
-                                    setFocus({
-                                        index: index + 1,
-                                        isKeyPress: true,
-                                        addToSelection: shiftKey,
-                                    });
-                                }
-                                if (['Backspace', 'Delete'].includes(key)) {
-                                    setSelectionValue(undefined);
                                 }
                             }}
                             onCreateKillerCage={() =>
