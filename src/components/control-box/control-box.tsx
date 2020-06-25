@@ -10,7 +10,11 @@ const preventFocus = (e: React.MouseEvent) => {
     e.preventDefault();
 };
 
-const ControlBox = () => {
+interface ControlBoxProps {
+    onShowSettings: () => void;
+}
+
+const ControlBox = ({ onShowSettings }: ControlBoxProps) => {
     const inputMode = useSelector((state) => state.player.inputMode);
     const setInputMode = useAction('player/set-input-mode');
 
@@ -97,7 +101,10 @@ const ControlBox = () => {
                 </div>
             </div>
             <div className="control-box__section">
-                <button className="btn btn-light alone">
+                <button
+                    className="btn btn-light alone"
+                    onClick={onShowSettings}
+                >
                     <i className="icon icon-more-horiz" />
                 </button>
                 <div className="control-box__colors"></div>

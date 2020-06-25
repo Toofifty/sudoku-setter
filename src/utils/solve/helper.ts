@@ -1,6 +1,7 @@
 import { Position, FilledCell } from '../../types';
 import { getBoxIndex, getCellAt, getCellIndex } from '../sudoku';
 import { InterCell } from './types';
+import { range } from 'utils/misc';
 
 export const row = <T>(board: T[], pos: Position, includeSelf = false) => {
     const row = board.slice(pos.y * 9, (pos.y + 1) * 9);
@@ -8,9 +9,21 @@ export const row = <T>(board: T[], pos: Position, includeSelf = false) => {
     return row;
 };
 
+export const rowIndices = (pos: Position, includeSelf = false) => {
+    const row = range(pos.y * 9, (pos.y + 1) * 9);
+    if (!includeSelf) return row.filter((n) => n !== getCellIndex(pos));
+    return row;
+};
+
 export const column = <T>(board: T[], pos: Position, includeSelf = false) => {
     const column = board.filter((_, i) => i % 9 === pos.x);
     if (!includeSelf) return column.filter((_, i) => i !== pos.y);
+    return column;
+};
+
+export const columnIndices = (pos: Position, includeSelf = false) => {
+    const column = range(0, 9).map((n) => n * 9 + pos.x);
+    if (!includeSelf) return column.filter((n) => n !== getCellIndex(pos));
     return column;
 };
 
@@ -22,7 +35,17 @@ export const box = <T>(board: T[], pos: Position, includeSelf = false) => {
     return box;
 };
 
-export const king = <T>(board: T[], pos: Position) => {
+export const boxIndices = (pos: Position, includeSelf = false) => {
+    const boxIndex = getBoxIndex(pos);
+    const box = range(0, 81).filter((n) => getBoxIndex(n) === boxIndex);
+    if (!includeSelf) return box.filter((n) => n !== getCellIndex(pos));
+    return box;
+};
+
+export const king = <T>(board: T[], pos: Position) =>
+    kingIndices(pos).map((i) => board[i]);
+
+export const kingIndices = (pos: Position) => {
     const deltas = [
         [-1, -1],
         [0, -1],
@@ -36,10 +59,13 @@ export const king = <T>(board: T[], pos: Position) => {
     return deltas
         .map(([x, y]) => ({ x: pos.x + x, y: pos.y + y }))
         .filter(({ x, y }) => x >= 0 && x < 9 && y >= 0 && y < 9)
-        .map((p) => board[getCellIndex(p)]);
+        .map(getCellIndex);
 };
 
-export const knight = <T>(board: T[], pos: Position) => {
+export const knight = <T>(board: T[], pos: Position) =>
+    knightIndices(pos).map((i) => board[i]);
+
+export const knightIndices = (pos: Position) => {
     const deltas = [
         [-1, -2],
         [1, -2],
@@ -53,14 +79,18 @@ export const knight = <T>(board: T[], pos: Position) => {
     return deltas
         .map(([x, y]) => ({ x: pos.x + x, y: pos.y + y }))
         .filter(({ x, y }) => x >= 0 && x < 9 && y >= 0 && y < 9)
-        .map((p) => board[getCellIndex(p)]);
+        .map(getCellIndex);
 };
 
-export const diagonals = <T>(board: T[], pos: Position) => {
+export const diagonals = <T>(board: T[], pos: Position) =>
+    diagonalIndices(pos).map((diag) => diag.map((i) => board[i]));
+
+export const diagonalIndices = (pos: Position) => {
     const diagonals = [];
+    const nums = range(0, 81);
     if (pos.x === pos.y) {
         diagonals.push(
-            board.filter((_, i) => {
+            nums.filter((i) => {
                 const { x, y } = getCellAt(i);
                 return x === y;
             })
@@ -68,7 +98,7 @@ export const diagonals = <T>(board: T[], pos: Position) => {
     }
     if (pos.x + pos.y === 8) {
         diagonals.push(
-            board.filter((_, i) => {
+            nums.filter((i) => {
                 const { x, y } = getCellAt(i);
                 return x + y === 8;
             })

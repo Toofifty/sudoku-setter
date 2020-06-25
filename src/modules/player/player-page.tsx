@@ -3,11 +3,13 @@ import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
 import ControlBox from 'components/control-box';
+import SettingsModal from 'components/settings-modal/settings-modal';
 
 const PlayerPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
     const setSudoku = useAction('puzzle/set-sudoku');
     const triggerSolve = useAction('solver/trigger-solve');
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     useEffect(() => {
         if (!hasLoadedFromHash) {
@@ -39,10 +41,15 @@ const PlayerPage = () => {
                             alignItems: 'flex-start',
                         }}
                     >
-                        <ControlBox />
+                        <ControlBox
+                            onShowSettings={() => setShowSettingsModal(true)}
+                        />
                     </div>
                 </div>
             </div>
+            {showSettingsModal && (
+                <SettingsModal onClose={() => setShowSettingsModal(false)} />
+            )}
         </div>
     );
 };

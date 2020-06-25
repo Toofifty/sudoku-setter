@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import KillerCageModal from 'components/killer-cage-modal';
+import { isSetModeSelector } from 'utils/selectors';
 import useSelector from '../../hooks/use-selector';
 import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
 import { getBoxIndex, getCellAt } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
-import { isEventOver } from 'utils';
+import { isEventOver, useHighlightedCells } from 'utils';
 import { useSudokuSolver } from '../../utils/solve';
-import {
-    row,
-    column,
-    box,
-    king,
-    knight,
-    diagonals,
-} from '../../utils/solve/helper';
-import KillerCageModal from 'components/killer-cage-modal';
 import './board.scss';
-import { isSetModeSelector } from 'utils/selectors';
 
 const Board = () => {
-    const { board, thermos, killerCages, restrictions } = useSelector(
-        (state) => state.puzzle
-    );
+    const { board } = useSelector((state) => state.puzzle);
     const isSetMode = useSelector(isSetModeSelector);
     const { dirty, solution } = useSelector((state) => state.solver);
     const { board: playerBoard } = useSelector((state) => state.player);
     const { selection, focused } = useSelector((state) => state.ui);
+    const { value: targetValue, cells: highlighted } = useHighlightedCells();
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
 
@@ -83,51 +74,6 @@ const Board = () => {
         }[][]
     );
 
-    const highlightedRow =
-        focused !== undefined ? row(board, getCellAt(focused)) : [];
-
-    const highlightedColumn =
-        focused !== undefined ? column(board, getCellAt(focused)) : [];
-
-    const highlightedBox =
-        focused !== undefined ? box(board, getCellAt(focused)) : [];
-
-    const highlightedThermos =
-        focused !== undefined && thermos
-            ? thermos.filter((thermo) => thermo.includes(focused)).flat()
-            : [];
-
-    const highlightedKillerCages =
-        focused !== undefined && killerCages
-            ? killerCages
-                  .filter(({ cage }) => cage.includes(focused))
-                  .map(({ cage }) => cage)
-                  .flat()
-            : [];
-
-    const highlightedKingCells =
-        focused !== undefined && restrictions.antiKing
-            ? king(board, getCellAt(focused))
-            : [];
-
-    const highlightedKnightCells =
-        focused !== undefined && restrictions.antiKnight
-            ? knight(board, getCellAt(focused))
-            : [];
-
-    const highlightedDiagonals =
-        focused !== undefined && restrictions.uniqueDiagonals
-            ? diagonals(board, getCellAt(focused)).flat()
-            : [];
-
-    const target = selection.length === 1 ? selection[0] : focused;
-    const targetValue =
-        (target &&
-            (board[target].value ??
-                (isSetMode ? solution[target].value : undefined) ??
-                playerBoard[target].value)) ??
-        0;
-
     return (
         <div className="board" id="board">
             {killerCageModalOpen && (
@@ -155,16 +101,7 @@ const Board = () => {
                             focused={focused === index}
                             selection={selection}
                             targetValue={targetValue}
-                            highlighted={
-                                highlightedRow.includes(cell) ||
-                                highlightedColumn.includes(cell) ||
-                                highlightedBox.includes(cell) ||
-                                highlightedThermos.includes(index) ||
-                                highlightedKillerCages.includes(index) ||
-                                highlightedKingCells.includes(cell) ||
-                                highlightedKnightCells.includes(cell) ||
-                                highlightedDiagonals.includes(cell)
-                            }
+                            highlighted={highlighted.includes(index)}
                             onMouseDown={(e) => {
                                 if (e.button === 0) {
                                     setFocus({
