@@ -38,25 +38,25 @@ const KeyListener = ({ children }: KeyListenerProps) => {
             // handle keyboard selection
             if (key === 'ArrowUp') {
                 setFocus({
-                    index: focused ?? 0 - 9,
+                    index: (focused ?? 0) - 9,
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
             } else if (key === 'ArrowDown') {
                 setFocus({
-                    index: focused ?? 0 + 9,
+                    index: (focused ?? 0) + 9,
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
             } else if (key === 'ArrowLeft') {
                 setFocus({
-                    index: focused ?? 0 - 1,
+                    index: (focused ?? 0) - 1,
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
             } else if (key === 'ArrowRight') {
                 setFocus({
-                    index: focused ?? 0 + 1,
+                    index: (focused ?? 0) + 1,
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
@@ -72,7 +72,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
             window.removeEventListener('keydown', keyListener);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [focused]);
 
     return <>{children}</>;
 };
