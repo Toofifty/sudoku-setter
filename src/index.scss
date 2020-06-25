@@ -49,6 +49,10 @@ code {
     }
 }
 
+.menu {
+    transform: none;
+}
+
 // spectre's btn-link doesn't match the
 // link styles - so use this instead
 .btn-fake-link {
@@ -142,7 +146,8 @@ code {
 }
 
 .form-checkbox,
-.form-switch {
+.form-switch,
+.form-radio {
     cursor: pointer;
     padding: 0.2rem 0.4rem;
     padding-left: 1.6rem;
