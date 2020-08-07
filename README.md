@@ -37,6 +37,7 @@ Features
 -   [x] Better URL encoding
 -   [x] More responsive layout
 -   [x] Undo/redo
+-   [ ] Themes
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
     -   [ ] Save puzzles
