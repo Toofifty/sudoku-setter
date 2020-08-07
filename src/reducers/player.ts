@@ -37,6 +37,14 @@ type PlayerSettings = {
      * Highlight all digits that have broken a restriction
      */
     showInvalidMoves: boolean;
+    /**
+     * Interface light/dark mode
+     */
+    darkMode: boolean;
+    /**
+     * Interface theme (TODO)
+     */
+    // theme: string;
 };
 
 export interface PlayerState {
@@ -67,6 +75,7 @@ const defaultState = (): PlayerState => ({
             autoFixPencilMarks: true,
             showIncorrectMoves: false,
             showInvalidMoves: true,
+            darkMode: false,
         },
     }),
 });

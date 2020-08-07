@@ -61,7 +61,7 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
 
     if (isStatic)
         return (
-            <ul className={cx('context-menu context-menu--mobile menu')}>
+            <ul className={cx('menu context-menu context-menu--mobile')}>
                 {content()}
             </ul>
         );
@@ -69,7 +69,7 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
     return (
         <ul
             className={cx(
-                'context-menu menu',
+                'menu context-menu',
                 isVisible && 'context-menu--visible'
             )}
             style={style}

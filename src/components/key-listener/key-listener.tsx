@@ -17,7 +17,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
 
     useEffect(() => {
         const keyListener = (e: KeyboardEvent) => {
-            if (isEventOver(e, 'form-input', 'form-group')) return;
+            if (isEventOver(e, 'form-input', 'form-group', 'nav-bar')) return;
 
             // handle undo/redo
             if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'z')
@@ -60,7 +60,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
-            } else if (key === ' ' || key === 'Tab') {
+            } else if (key === ' ') {
                 cycleInputMode(shiftKey);
                 e.preventDefault();
             }

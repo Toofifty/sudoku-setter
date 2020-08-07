@@ -1,0 +1,63 @@
+@import 'sass';
+
+:root:root {
+    .toggle {
+        padding: $sp-4 $sp-12;
+        padding-left: $sp-48;
+        color: $grey-800;
+        margin: 0;
+        border: 1px solid transparent;
+
+        &.form-checkbox {
+            padding-left: $sp-12 + $sp-16 + $sp-12;
+
+            .form-icon {
+                margin-left: $sp-12;
+            }
+        }
+
+        &:hover {
+            background: $grey-200;
+            border-color: $grey-300;
+        }
+
+        &--disabled {
+            background: transparent !important;
+            border-color: transparent !important;
+            color: $grey-500;
+        }
+
+        input:focus + .form-icon {
+            @include focus-outline;
+        }
+    }
+
+    .theme-dark .toggle {
+        color: white;
+
+        .form-icon {
+            border-color: $grey-700;
+
+            &::before {
+                border-color: white;
+            }
+        }
+
+        input:checked + .form-icon {
+            border-color: $purple-500;
+        }
+
+        input:not(:checked) + .form-icon {
+            background: $grey-900;
+        }
+
+        &--disabled {
+            color: $grey-600;
+        }
+
+        &:hover {
+            background-color: $grey-800;
+            border-color: transparent;
+        }
+    }
+}

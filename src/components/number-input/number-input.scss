@@ -2,16 +2,17 @@
 
 .number-input {
     display: flex;
-    width: calc(100% + 16px);
+    width: 100%;
     padding-top: 8px;
     padding-bottom: 16px;
     flex-wrap: wrap;
-    margin: 0 -8px;
 
-    > .btn {
-        flex: 1 1 calc(20% - 4px);
-        margin: 0 2px;
-        margin-bottom: 4px;
+    > .button {
+        flex: 1 1 calc(20% - 6px);
+        max-width: 39px;
+        margin: 0 2px !important;
+        margin-bottom: 4px !important;
+        text-align: center !important;
     }
 
     @media (max-width: 760px) {

@@ -1,7 +1,10 @@
 import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
+import Button from 'components/button';
+import Menu from 'components/menu';
 import './controls-menu.scss';
+import Toggle from 'components/toggle';
 
 const ControlsMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -29,280 +32,243 @@ const ControlsMenu = () => {
     };
 
     return (
-        <ul className="controls menu">
-            <li className="menu-item">
-                <a href={`puzzle/${window.location.hash}`} target="blank">
-                    <i className="icon icon-share mr-1" /> Test puzzle
-                </a>
-            </li>
-            <li className="divider" data-content="View" />
-            <li className="menu-item">
-                <label className="form-switch">
-                    <input
-                        type="checkbox"
-                        checked={debugMode}
-                        onChange={() => toggleDebugMode()}
-                    />
-                    <i className="form-icon" /> Debug mode
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-switch">
-                    <input
-                        type="checkbox"
-                        checked={hideSolution}
-                        onChange={() => toggleHideSolution()}
-                    />
-                    <i className="form-icon" /> Hide solution
-                </label>
-            </li>
-            <li className="divider" data-content="Solving algorithms" />
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input type="checkbox" checked disabled />
-                    <i className="form-icon" /> Naked singles
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.hiddenSingles}
-                        onChange={() =>
-                            setAlgorithms({
-                                hiddenSingles: !algorithms.hiddenSingles,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Hidden singles
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.nakedPairs}
-                        onChange={() =>
-                            setAlgorithms({
-                                nakedPairs: !algorithms.nakedPairs,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Naked pairs
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.hiddenPairs}
-                        onChange={() =>
-                            setAlgorithms({
-                                hiddenPairs: !algorithms.hiddenPairs,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Hidden pairs
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.lockedCandidates}
-                        onChange={() =>
-                            setAlgorithms({
-                                lockedCandidates: !algorithms.lockedCandidates,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Locked candidates
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.thermos}
-                        onChange={() =>
-                            setAlgorithms({
-                                thermos: !algorithms.thermos,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Thermo sudoku
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.killerCages}
-                        onChange={() =>
-                            setAlgorithms({
-                                killerCages: !algorithms.killerCages,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Killer sudoku
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input type="checkbox" disabled />
-                    <i className="form-icon" /> Sandwich sudoku
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.antiKnight}
-                        onChange={() =>
-                            setAlgorithms({
-                                antiKnight: !algorithms.antiKnight,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Anti-knight
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.antiKing}
-                        onChange={() =>
-                            setAlgorithms({
-                                antiKing: !algorithms.antiKing,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Anti-king
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.uniqueDiagonals}
-                        onChange={() =>
-                            setAlgorithms({
-                                uniqueDiagonals: !algorithms.uniqueDiagonals,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Unique diagonals
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={algorithms.nonSeqNeighbors}
-                        onChange={() =>
-                            setAlgorithms({
-                                nonSeqNeighbors: !algorithms.nonSeqNeighbors,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Non-sequential neighbors
-                </label>
-            </li>
-            <li className="divider" />
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={lookahead}
-                        onChange={() => setLookahead(!lookahead)}
-                    />
-                    <i className="form-icon" /> Enable look-ahead solve
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={stepSolve}
-                        onChange={() => setStepSolve(!stepSolve)}
-                    />
-                    <i className="form-icon" /> Step-by-step solve
-                </label>
-            </li>
-            <li className="menu-item">
-                <button
-                    className="btn-fake-link"
-                    disabled={!stepSolve}
-                    onClick={() => triggerSolve()}
+        <Menu className="controls">
+            <Menu.Item className="m-y-1">
+                <Button
+                    primary
+                    wide
+                    href={`puzzle/${window.location.hash}`}
+                    target="blank"
                 >
-                    <i className="icon icon-time mr-1" /> Run solve step
-                </button>
-            </li>
-            <li className="menu-item">
-                <button
-                    className="btn-fake-link"
-                    onClick={() => triggerSolve(true)}
+                    <i className="fa fa-play m-r-12" />
+                    Test puzzle
+                </Button>
+            </Menu.Item>
+            <Menu.Divider label="View" />
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    sw
+                    checked={debugMode}
+                    onChange={() => toggleDebugMode()}
                 >
-                    <i className="icon icon-refresh mr-1" /> Solve from scratch
-                </button>
-            </li>
+                    Debug mode
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    sw
+                    checked={hideSolution}
+                    onChange={() => toggleHideSolution()}
+                >
+                    Hide solution
+                </Toggle>
+            </Menu.Item>
+            <Menu.Divider label="Solving algorithms" />
+            <Menu.Item className="m-y-1">
+                <Toggle checked disabled>
+                    Naked singles
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.hiddenSingles}
+                    onChange={() =>
+                        setAlgorithms({
+                            hiddenSingles: !algorithms.hiddenSingles,
+                        })
+                    }
+                >
+                    Hidden singles
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.nakedPairs}
+                    onChange={() =>
+                        setAlgorithms({
+                            nakedPairs: !algorithms.nakedPairs,
+                        })
+                    }
+                >
+                    Naked pairs
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.hiddenPairs}
+                    onChange={() =>
+                        setAlgorithms({
+                            hiddenPairs: !algorithms.hiddenPairs,
+                        })
+                    }
+                >
+                    Hidden pairs
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.lockedCandidates}
+                    onChange={() =>
+                        setAlgorithms({
+                            lockedCandidates: !algorithms.lockedCandidates,
+                        })
+                    }
+                >
+                    Locked candidates
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.thermos}
+                    onChange={() =>
+                        setAlgorithms({
+                            thermos: !algorithms.thermos,
+                        })
+                    }
+                >
+                    Thermo sudoku
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.killerCages}
+                    onChange={() =>
+                        setAlgorithms({
+                            killerCages: !algorithms.killerCages,
+                        })
+                    }
+                >
+                    Killer cages sudoku
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle disabled>Sandwich sudoku</Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.antiKnight}
+                    onChange={() =>
+                        setAlgorithms({
+                            antiKnight: !algorithms.antiKnight,
+                        })
+                    }
+                >
+                    Anti-knight
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.antiKing}
+                    onChange={() =>
+                        setAlgorithms({
+                            antiKing: !algorithms.antiKing,
+                        })
+                    }
+                >
+                    Anti-king
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.uniqueDiagonals}
+                    onChange={() =>
+                        setAlgorithms({
+                            uniqueDiagonals: !algorithms.uniqueDiagonals,
+                        })
+                    }
+                >
+                    Unique diagonals
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={algorithms.nonSeqNeighbors}
+                    onChange={() =>
+                        setAlgorithms({
+                            nonSeqNeighbors: !algorithms.nonSeqNeighbors,
+                        })
+                    }
+                >
+                    Non-sequential neighbors
+                </Toggle>
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={lookahead}
+                    onChange={() => setLookahead(!lookahead)}
+                >
+                    Enable look-ahead solve
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={stepSolve}
+                    onChange={() => setStepSolve(!stepSolve)}
+                >
+                    Step-by-step solve
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Button wide onClick={() => triggerSolve()}>
+                    <i className="fa fa-stopwatch m-r-12" />
+                    Run solve step
+                </Button>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Button wide onClick={() => triggerSolve(true)}>
+                    <i className="fa fa-redo m-r-12" />
+                    Solve from scratch
+                </Button>
+            </Menu.Item>
             <li className="divider" data-content="Restrictions" />
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input type="checkbox" disabled />
-                    <i className="form-icon" /> Enable perimeter cells
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={restrictions.antiKnight}
-                        onChange={() =>
-                            setRestrictions({
-                                antiKnight: !restrictions.antiKnight,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Anti-knight
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={restrictions.antiKing}
-                        onChange={() =>
-                            setRestrictions({
-                                antiKing: !restrictions.antiKing,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Anti-king
-                </label>
-            </li>
-            <li className="menu-item">
-                <label className="form-checkbox">
-                    <input
-                        type="checkbox"
-                        checked={restrictions.uniqueDiagonals}
-                        onChange={() =>
-                            setRestrictions({
-                                uniqueDiagonals: !restrictions.uniqueDiagonals,
-                            })
-                        }
-                    />
-                    <i className="form-icon" /> Unique diagonals
-                </label>
-            </li>
+            <Menu.Item className="m-y-1">
+                <Toggle disabled>Enable perimeter cells</Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={restrictions.antiKnight}
+                    onChange={() =>
+                        setRestrictions({
+                            antiKnight: !restrictions.antiKnight,
+                        })
+                    }
+                >
+                    Anti-knight
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={restrictions.antiKing}
+                    onChange={() =>
+                        setRestrictions({
+                            antiKing: !restrictions.antiKing,
+                        })
+                    }
+                >
+                    Anti-king
+                </Toggle>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Toggle
+                    checked={restrictions.uniqueDiagonals}
+                    onChange={() =>
+                        setRestrictions({
+                            uniqueDiagonals: !restrictions.uniqueDiagonals,
+                        })
+                    }
+                >
+                    Unique diagonals
+                </Toggle>
+            </Menu.Item>
             <li className="divider" data-content="Puzzle" />
-            <li className="menu-item">
-                <button className="btn-fake-link" onClick={() => reset()}>
-                    <i className="icon icon-refresh mr-1" /> Reset grid
-                </button>
-            </li>
-        </ul>
+            <Menu.Item className="m-y-1">
+                <Button wide onClick={() => reset()}>
+                    <i className="fa fa-times m-r-12" />
+                    Reset grid
+                </Button>
+            </Menu.Item>
+        </Menu>
     );
 };
 

@@ -1,0 +1,40 @@
+@import 'sass';
+
+.menu {
+    padding: $sp-16;
+    box-shadow: none;
+    border: 1px solid $grey-300;
+    border-radius: 2px;
+
+    .menu-item {
+        padding: 0;
+    }
+
+    .divider {
+        border-top: 1px solid $grey-300;
+        margin: $sp-16 -#{$sp-16};
+        margin-top: $sp-24;
+
+        &::after {
+            color: $grey-500;
+            transform: translateY(calc(-50% - 6px));
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: $sp-16;
+        }
+    }
+}
+
+.theme-dark .menu {
+    background: $grey-900;
+    border-color: transparent;
+
+    .divider {
+        border-color: $black;
+
+        &::after {
+            background: $grey-900;
+        }
+    }
+}

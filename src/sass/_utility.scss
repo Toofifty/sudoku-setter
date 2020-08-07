@@ -1,3 +1,79 @@
+/**
+ * Generates margin & padding for all spacing sizes for each
+ * direction: top, right, bottom, left, x and y.
+ * e.g. m-t-12 (margin top 12)
+ *      p-x-4 (padding left/right 4)
+ *      m-24 (padding all 24)
+ */
+:root:root:root {
+    @each $space in $spacing-scale {
+        @each $prop in $spacing-props {
+            $p: str-slice($prop, 0, 1);
+
+            .#{$p}-#{$space} {
+                #{$prop}: #{$space}px;
+            }
+
+            .#{$p}-x-#{$space} {
+                #{$prop}-left: #{$space}px;
+                #{$prop}-right: #{$space}px;
+            }
+
+            .#{$p}-y-#{$space} {
+                #{$prop}-top: #{$space}px;
+                #{$prop}-bottom: #{$space}px;
+            }
+
+            @each $dir in $directions {
+                $d: str-slice($dir, 0, 1);
+
+                .#{$p}-#{$d}-#{$space} {
+                    #{$prop}-#{$dir}: #{$space}px;
+                }
+            }
+        }
+    }
+}
+
+.fg-1 {
+    flex-grow: 1;
+}
+
+.fs-0 {
+    flex-shrink: 0;
+}
+
+/** Typography */
+:root:root .text {
+    &--left {
+        text-align: left;
+    }
+
+    &--right {
+        text-align: right;
+    }
+
+    &--center {
+        text-align: center;
+    }
+
+    &--justify {
+        text-align: justify;
+    }
+
+    &--bold {
+        font-weight: 600;
+    }
+
+    &--italic {
+        font-style: italic;
+    }
+
+    &--uppercase {
+        text-transform: uppercase;
+    }
+}
+
 .hide-desktop {
     @media (min-width: 1301px) {
         display: none;

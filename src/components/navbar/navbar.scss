@@ -3,15 +3,15 @@
 // .nav-bar doesn't conflict with spectre
 // which tbh has shit navbar styling >.>
 .nav-bar {
-    background: $grey-900;
-    padding: 8px;
+    background: $grey-100;
+    padding: $sp-8 $sp-24;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 1;
 
-    box-shadow: 0 1px 1px $grey-200-2, 0 2px 4px $grey-200-2,
-        0 4px 8px $grey-200-2, 0 8px 16px $grey-200-2, 0 16px 32px $grey-200-2;
+    border-bottom: 1px solid $grey-300;
+    // box-shadow: 0 16px 32px $grey-400-2;
 
     &__section {
         display: flex;
@@ -22,7 +22,7 @@
         text-transform: uppercase;
         font-weight: bolder;
         font-size: 20px;
-        color: white !important;
+        color: $grey-900 !important;
 
         padding: 8px;
         margin-right: 8px;
@@ -34,14 +34,13 @@
     }
 
     &__link {
-        margin: 0 8px;
-        color: $purple-200;
+        color: $purple-400;
         font-weight: bold;
-        padding: 6px 12px;
+        padding: $sp-4 $sp-12;
         border-radius: 2px;
 
         &:visited {
-            color: $purple-200;
+            color: $purple-400;
         }
 
         &:hover,
@@ -50,5 +49,14 @@
             background: $purple-200;
             text-decoration: none;
         }
+    }
+}
+
+.theme-dark .nav-bar {
+    background: $grey-900;
+    border-color: transparent;
+
+    &__brand {
+        color: white !important;
     }
 }

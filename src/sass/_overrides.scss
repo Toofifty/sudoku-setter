@@ -113,20 +113,25 @@
     padding-left: 1.6rem;
     border-radius: 2px;
 
-    margin: 0 -0.4rem !important;
-
     .form-icon {
         margin-left: 0.4rem;
         margin-top: 0.1rem;
     }
+}
 
-    &:focus-within,
-    &:hover {
-        color: $purple-600;
-        background: $purple-100;
+.menu .menu-item {
+    .form-switch,
+    .form-checkbox {
+        margin: 0 -0.4rem;
     }
 }
 
 .form-switch {
     padding-left: 2.4rem;
+}
+
+.fa {
+    width: 16px;
+    display: inline-flex;
+    justify-content: center;
 }

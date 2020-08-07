@@ -2,6 +2,7 @@ import React from 'react';
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
 import { canUndoSelector, canRedoSelector } from 'utils/selectors';
+import Button from 'components/button';
 import './undo-redo.scss';
 
 const UndoRedo = () => {
@@ -12,20 +13,22 @@ const UndoRedo = () => {
 
     return (
         <li className="menu-item undo-redo">
-            <button
-                className="btn mr-2"
+            <Button
+                className="m-r-8 fg-1"
                 onClick={() => undo()}
                 disabled={!canUndo}
             >
-                <i className="icon icon-back mr-2" /> Undo
-            </button>
-            <button
-                className="btn ml-2"
+                Undo
+                <i className="fa fa-undo m-l-12" />
+            </Button>
+            <Button
+                className="m-l-8 fg-1"
                 onClick={() => redo()}
                 disabled={!canRedo}
             >
-                Redo <i className="icon icon-forward ml-2" />
-            </button>
+                <i className="fa fa-redo m-r-12" />
+                Redo
+            </Button>
         </li>
     );
 };
