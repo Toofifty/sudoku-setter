@@ -72,7 +72,7 @@ const defaultState = (): PlayerState => ({
             highlightSudokuRestrictions: true,
             highlightMiscRestrictions: true,
             highlightMatchingNumbers: true,
-            autoFixPencilMarks: true,
+            autoFixPencilMarks: false,
             showIncorrectMoves: false,
             showInvalidMoves: true,
             darkMode: false,

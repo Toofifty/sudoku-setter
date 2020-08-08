@@ -1,5 +1,11 @@
 @import 'sass';
 
-.settings-modal {
-    box-shadow: none;
+:root:root {
+    .settings-modal {
+        box-shadow: none;
+
+        &__menu {
+            border: none;
+        }
+    }
 }

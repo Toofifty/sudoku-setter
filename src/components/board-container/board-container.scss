@@ -1,13 +1,15 @@
 @import 'sass';
 
 $extra: 10px;
+$padding: $sp-8;
 
 .board-container {
     position: relative;
-    margin: 6px;
+    background: $grey-300;
     --size: 1000px;
-    width: var(--size);
-    height: var(--size);
+    width: calc(var(--size) + #{$padding});
+    height: calc(var(--size) + #{$padding});
+    border-radius: 4px;
 
     @for $i from 1 through 50 {
         $j: 10 - ($i / 5);
@@ -24,7 +26,7 @@ $extra: 10px;
         transform: translate(-50%, -50%) scale(1);
         width: 1000px;
         height: 1000px;
-        border: 2px solid $grey-900;
+        border: 2px solid $grey-300;
 
         @for $i from 1 through 50 {
             $j: 10 - ($i / 5);
@@ -33,5 +35,13 @@ $extra: 10px;
                 transform: translate(-50%, -50%) scale($scale);
             }
         }
+    }
+}
+
+.theme-dark .board-container {
+    background: $grey-900;
+
+    .board-sizer {
+        border-color: $grey-900;
     }
 }

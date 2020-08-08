@@ -62,3 +62,27 @@
         background: $blue-100-2;
     }
 }
+
+.theme-dark {
+    .background {
+        background: $black;
+    }
+
+    .background-cell {
+        &--yellow {
+            background: $yellow-100-3;
+        }
+
+        &--red {
+            background: $red-100-3;
+        }
+
+        &--green {
+            background: $green-100-3;
+        }
+
+        &--blue {
+            background: $blue-100-3;
+        }
+    }
+}

@@ -52,7 +52,10 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
 
     return (
         <Modal size="sm">
-            <Modal.Header onClose={onClose}>Create Killer Cage</Modal.Header>
+            <Modal.Header onClose={onClose}>
+                <i className="fad fa-border-none m-r-12" />
+                Create killer cage
+            </Modal.Header>
             <form
                 onSubmit={() => {
                     if (total < minimum || total > maximum) {
@@ -97,7 +100,7 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                         Cancel
                     </Button>
                     <Button primary submit>
-                        <i className="fa fa-border-none m-r-12" />
+                        <i className="fad fa-check m-r-12" />
                         Create
                     </Button>
                 </Modal.Footer>

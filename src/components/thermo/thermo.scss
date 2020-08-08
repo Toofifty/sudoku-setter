@@ -119,3 +119,11 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
         }
     }
 }
+
+.theme-dark .thermo {
+    &__bulb::before,
+    &__line::before {
+        background: $grey-700;
+        border-color: $grey-700;
+    }
+}

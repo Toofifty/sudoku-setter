@@ -8,6 +8,7 @@
 
         .menu-item {
             padding: 0;
+            margin: $sp-1 0;
         }
 
         .divider {
@@ -71,10 +72,15 @@
 
             &__list {
                 list-style-type: none;
-                margin: 0;
+                margin: 0 #{-$sp-4};
+                padding: 0 $sp-4;
                 overflow: hidden;
                 transition: max-height 0.1s, opacity 0.1s;
                 opacity: 0;
+
+                > * {
+                    visibility: hidden;
+                }
             }
 
             &--expanded {
@@ -84,6 +90,10 @@
 
                 .collapse__list {
                     opacity: 1;
+
+                    > * {
+                        visibility: unset;
+                    }
                 }
             }
         }

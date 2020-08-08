@@ -9,8 +9,8 @@ $padding: 6px;
     border-#{$vert}-width: 0;
     border-#{$horiz}-width: 0;
     position: absolute;
-    width: calc(#{$padding} + 3px);
-    height: calc(#{$padding} + 3px);
+    width: calc(#{$padding} + 4px);
+    height: calc(#{$padding} + 4px);
     #{$vert}: 0;
     #{$horiz}: 0;
 }
@@ -92,5 +92,17 @@ $padding: 6px;
                 }
             }
         }
+    }
+}
+
+.theme-dark .killer-cage {
+    &__total {
+        background: $black;
+        color: $grey-400;
+    }
+
+    &__cage::before,
+    &__cage::after {
+        border-color: $grey-600 !important;
     }
 }

@@ -63,5 +63,9 @@
         &--selected {
             border-color: $grey-200;
         }
+
+        &--white {
+            background: $black;
+        }
     }
 }

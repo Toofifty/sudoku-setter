@@ -1,8 +1,12 @@
 @import 'sass';
 
 .box {
-    border: 1px solid $grey-900;
+    border: 1px solid $grey-300;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+}
+
+.theme-dark .box {
+    border-color: $grey-900;
 }
