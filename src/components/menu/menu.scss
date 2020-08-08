@@ -62,9 +62,9 @@
                     position: absolute;
                     content: '';
                     border-top: 1px solid $grey-300;
-                    width: calc(100% + #{$sp-16} + 2px);
+                    width: calc(100% + #{$sp-8} + 2px);
                     height: 0px;
-                    left: -$sp-8 - 1px;
+                    left: -$sp-4 - 1px;
                     z-index: -1;
                 }
             }
@@ -73,12 +73,17 @@
                 list-style-type: none;
                 margin: 0;
                 overflow: hidden;
-                transition: max-height 0.1s;
+                transition: max-height 0.1s, opacity 0.1s;
+                opacity: 0;
             }
 
             &--expanded {
                 .collapse__button {
                     margin-bottom: $sp-12;
+                }
+
+                .collapse__list {
+                    opacity: 1;
                 }
             }
         }

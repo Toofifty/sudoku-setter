@@ -40,7 +40,7 @@ const ControlsMenu = () => {
                     href={`puzzle/${window.location.hash}`}
                     target="blank"
                 >
-                    <i className="fa fa-play m-r-12" />
+                    <i className="fad fa-play m-r-12" />
                     Test puzzle
                 </Button>
             </Menu.Item>
@@ -254,13 +254,13 @@ const ControlsMenu = () => {
                 </Menu.Item>
                 <Menu.Item className="m-y-1">
                     <Button wide onClick={() => triggerSolve()}>
-                        <i className="fa fa-stopwatch m-r-12" />
+                        <i className="fad fa-stopwatch m-r-12" />
                         Run solve step
                     </Button>
                 </Menu.Item>
                 <Menu.Item className="m-y-1">
                     <Button wide onClick={() => triggerSolve(true)}>
-                        <i className="fa fa-redo m-r-12" />
+                        <i className="fad fa-redo m-r-12" />
                         Solve from scratch
                     </Button>
                 </Menu.Item>
@@ -268,8 +268,20 @@ const ControlsMenu = () => {
             <Menu.Divider label="Puzzle" />
             <Menu.Item className="m-y-1">
                 <Button wide onClick={() => reset()}>
-                    <i className="fa fa-times m-r-12" />
+                    <i className="fad fa-times m-r-12" />
                     Reset grid
+                </Button>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Button wide disabled onClick={() => {}}>
+                    <i className="fad fa-save m-r-12" />
+                    Save draft
+                </Button>
+            </Menu.Item>
+            <Menu.Item className="m-y-1">
+                <Button wide primary disabled onClick={() => {}}>
+                    <i className="fad fa-check m-r-12" />
+                    Publish
                 </Button>
             </Menu.Item>
         </Menu>

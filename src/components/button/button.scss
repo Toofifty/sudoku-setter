@@ -81,5 +81,13 @@
                 border-color: $red-600;
             }
         }
+
+        &--disabled {
+            color: $grey-600;
+
+            &.button--primary {
+                background: $grey-800;
+            }
+        }
     }
 }
