@@ -7,12 +7,17 @@ interface BaseButtonProps {
     children?: React.ReactNode;
     className?: string;
     primary?: boolean;
+    danger?: boolean;
     wide?: boolean;
     disabled?: boolean;
 }
 
 interface RealButtonProps {
     onClick: (event: React.MouseEvent) => void;
+}
+
+interface SubmitButtonProps {
+    submit: boolean;
 }
 
 interface LinkButtonProps {
@@ -25,25 +30,36 @@ interface ExternalLinkButtonProps {
 }
 
 type ButtonProps = BaseButtonProps &
-    (RealButtonProps | LinkButtonProps | ExternalLinkButtonProps);
+    (
+        | RealButtonProps
+        | SubmitButtonProps
+        | LinkButtonProps
+        | ExternalLinkButtonProps
+    );
 
 const Button = ({
     children,
     className,
     primary,
+    danger,
     wide,
     disabled,
     ...rest
 }: ButtonProps) => {
     const classNames = cx('button', className, {
         'button--primary': primary,
+        'button--danger': danger,
         'button--wide': wide,
         'button--disabled': disabled,
     });
 
-    if ('onClick' in rest) {
+    if ('onClick' in rest || 'submit' in rest) {
         return (
-            <button className={classNames} {...rest}>
+            <button
+                className={classNames}
+                {...rest}
+                type={'submit' in rest ? 'submit' : 'button'}
+            >
                 {children}
             </button>
         );

@@ -2,11 +2,13 @@ import React from 'react';
 import ColorPicker from 'components/color-picker';
 import useSelector from 'hooks/use-selector';
 import { getCellAt } from 'utils/sudoku';
-import useAction from 'hooks/use-action';
-import { isContiguous, isContiguousSequential } from 'utils/contiguous';
-import NumberInput from 'components/number-input';
 import { isFilled } from 'utils/solve/helper';
+import { isContiguous, isContiguousSequential } from 'utils/contiguous';
+import useAction from 'hooks/use-action';
+import NumberInput from 'components/number-input';
 import UndoRedo from 'components/undo-redo';
+import Menu from 'components/menu';
+import Button from 'components/button';
 
 interface CellContextMenuProps {
     index: number;
@@ -38,55 +40,50 @@ const CellContextMenu = ({
 
     return (
         <>
-            <li className="menu-item">
+            <Menu.Item>
                 <NumberInput
                     onSetNumber={(value) =>
                         setValue({ index, value: value || undefined })
                     }
                     selected={value}
                 />
-            </li>
+            </Menu.Item>
             <UndoRedo />
-            <li
-                className="divider"
-                data-content={`Set ${
+            <Menu.Divider
+                label={`Set ${
                     selection.length > 1
                         ? 'selection'
                         : `r${pos.y + 1}c${pos.x + 1}`
                 } color`}
             />
-            <li className="menu-item">
+            <Menu.Item>
                 <ColorPicker
                     color={color ?? 'white'}
                     onSelect={(color) => setColor({ index: selection, color })}
                 />
-            </li>
+            </Menu.Item>
             {selection.length <= 9 && isContiguous(selection, true) && (
                 <>
-                    <li
-                        className="divider"
-                        data-content={`Selection (${selection.length})`}
-                    />
+                    <Menu.Divider label={`Selection (${selection.length})`} />
                     {selection.length > 1 &&
                         isContiguousSequential(selection, true) && (
-                            <li className="menu-item">
-                                <button
-                                    className="btn-fake-link"
+                            <Menu.Item>
+                                <Button
+                                    wide
                                     onClick={() => createThermo(selection)}
                                 >
-                                    Selection to thermo
-                                </button>
-                            </li>
+                                    <i className="fa fa-temperature-up m-r-12" />
+                                    Create thermo
+                                </Button>
+                            </Menu.Item>
                         )}
                     {isContiguous(selection) && (
-                        <li className="menu-item">
-                            <button
-                                className="btn-fake-link"
-                                onClick={onCreateKillerCage}
-                            >
-                                Selection to killer cage
-                            </button>
-                        </li>
+                        <Menu.Item>
+                            <Button wide onClick={onCreateKillerCage}>
+                                <i className="fa fa-border-none m-r-12" />
+                                Create killer cage
+                            </Button>
+                        </Menu.Item>
                     )}
                 </>
             )}
@@ -94,30 +91,34 @@ const CellContextMenu = ({
                 <>
                     <li className="divider" data-content="Variants" />
                     {hasThermo && (
-                        <li className="menu-item">
-                            <button
-                                className="btn-fake-link"
+                        <Menu.Item>
+                            <Button
+                                danger
+                                wide
                                 onClick={() => deleteThermo(index)}
                             >
+                                <i className="fa fa-trash m-r-12" />
                                 Delete thermo at{' '}
                                 <strong>
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>
-                            </button>
-                        </li>
+                            </Button>
+                        </Menu.Item>
                     )}
                     {hasKillerCage && (
-                        <li className="menu-item">
-                            <button
-                                className="btn-fake-link"
+                        <Menu.Item>
+                            <Button
+                                danger
+                                wide
                                 onClick={() => deleteKillerCage(index)}
                             >
+                                <i className="fa fa-trash m-r-12" />
                                 Delete killer cage at{' '}
                                 <strong>
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>
-                            </button>
-                        </li>
+                            </Button>
+                        </Menu.Item>
                     )}
                 </>
             )}

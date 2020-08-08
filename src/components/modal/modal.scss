@@ -1,0 +1,59 @@
+@import 'sass';
+
+:root:root {
+    .modal {
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-container {
+            padding: 0;
+            border-radius: 2px;
+            border: 1px solid $grey-300;
+        }
+
+        .modal-header {
+            background: $grey-100;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+            border-bottom: 1px solid $grey-300;
+
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            border-top: 1px solid $grey-300;
+            background: $grey-100;
+        }
+    }
+
+    .theme-dark .modal {
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-container {
+            background: $grey-900;
+            color: white;
+            border-color: $black;
+        }
+
+        .modal-header {
+            background: $black;
+            border-color: transparent;
+            color: white;
+        }
+
+        .modal-footer {
+            background: $black;
+            border-color: transparent;
+        }
+    }
+}

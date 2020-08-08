@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import useSelector from 'hooks/use-selector';
 import { isFilled } from 'utils/solve/helper';
 import useAction from 'hooks/use-action';
+import Modal from 'components/modal';
+import Button from 'components/button';
 
 interface KillerCageModalProps {
     selection: number[];
@@ -49,71 +51,58 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
     const [total, setTotal] = useState<number>(minimum);
 
     return (
-        <div className="modal modal-sm active">
-            <div className="modal-overlay" />
-            <div className="modal-container">
-                <div className="modal-header">
-                    <button
-                        className="btn btn-clear float-right"
-                        aria-label="Close"
-                        onClick={onClose}
-                    />
-                    <div className="modal-title h5">Create Killer Cage</div>
-                </div>
-                <form
-                    onSubmit={() => {
-                        if (total < minimum || total > maximum) {
-                            return false;
-                        }
-                        createCage({ total, cage: selection });
-                        onClose();
-                    }}
-                >
-                    <div className="modal-body">
-                        <div className="content">
-                            <p>
-                                Over <strong>{selection.length}</strong> cell
-                                {selection.length === 1 ? '' : 's'}
-                            </p>
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="value">
-                                    Value
-                                </label>
-                                <input
-                                    name="total"
-                                    className="form-input"
-                                    type="number"
-                                    min={minimum}
-                                    max={maximum}
-                                    step={1}
-                                    placeholder="Total value"
-                                    id="value"
-                                    onChange={(e) =>
-                                        setTotal(Number(e.target.value))
-                                    }
-                                    value={total ?? minimum}
-                                />
-                            </div>
-                            <p>
-                                min: {minimum} max: {maximum}
-                            </p>
+        <Modal size="sm">
+            <Modal.Header onClose={onClose}>Create Killer Cage</Modal.Header>
+            <form
+                onSubmit={() => {
+                    if (total < minimum || total > maximum) {
+                        return false;
+                    }
+                    createCage({ total, cage: selection });
+                    onClose();
+                }}
+            >
+                <Modal.Body>
+                    <div className="content">
+                        <p>
+                            Over <strong>{selection.length}</strong> cell
+                            {selection.length === 1 ? '' : 's'}
+                        </p>
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="value">
+                                Value
+                            </label>
+                            <input
+                                name="total"
+                                className="form-input"
+                                type="number"
+                                min={minimum}
+                                max={maximum}
+                                step={1}
+                                placeholder="Total value"
+                                id="value"
+                                onChange={(e) =>
+                                    setTotal(Number(e.target.value))
+                                }
+                                value={total ?? minimum}
+                            />
                         </div>
+                        <p>
+                            min: {minimum} max: {maximum}
+                        </p>
                     </div>
-                    <div className="modal-footer">
-                        <button
-                            className="btn btn-link mr-2"
-                            onClick={onClose}
-                            type="button"
-                        >
-                            Cancel
-                        </button>
-                        <button className="btn btn-primary" type="submit">
-                            Create
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button danger className="m-r-12" onClick={onClose}>
+                        Cancel
+                    </Button>
+                    <Button primary submit>
+                        <i className="fa fa-border-none m-r-12" />
+                        Create
+                    </Button>
+                </Modal.Footer>
+            </form>
+        </Modal>
     );
 };
 

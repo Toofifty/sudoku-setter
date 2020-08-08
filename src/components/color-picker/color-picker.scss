@@ -3,6 +3,8 @@
 .color-picker {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 100%;
 
     &__option {
         border: 2px solid $grey-300;
@@ -22,6 +24,10 @@
         &:hover {
             cursor: pointer;
             border-color: $purple-600;
+        }
+
+        &:focus {
+            @include focus-outline;
         }
 
         &--white {
@@ -45,7 +51,17 @@
         }
 
         &--selected {
-            border-color: $grey-500;
+            border-color: $grey-800;
+        }
+    }
+}
+
+.theme-dark .color-picker {
+    &__option {
+        border-color: $black;
+
+        &--selected {
+            border-color: $grey-200;
         }
     }
 }
