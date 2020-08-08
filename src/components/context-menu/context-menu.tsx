@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
-import useSelector from '../../hooks/use-selector';
-import useAction from '../../hooks/use-action';
+import { Portal } from 'react-portal';
+import useSelector from 'hooks/use-selector';
+import useAction from 'hooks/use-action';
 import './context-menu.scss';
 import { isEventOver } from 'utils';
 
@@ -67,15 +68,17 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
         );
 
     return (
-        <ul
-            className={cx(
-                'menu context-menu',
-                isVisible && 'context-menu--visible'
-            )}
-            style={style}
-        >
-            {content()}
-        </ul>
+        <Portal>
+            <ul
+                className={cx(
+                    'menu context-menu',
+                    isVisible && 'context-menu--visible'
+                )}
+                style={style}
+            >
+                {content()}
+            </ul>
+        </Portal>
     );
 };
 

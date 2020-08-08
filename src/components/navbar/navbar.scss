@@ -2,61 +2,107 @@
 
 // .nav-bar doesn't conflict with spectre
 // which tbh has shit navbar styling >.>
-.nav-bar {
-    background: $grey-100;
-    padding: $sp-8 $sp-24;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1;
-
-    border-bottom: 1px solid $grey-300;
-    // box-shadow: 0 16px 32px $grey-400-2;
-
-    &__section {
+:root:root {
+    .nav-bar {
+        background: $grey-100;
+        padding: $sp-8 $sp-24;
         display: flex;
         align-items: center;
-    }
+        justify-content: space-between;
+        z-index: 1;
 
-    &__brand {
-        text-transform: uppercase;
-        font-weight: bolder;
-        font-size: 20px;
-        color: $grey-900 !important;
+        border-bottom: 1px solid $grey-300;
+        // box-shadow: 0 16px 32px $grey-400-2;
 
-        padding: 8px;
-        margin-right: 8px;
-
-        &:hover,
-        &:focus {
-            text-decoration: none;
+        &__section {
+            display: flex;
+            align-items: center;
         }
-    }
 
-    &__link {
-        color: $purple-400;
-        font-weight: bold;
-        padding: $sp-4 $sp-12;
-        border-radius: 2px;
+        &__brand {
+            text-transform: uppercase;
+            font-weight: bolder;
+            font-size: 20px;
+            color: $grey-900 !important;
 
-        &:visited {
+            padding: 8px;
+            margin-right: 8px;
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+            }
+        }
+
+        &__link {
             color: $purple-400;
+            font-weight: bold;
+            padding: $sp-4 $sp-12;
+            border-radius: 2px;
+
+            &:visited {
+                color: $purple-400;
+            }
+
+            &:hover,
+            &:focus {
+                color: $purple-600;
+                background: $purple-200;
+                text-decoration: none;
+            }
         }
 
-        &:hover,
-        &:focus {
-            color: $purple-600;
-            background: $purple-200;
-            text-decoration: none;
+        &__menu-btn {
+            display: none;
+        }
+
+        @media (max-width: 660px) {
+            &__menu-btn {
+                display: initial;
+            }
+
+            &__section {
+                position: absolute;
+                transform: translateY(90px);
+                z-index: -1;
+                right: $sp-24;
+                background: $grey-100;
+                padding: $sp-16;
+                border: 1px solid $grey-300;
+                border-radius: 3px;
+                transition: transform 0.1s, opacity 0.1s;
+                flex-direction: column;
+                align-items: flex-end;
+                flex-wrap: wrap;
+                opacity: 0;
+                box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+
+                > * {
+                    transition: opacity 0.1s;
+                    width: 150px;
+                }
+
+                &--visible {
+                    transform: translateY(98px);
+                    opacity: 1;
+                }
+            }
         }
     }
-}
 
-.theme-dark .nav-bar {
-    background: $grey-900;
-    border-color: transparent;
+    .theme-dark .nav-bar {
+        background: $grey-900;
+        border-color: transparent;
 
-    &__brand {
-        color: white !important;
+        &__brand {
+            color: white !important;
+        }
+
+        @media (max-width: 660px) {
+            &__section {
+                background: $grey-900;
+                border-color: transparent;
+            }
+        }
     }
 }
