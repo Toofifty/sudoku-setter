@@ -2,7 +2,7 @@ import { CellSolver } from './types';
 import { regions, isFilled } from '../helper';
 import { getCellAt } from 'utils/sudoku';
 
-export const solveNakedHiddenTuples: CellSolver = (cell, i, board) => {
+export const solveNakedTuples: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
 
     if (isFilled(cell)) return cell;

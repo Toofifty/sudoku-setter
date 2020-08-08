@@ -9,7 +9,8 @@ Solvers
 -   [x] Naked singles
 -   [x] Hidden singles
 -   [x] Naked/hidden pairs
--   [x] Naked/hidden tuples
+-   [x] Naked tuples
+-   [ ] Hidden tuples
 -   [x] Line-locked candidates (eliminate in row/column)
 -   [ ] Box-locked candidates (eliminate in box)
 -   [ ] X wing

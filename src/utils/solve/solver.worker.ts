@@ -4,7 +4,7 @@ import {
     solveHiddenSingles,
     solveNakedPairs,
     solveHiddenPairs,
-    solveNakedHiddenTuples,
+    solveNakedTuples,
     solveLockedCandidates,
     solveThermos,
     solveKillerCages,
@@ -68,7 +68,7 @@ const solveStep = ({
         .map(algorithms.hiddenSingles ? solveHiddenSingles : noop)
         .map(algorithms.nakedPairs ? solveNakedPairs : noop)
         .map(algorithms.hiddenPairs ? solveHiddenPairs : noop)
-        .map(algorithms.nakedHiddenTuples ? solveNakedHiddenTuples : noop)
+        .map(algorithms.nakedTuples ? solveNakedTuples : noop)
         .map(algorithms.lockedCandidates ? solveLockedCandidates : noop);
 
     // solve particular sudokus

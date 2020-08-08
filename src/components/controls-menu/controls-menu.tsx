@@ -163,14 +163,14 @@ const ControlsMenu = () => {
                 </Menu.Item>
                 <Menu.Item>
                     <Toggle
-                        checked={algorithms.nakedHiddenTuples}
+                        checked={algorithms.nakedTuples}
                         onChange={() =>
                             setAlgorithms({
-                                nakedHiddenTuples: !algorithms.nakedHiddenTuples,
+                                nakedTuples: !algorithms.nakedTuples,
                             })
                         }
                     >
-                        Naked/hidden tuples (3+)
+                        Naked tuples (3+)
                     </Toggle>
                 </Menu.Item>
                 <Menu.Item>
