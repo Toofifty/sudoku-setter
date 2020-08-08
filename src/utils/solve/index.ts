@@ -45,6 +45,7 @@ const prepareBoard = (
             marks: solutionCell.candidates,
             initialMarks: solutionCell.candidates,
             invalidMarks: solutionCell.invalidCandidates,
+            color: solutionCell.color,
         };
     });
 
@@ -53,6 +54,7 @@ const prepareSolutionData = (board: InterCell[]): SolutionCell[] =>
         value: cell.value,
         candidates: cell.marks,
         invalidCandidates: cell.invalidMarks ?? [],
+        color: cell.color,
     }));
 
 export const useSudokuSolver = () => {

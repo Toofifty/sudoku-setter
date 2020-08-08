@@ -119,7 +119,7 @@ const ControlsMenu = () => {
                     </Toggle>
                 </Menu.Item>
             </Menu.Collapse>
-            <Menu.Collapse label="Solve algorithms">
+            <Menu.Collapse label="Solve algorithms" expandedByDefault>
                 <Menu.Item>
                     <Toggle checked disabled>
                         Naked singles
@@ -163,6 +163,18 @@ const ControlsMenu = () => {
                 </Menu.Item>
                 <Menu.Item>
                     <Toggle
+                        checked={algorithms.nakedHiddenTuples}
+                        onChange={() =>
+                            setAlgorithms({
+                                nakedHiddenTuples: !algorithms.nakedHiddenTuples,
+                            })
+                        }
+                    >
+                        Naked/hidden tuples (3+)
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
                         checked={algorithms.lockedCandidates}
                         onChange={() =>
                             setAlgorithms({
@@ -194,7 +206,7 @@ const ControlsMenu = () => {
                             })
                         }
                     >
-                        Killer cages sudoku
+                        Killer cage sudoku
                     </Toggle>
                 </Menu.Item>
                 <Menu.Item>

@@ -17,14 +17,14 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
     const boxColumn = range(currentBox.y * 3, (currentBox.y + 1) * 3);
 
     for (let n of cell.marks) {
-        // short circuit if digit already markled
+        // short circuit if digit already marked
         // previously in box
         const alreadyTested = cells
             .filter((_, j) => j < ownIndex)
             .some((other) => !isFilled(other) && other.marks.includes(n));
         if (alreadyTested) continue;
 
-        // get all positions of the digit markled
+        // get all positions of the digit marked
         // in the box
         const digitIndices = cells
             .map((other, j) => {

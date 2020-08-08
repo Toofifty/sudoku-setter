@@ -20,6 +20,7 @@ export type SolutionCell = {
     value?: number;
     candidates: number[];
     invalidCandidates: number[];
+    color?: string;
 };
 
 export type PlayerCell = {

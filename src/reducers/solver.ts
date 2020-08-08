@@ -6,6 +6,7 @@ export interface SolverState {
         hiddenSingles: boolean;
         nakedPairs: boolean;
         hiddenPairs: boolean;
+        nakedHiddenTuples: boolean;
         lockedCandidates: boolean;
         thermos: boolean;
         killerCages: boolean;
@@ -30,6 +31,7 @@ const defaultState = (): SolverState => ({
         hiddenSingles: true,
         nakedPairs: true,
         hiddenPairs: true,
+        nakedHiddenTuples: true,
         lockedCandidates: true,
         thermos: true,
         killerCages: true,

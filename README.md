@@ -9,7 +9,7 @@ Solvers
 -   [x] Naked singles
 -   [x] Hidden singles
 -   [x] Naked/hidden pairs
--   [ ] Naked/hidden triplets
+-   [x] Naked/hidden tuples
 -   [x] Line-locked candidates (eliminate in row/column)
 -   [ ] Box-locked candidates (eliminate in box)
 -   [ ] X wing
@@ -37,7 +37,7 @@ Features
 -   [x] Better URL encoding
 -   [x] More responsive layout
 -   [x] Undo/redo
--   [ ] Themes
+-   [x] Dark mode
 -   [ ] Solve breakdown
 -   [ ] Play puzzle
     -   [ ] Save puzzles

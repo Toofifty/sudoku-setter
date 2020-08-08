@@ -53,12 +53,19 @@ const Button = ({
         'button--disabled': disabled,
     });
 
-    if ('onClick' in rest || 'submit' in rest) {
+    if ('onClick' in rest) {
+        return (
+            <button className={classNames} {...rest}>
+                {children}
+            </button>
+        );
+    }
+
+    if ('submit' in rest) {
         return (
             <button
                 className={classNames}
-                {...rest}
-                type={'submit' in rest ? 'submit' : 'button'}
+                type={rest.submit ? 'submit' : 'button'}
             >
                 {children}
             </button>

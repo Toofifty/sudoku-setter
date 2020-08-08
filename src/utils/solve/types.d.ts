@@ -1,3 +1,5 @@
+import { SolverState } from 'reducers/solver';
+
 export type InterCell = {
     value?: number;
     given: boolean;
@@ -5,6 +7,7 @@ export type InterCell = {
     initialMarks: number[];
     index: number;
     invalidMarks?: number[];
+    color?: string;
 };
 
 export type SolvePayload = {
@@ -12,16 +15,5 @@ export type SolvePayload = {
     thermos?: number[][];
     killerCages?: { total: number; cage: number[] }[];
     stepSolve: boolean;
-    algorithms: {
-        hiddenSingles: boolean;
-        nakedPairs: boolean;
-        hiddenPairs: boolean;
-        lockedCandidates: boolean;
-        thermos: boolean;
-        killerCages: boolean;
-        antiKing: boolean;
-        antiKnight: boolean;
-        uniqueDiagonals: boolean;
-        nonSeqNeighbors: boolean;
-    };
+    algorithms: SolverState['algorithms'];
 };

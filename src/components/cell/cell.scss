@@ -137,10 +137,14 @@
 
 .theme-dark .cell {
     border-color: $grey-900;
-    color: $purple-100;
+    color: $purple-300;
 
     &--highlighted {
         background: $grey-200-1;
+    }
+
+    &--given {
+        color: $purple-100;
     }
 
     &--selected {

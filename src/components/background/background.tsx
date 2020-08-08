@@ -19,6 +19,7 @@ const Background = () => {
     const { board, thermos, killerCages, restrictions } = useSelector(
         (state) => state.puzzle
     );
+    const solution = useSelector((state) => state.solver.solution);
 
     return (
         <div
@@ -33,7 +34,9 @@ const Background = () => {
                         <BackgroundCell
                             key={n}
                             index={n}
-                            color={board[n].color ?? 'white'}
+                            color={
+                                solution[n].color ?? board[n].color ?? 'white'
+                            }
                             thermos={thermos}
                             killerCages={killerCages}
                         />
