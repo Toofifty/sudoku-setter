@@ -4,6 +4,7 @@ import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
 import ControlBox from 'components/control-box';
 import SettingsModal from 'components/settings-modal/settings-modal';
+import PageLayout from 'components/page-layout';
 
 const PlayerPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -24,33 +25,19 @@ const PlayerPage = () => {
     }, [hasLoadedFromHash, setSudoku, triggerSolve]);
 
     return (
-        <div>
-            <div className="container">
-                <div className="columns">
-                    <div
-                        className="column"
-                        style={{ display: 'flex', justifyContent: 'center' }}
-                    >
-                        <BoardContainer />
-                    </div>
-                    <div
-                        className="column"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'flex-start',
-                        }}
-                    >
-                        <ControlBox
-                            onShowSettings={() => setShowSettingsModal(true)}
-                        />
-                    </div>
-                </div>
-            </div>
+        <>
+            <PageLayout
+                board={<BoardContainer />}
+                controls={
+                    <ControlBox
+                        onShowSettings={() => setShowSettingsModal(true)}
+                    />
+                }
+            />
             {showSettingsModal && (
                 <SettingsModal onClose={() => setShowSettingsModal(false)} />
             )}
-        </div>
+        </>
     );
 };
 

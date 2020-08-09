@@ -91,7 +91,16 @@ const setCellValue = action(
             mode = state.settings.multiInputMode;
         }
         cells.forEach(({ index, value }) => {
-            const { color, centreMarks, cornerMarks } = board[index];
+            const {
+                color,
+                centreMarks,
+                cornerMarks,
+                value: initialValue,
+            } = board[index];
+
+            // don't overwrite existing digits with pencil marks
+            if (initialValue && mode !== 'digit') return;
+
             if (mode === 'digit' || !value) {
                 board[index] = {
                     value,

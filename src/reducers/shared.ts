@@ -39,13 +39,19 @@ const setSelectionValue = action(
         const isPlayMode = isPlayModeSelector(state);
         let fromScratchSolve = false;
         if (isPlayMode) {
-            if (state.ui.selection.length === 0) return state;
+            const { selection } = state.ui;
+            if (selection.length === 0) return state;
+
+            // ignore changes to given cells
+            const filteredSelection = selection.filter(
+                (index) => !state.puzzle.board[index].given
+            );
 
             dispatch({
                 type: 'player/set-cell-value',
-                payload: state.ui.selection.map((index) => ({ index, value })),
+                payload: filteredSelection.map((index) => ({ index, value })),
             });
-            fromScratchSolve = state.ui.selection.some((index) => {
+            fromScratchSolve = selection.some((index) => {
                 const prevValue = state.puzzle.board[index].value;
                 return !!prevValue && value !== prevValue;
             });

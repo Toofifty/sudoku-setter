@@ -4,7 +4,7 @@ import Board from 'components/board';
 import './board-container.scss';
 
 const MOBILE_PADDING = 48;
-const DESKTOP_EXTRA_ROOM = 360;
+const DESKTOP_EXTRA_ROOM = 400;
 
 const BoardContainer = () => {
     const [scale, setScale] = useState(100);
