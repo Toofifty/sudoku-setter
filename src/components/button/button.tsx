@@ -55,7 +55,7 @@ const Button = ({
 
     if ('onClick' in rest) {
         return (
-            <button className={classNames} {...rest}>
+            <button className={classNames} type="button" {...rest}>
                 {children}
             </button>
         );

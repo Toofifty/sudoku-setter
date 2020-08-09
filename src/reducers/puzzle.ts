@@ -54,8 +54,11 @@ const setGiven = action(
     saveHistory<PuzzleState>(...trackHistoryOf)
 );
 
-const reset = action(_ as PuzzleState, _ as undefined, 'puzzle/reset', () =>
-    defaultState()
+const reset = action(
+    _ as PuzzleState,
+    _ as undefined,
+    'puzzle/reset',
+    (state) => ({ ...defaultState(), mode: state.mode })
 );
 
 const createThermo = action(

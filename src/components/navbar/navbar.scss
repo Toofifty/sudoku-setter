@@ -76,6 +76,7 @@
                 flex-wrap: wrap;
                 opacity: 0;
                 box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+                pointer-events: none;
 
                 > * {
                     transition: opacity 0.1s;
@@ -85,6 +86,7 @@
                 &--visible {
                     transform: translateY(106px);
                     opacity: 1;
+                    pointer-events: all;
                 }
             }
         }

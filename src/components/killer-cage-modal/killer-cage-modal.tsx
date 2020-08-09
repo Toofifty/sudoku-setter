@@ -78,16 +78,35 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                             <input
                                 name="total"
                                 className="form-input"
-                                type="number"
+                                type="text"
                                 min={minimum}
                                 max={maximum}
                                 step={1}
                                 placeholder="Total value"
                                 id="value"
-                                onChange={(e) =>
-                                    setTotal(Number(e.target.value))
-                                }
+                                onChange={(e) => {
+                                    setTotal(Number(e.target.value));
+                                }}
                                 value={total ?? minimum}
+                                autoFocus
+                                onFocus={(e) =>
+                                    e.target.setSelectionRange(
+                                        0,
+                                        e.target.value.length
+                                    )
+                                }
+                                onKeyDown={({ key, target }) => {
+                                    if (key === 'ArrowUp') {
+                                        setTotal(
+                                            Number((target as any).value) + 1
+                                        );
+                                    }
+                                    if (key === 'ArrowDown') {
+                                        setTotal(
+                                            Number((target as any).value) - 1
+                                        );
+                                    }
+                                }}
                             />
                         </div>
                         <p>
@@ -99,7 +118,11 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                     <Button danger className="m-r-12" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button primary submit>
+                    <Button
+                        primary
+                        submit
+                        disabled={total < minimum || total > maximum}
+                    >
                         <i className="fad fa-check m-r-12" />
                         Create
                     </Button>

@@ -26,6 +26,7 @@ Extra restrictions
     -   [ ] Remove candidates forced into a cage from the box/column/row
     -   [ ] Solve by box/column/row totals
     -   [ ] Solve by multi box/column/row totals
+    -   [ ] Check adjacent cages for required numbers
 -   [x] Non-sequential neighbors
 -   [x] Diagonals
 -   [ ] Comparators
