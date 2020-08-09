@@ -36,7 +36,7 @@ const Board = () => {
     // remove selection on click-away
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (!isEventOver(e, 'board', 'menu', 'modal')) {
+            if (!isEventOver(e, 'board', 'menu', 'modal', 'button')) {
                 clearFocus();
             }
         };

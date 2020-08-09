@@ -10,14 +10,15 @@ interface NumberInputProps {
 
 const NumberInput = ({ onSetNumber, selected }: NumberInputProps) => (
     <div className="number-input">
-        {range(0, 10).map((n) => (
+        {range(1, 11).map((n) => (
             <Button
-                primary
+                primary={n !== 10}
                 key={n}
-                onClick={() => onSetNumber(n)}
+                onClick={() => onSetNumber(n === 10 ? 0 : n)}
                 disabled={n === selected}
+                danger={n === 10}
             >
-                {n === 0 ? <i className="icon icon-cross" /> : n}
+                {n === 10 ? <i className="fa fa-times" /> : n}
             </Button>
         ))}
     </div>

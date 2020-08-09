@@ -44,7 +44,7 @@
 }
 
 /** Typography */
-:root:root .text {
+:root:root:root .text {
     &--left {
         text-align: left;
     }
@@ -75,7 +75,13 @@
 }
 
 .hide-desktop {
-    @media (min-width: 1301px) {
+    @include desktop {
+        display: none;
+    }
+}
+
+.hide-mobile {
+    @include mobile {
         display: none;
     }
 }

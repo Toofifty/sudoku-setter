@@ -12,9 +12,9 @@ const UndoRedo = () => {
     const canRedo = useSelector(canRedoSelector('player'));
 
     return (
-        <li className="menu-item undo-redo">
+        <div className="undo-redo">
             <Button
-                className="m-r-8 fg-1"
+                className="text--center m-r-8 fg-1"
                 onClick={() => undo()}
                 disabled={!canUndo}
             >
@@ -22,14 +22,14 @@ const UndoRedo = () => {
                 <i className="fa fa-undo m-l-12" />
             </Button>
             <Button
-                className="m-l-8 fg-1"
+                className="text--center m-l-8 fg-1"
                 onClick={() => redo()}
                 disabled={!canRedo}
             >
                 <i className="fa fa-redo m-r-12" />
                 Redo
             </Button>
-        </li>
+        </div>
     );
 };
 

@@ -1,0 +1,24 @@
+@import 'sass';
+
+.page-layout {
+    display: flex;
+
+    &__board {
+        margin-right: $sp-16;
+    }
+
+    &__controls {
+        max-width: 90%;
+        overflow: hidden;
+    }
+
+    @include mobile {
+        flex-direction: column;
+        align-items: center;
+
+        &__board {
+            margin-right: 0;
+            margin-bottom: $sp-16;
+        }
+    }
+}

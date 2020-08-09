@@ -8,9 +8,22 @@
         margin: 0;
         border: 1px solid transparent;
 
+        @media (pointer: coarse) {
+            padding: $sp-12 $sp-16;
+            padding-left: $sp-48;
+
+            .form-icon {
+                margin-top: 10px;
+            }
+        }
+
         &.form-checkbox,
         &.form-radio {
             padding-left: $sp-12 + $sp-16 + $sp-12;
+
+            @media (pointer: coarse) {
+                padding-left: $sp-12 + $sp-16 + $sp-12;
+            }
 
             .form-icon {
                 margin-left: $sp-12;

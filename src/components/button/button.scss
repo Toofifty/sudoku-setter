@@ -54,6 +54,10 @@
             pointer-events: none;
             color: $grey-500;
         }
+
+        @media (pointer: coarse) {
+            padding: $sp-12 $sp-16;
+        }
     }
 
     .theme-dark .button {

@@ -1,10 +1,6 @@
-.menu .undo-redo.menu-item {
+.undo-redo {
     display: flex;
-    justify-content: stretch;
+    justify-content: space-between;
     margin-top: 0;
     padding-bottom: 8px;
-
-    > .btn {
-        flex: 1;
-    }
 }

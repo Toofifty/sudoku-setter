@@ -48,7 +48,9 @@ const CellContextMenu = ({
                     selected={value}
                 />
             </Menu.Item>
-            <UndoRedo />
+            <Menu.Item>
+                <UndoRedo />
+            </Menu.Item>
             <Menu.Divider
                 label={`Set ${
                     selection.length > 1

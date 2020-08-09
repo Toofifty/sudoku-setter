@@ -10,6 +10,16 @@
             padding: 0;
             border-radius: 4px;
             border: 1px solid $grey-300;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-body {
+            padding: $sp-12;
+        }
+
+        .modal-body > .menu {
+            border: none;
+            margin: -#{$sp-12};
         }
 
         .modal-header {

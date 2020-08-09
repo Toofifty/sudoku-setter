@@ -4,6 +4,8 @@ import ContextMenu from 'components/context-menu';
 import useAction from 'hooks/use-action';
 import BoardContainer from 'components/board-container';
 import ControlsMenu from 'components/controls-menu';
+import PageLayout from 'components/page-layout';
+import SetterMobileControls from 'components/setter-mobile-controls';
 
 const SetterPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -23,34 +25,14 @@ const SetterPage = () => {
     }, [hasLoadedFromHash, setSudoku, triggerSolve]);
 
     return (
-        <div>
-            <div className="container">
-                <div className="columns">
-                    <div
-                        className="column"
-                        style={{ display: 'flex', justifyContent: 'center' }}
-                    >
-                        <BoardContainer />
-                    </div>
-                    <div
-                        className="column columns control-columns"
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'flex-start',
-                        }}
-                    >
-                        <div className="column">
-                            <ControlsMenu />
-                        </div>
-                        <div className="column col-4 hide-desktop">
-                            <ContextMenu isStatic />
-                        </div>
-                    </div>
-                </div>
-                <ContextMenu />
-            </div>
-        </div>
+        <>
+            <PageLayout
+                board={<BoardContainer />}
+                controls={<ControlsMenu />}
+                mobileControls={<SetterMobileControls />}
+            />
+            <ContextMenu />
+        </>
     );
 };
 

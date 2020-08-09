@@ -11,9 +11,10 @@ const Y_OFFSET = 4;
 
 interface ContextMenuProps {
     isStatic?: boolean;
+    onAction?: () => void;
 }
 
-const ContextMenu = ({ isStatic }: ContextMenuProps) => {
+const ContextMenu = ({ isStatic, onAction }: ContextMenuProps) => {
     const content = useSelector((state) => state.ui.contextMenu);
     const isVisible = useSelector((state) => state.ui.contextVisible);
     const [mouse, setMouse] = useState({ x: 0, y: 0 });
@@ -36,12 +37,14 @@ const ContextMenu = ({ isStatic }: ContextMenuProps) => {
             e.button !== 2 &&
             toggleContextMenu(false);
 
-        const closeAfterClick = (e: MouseEvent) =>
-            isEventOver(e, 'context-menu') &&
-            e.button !== 2 &&
-            toggleContextMenu(false);
+        const closeAfterClick = (e: MouseEvent) => {
+            if (isEventOver(e, 'context-menu') && e.button !== 2) {
+                toggleContextMenu(false);
+                onAction?.();
+            }
+        };
 
-        if (isVisible) {
+        if (isVisible || onAction) {
             window.addEventListener('mousedown', close);
             window.addEventListener('click', closeAfterClick);
             setPosition({ x: mouse.x + X_OFFSET, y: mouse.y + Y_OFFSET });

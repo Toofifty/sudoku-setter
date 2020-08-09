@@ -3,40 +3,75 @@
 $extra: 10px;
 $padding: $sp-8;
 
+$free-space-required: 300px;
+
+$a: 200px;
+
 .board-container {
     position: relative;
     background: $grey-300;
-    --size: 1000px;
-    width: calc(var(--size) + #{$padding});
-    height: calc(var(--size) + #{$padding});
     border-radius: 4px;
+    --scale: 100;
+    --mobile-scale: 100;
+    padding: $padding;
 
-    @for $i from 1 through 50 {
-        $j: 10 - ($i / 5);
-        @media (max-width: $j * 100px + $extra) {
-            --size: #{($j - 1) * 100px};
-        }
+    width: calc(var(--scale) * 10px + #{$padding});
+    height: calc(var(--scale) * 10px + #{$padding});
+
+    @include mobile {
+        width: calc(var(--mobile-scale) * 10px + #{$padding});
+        height: calc(var(--mobile-scale) * 10px + #{$padding});
     }
 
     .board-sizer {
         position: absolute;
         left: 50%;
         top: 50%;
-
-        transform: translate(-50%, -50%) scale(1);
         width: 1000px;
         height: 1000px;
-        border: 2px solid $grey-300;
+        transform: translate(-50%, -50%) scale(calc(var(--scale) / 100));
 
-        @for $i from 1 through 50 {
-            $j: 10 - ($i / 5);
-            $scale: ($j - 1) / 10;
-            @media (max-width: $j * 100px + $extra) {
-                transform: translate(-50%, -50%) scale($scale);
-            }
+        @include mobile {
+            transform: translate(-50%, -50%)
+                scale(calc(var(--mobile-scale) / 100));
         }
     }
 }
+
+// .board-container {
+//     position: relative;
+//     background: $grey-300;
+//     --size: 1000px;
+//     width: calc(var(--size) + #{$padding});
+//     height: calc(var(--size) + #{$padding});
+//     border-radius: 4px;
+
+//     @for $i from 1 through 50 {
+//         $j: 10 - ($i / 5);
+//         @media (max-width: $j * 120px + $extra) {
+//             --size: #{($j - 1) * 120px};
+//         }
+//     }
+
+//     .board-sizer {
+//         position: absolute;
+//         left: 50%;
+//         top: 50%;
+
+//         transform: translate(-50%, -50%) scale(0.9);
+//         width: 1000px;
+//         height: 1000px;
+//         border: 2px solid $grey-300;
+
+//         @for $i from 1 through 50 {
+//             $j: 10 - ($i / 5);
+//             $scale: ($j - 2) / 10;
+//             @media (max-width: $j * 120px + $extra) {
+//                 transform: translate(-50%, -50%) scale($scale);
+//             }
+//         }
+//     }
+// }
 
 .theme-dark .board-container {
     background: $grey-900;
