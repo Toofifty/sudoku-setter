@@ -1,43 +1,65 @@
-import { CellSolver } from './types';
-import { getCellAt } from '../../sudoku';
+import { CellSolver, SolveHistory } from './types';
+import { getCellAt, getCoord } from '../../sudoku';
 import { isFilled, getMarks, regions } from '../helper';
 
-export const solveNakedPairs: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+/**
+ * Solves naked pairs by looking for paired cells with
+ * identical candidates, and removing those candidates from
+ * any cells in the same row/column/box
+ *
+ * repro: #!K:3:v,14
+ */
+export const solveNakedPairs =
+    (history: SolveHistory): CellSolver =>
+    (cell, i, board) => {
+        const pos = getCellAt(i);
 
-    if (isFilled(cell)) return cell;
+        if (isFilled(cell)) return cell;
 
-    if (cell.marks.length === 2) {
-        // @see naked-tuples
-        regions(board, pos, true).forEach((cells, k) => {
-            const ownIndex = cells.indexOf(cell);
-            let matchIndex = 0;
-            const hasPair = cells
-                .filter((_, j) => j > ownIndex)
-                .some((other, j) => {
+        if (cell.marks.length === 2) {
+            // @see naked-tuples
+            regions(board, pos, true).forEach((cells) => {
+                const ownLocalIndex = cells.indexOf(cell);
+                let pairLocalIndex = 0;
+                const pairCell = cells.find((other, otherLocalIndex) => {
                     const marks = getMarks(other);
                     return (
-                        !isFilled(other) &&
+                        otherLocalIndex > ownLocalIndex &&
                         marks.length === 2 &&
                         JSON.stringify(cell.marks) === JSON.stringify(marks) &&
-                        (matchIndex = j + ownIndex + 1)
+                        (pairLocalIndex = otherLocalIndex)
                     );
                 });
 
-            if (hasPair) {
-                cells.forEach((other, j) => {
-                    if (
-                        !isFilled(other) &&
-                        matchIndex !== j &&
-                        j !== ownIndex
-                    ) {
-                        other.marks = other.marks.filter(
-                            (n) => !cell.marks.includes(n)
-                        );
+                if (pairCell !== undefined) {
+                    const affected: number[] = [];
+                    cells.forEach((other, otherLocalIndex) => {
+                        if (
+                            !isFilled(other) &&
+                            otherLocalIndex !== pairLocalIndex &&
+                            otherLocalIndex !== ownLocalIndex &&
+                            (other.marks.includes(cell.marks[0]) ||
+                                other.marks.includes(cell.marks[1]))
+                        ) {
+                            affected.push(other.index);
+                            other.marks = other.marks.filter(
+                                (n) => !cell.marks.includes(n)
+                            );
+                        }
+                    });
+
+                    if (affected.length > 0) {
+                        history.push({
+                            algorithm: 'naked-pairs',
+                            affected,
+                            removedCandidates: cell.marks,
+                            reason: `${cell.marks.join('-')} pair at ${getCoord(
+                                i
+                            )}/${getCoord(pairCell.index)}`,
+                        });
                     }
-                });
-            }
-        });
-    }
-    return cell;
-};
+                }
+            });
+        }
+        return cell;
+    };

@@ -4,11 +4,12 @@ import { column, row, box, getValue } from '../helper';
 import { InterCell } from '../types';
 import { Position } from '../../../types';
 
-export const solveNakedSingles = (initial = false): CellSolver => (
-    cell,
-    i,
-    board
-) => {
+/**
+ * Solves naked-singles by removing conflicting candidates
+ *
+ * repro: #G:10:1,11:2,12:3,13:4,15:6,16:7,17:8,18:9
+ */
+export const solveNakedSingles: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
     cell.marks = cell.marks.filter((n) => !breaksSudoku(board, pos, n));
     return cell;

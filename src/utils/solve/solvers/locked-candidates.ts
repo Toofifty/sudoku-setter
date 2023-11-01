@@ -3,30 +3,37 @@ import { getCellAt, getBox } from '../../sudoku';
 import { isFilled, box, row, column } from '../helper';
 import { range } from '../../misc';
 
+/**
+ * Solve for "locked-candidates" - when the same digit is locked
+ * to the same row/column in a single box, it cannot appear
+ * in another box in that row/column.
+ *
+ * repro: #G:5:1,13:3,14:4,1c:5,1d:6
+ */
 export const solveLockedCandidates: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
     if (isFilled(cell) && cell.given) return cell;
 
-    const cells = box(board, pos, true);
-    const ownIndex = cells.indexOf(cell);
+    const boxCells = box(board, pos, true);
+    const ownIndex = boxCells.indexOf(cell);
 
     // calculate indices of box contents
     // so we can avoid them later
     const currentBox = getBox(pos);
-    const boxRow = range(currentBox.x * 3, (currentBox.x + 1) * 3);
-    const boxColumn = range(currentBox.y * 3, (currentBox.y + 1) * 3);
+    const boxRow = range(currentBox.x * 3, (currentBox.x + 1) * 3 - 1);
+    const boxColumn = range(currentBox.y * 3, (currentBox.y + 1) * 3 - 1);
 
     for (let n of cell.marks) {
         // short circuit if digit already marked
         // previously in box
-        const alreadyTested = cells
+        const alreadyTested = boxCells
             .filter((_, j) => j < ownIndex)
             .some((other) => !isFilled(other) && other.marks.includes(n));
         if (alreadyTested) continue;
 
         // get all positions of the digit marked
         // in the box
-        const digitIndices = cells
+        const digitIndices = boxCells
             .map((other, j) => {
                 if (j < ownIndex || isFilled(other) || !other.marks.includes(n))
                     return null;

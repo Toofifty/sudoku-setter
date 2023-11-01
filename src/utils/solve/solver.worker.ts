@@ -1,3 +1,4 @@
+import { getCoord } from 'utils/sudoku';
 import { InterCell, SolvePayload } from './types';
 import {
     solveNakedSingles,
@@ -14,6 +15,7 @@ import {
 } from './solvers';
 import { isFilled, hasEmptyCell } from './helper';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
+import { SolveHistory } from './solvers/types';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };
 
@@ -45,6 +47,29 @@ const SOLVE_PASSES = 20;
 
 const noop = (a: any) => a;
 
+const printHistory = (history: SolveHistory) => {
+    history.forEach((step) => {
+        if ('placed' in step) {
+            step.affected.forEach((index) => {
+                console.log(
+                    `solve(${step.algorithm}): ${
+                        step.placed
+                    } can be placed at ${getCoord(index)}`
+                );
+            });
+        } else {
+            const coords = step.affected.map(getCoord);
+            console.log(
+                `solve(${step.algorithm}): ${step.removedCandidates.join(
+                    ', '
+                )} can be removed from ${coords.join(', ')} due to ${
+                    step.reason
+                }`
+            );
+        }
+    });
+};
+
 const solveStep = ({
     board,
     thermos,
@@ -52,7 +77,9 @@ const solveStep = ({
     algorithms,
 }: SolvePayload) => {
     let hasChanged = false;
-    console.time('solve step');
+    // console.time('solve step');
+
+    const history: SolveHistory = [];
 
     // prepare cells
     let intermediate: InterCell[] = board.map((cell, i) => ({
@@ -64,9 +91,9 @@ const solveStep = ({
     }));
 
     intermediate = intermediate
-        .map(solveNakedSingles(true))
-        .map(algorithms.hiddenSingles ? solveHiddenSingles : noop)
-        .map(algorithms.nakedPairs ? solveNakedPairs : noop)
+        .map(solveNakedSingles)
+        .map(algorithms.hiddenSingles ? solveHiddenSingles(history) : noop)
+        .map(algorithms.nakedPairs ? solveNakedPairs(history) : noop)
         .map(algorithms.hiddenPairs ? solveHiddenPairs : noop)
         .map(algorithms.nakedTuples ? solveNakedTuples : noop)
         .map(algorithms.lockedCandidates ? solveLockedCandidates : noop);
@@ -97,7 +124,7 @@ const solveStep = ({
     }
 
     // final cleanup & check for changes
-    intermediate = intermediate.map(solveNakedSingles(false)).map((cell, i) => {
+    intermediate = intermediate.map(solveNakedSingles).map((cell, i) => {
         if (
             JSON.stringify(cell.marks) === JSON.stringify(cell.initialMarks) ||
             (cell.initialMarks.length === 1 &&
@@ -120,7 +147,20 @@ const solveStep = ({
         }
 
         if (cell.marks.length === 1) {
-            console.log('set', i, 'to', cell.marks[0]);
+            // don't double up on history if another algorithm
+            // has already placed this value
+            if (
+                !history.some(
+                    (step) =>
+                        step.affected.length === 1 && step.affected[0] === i
+                )
+            ) {
+                history.push({
+                    algorithm: 'naked-singles',
+                    affected: [i],
+                    placed: cell.marks[0],
+                });
+            }
 
             return {
                 ...cell,
@@ -137,7 +177,8 @@ const solveStep = ({
         };
     });
 
-    console.timeEnd('solve step');
+    // console.timeEnd('solve step');
+    printHistory(history);
     return {
         updatedBoard: intermediate,
         hasChanged,

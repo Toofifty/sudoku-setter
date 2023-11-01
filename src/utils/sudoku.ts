@@ -16,4 +16,11 @@ export const getCellAt = (index: number): Position => {
     return { x, y };
 };
 
+export const getCoord = (index: number | Position): string => {
+    if (typeof index === 'number') {
+        return getCoord(getCellAt(index)) + `(${index})`;
+    }
+    return `r${index.y + 1}c${index.x + 1}`;
+};
+
 export const getCellIndex = (pos: Position): number => pos.x + pos.y * 9;

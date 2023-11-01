@@ -5,3 +5,19 @@ export type CellSolver = (
     i: number,
     board: InterCell[]
 ) => InterCell;
+
+export type SolveStep =
+    | {
+          algorithm: string;
+          affected: number[];
+      } & (
+          | {
+                placed: number;
+            }
+          | {
+                removedCandidates: number[];
+                reason: string;
+            }
+      );
+
+export type SolveHistory = SolveStep[];
