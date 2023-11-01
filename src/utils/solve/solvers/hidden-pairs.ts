@@ -15,7 +15,7 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
         row(board, pos, true),
         column(board, pos, true),
         box(board, pos, true),
-    ].forEach((cells, k) => {
+    ].forEach((cells) => {
         const ownIndex = cells.indexOf(cell);
 
         let matchIndex = 0;

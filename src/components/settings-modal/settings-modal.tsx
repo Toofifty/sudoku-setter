@@ -53,7 +53,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                         checked={settings.highlightSudokuRestrictions}
                         onChange={() =>
                             setSettings({
-                                highlightSudokuRestrictions: !settings.highlightSudokuRestrictions,
+                                highlightSudokuRestrictions:
+                                    !settings.highlightSudokuRestrictions,
                             })
                         }
                     >
@@ -65,7 +66,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                         checked={settings.highlightMatchingNumbers}
                         onChange={() =>
                             setSettings({
-                                highlightMatchingNumbers: !settings.highlightMatchingNumbers,
+                                highlightMatchingNumbers:
+                                    !settings.highlightMatchingNumbers,
                             })
                         }
                     >
@@ -77,7 +79,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                         checked={settings.highlightMiscRestrictions}
                         onChange={() =>
                             setSettings({
-                                highlightMiscRestrictions: !settings.highlightMiscRestrictions,
+                                highlightMiscRestrictions:
+                                    !settings.highlightMiscRestrictions,
                             })
                         }
                     >
@@ -87,11 +90,11 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                 <Menu.Divider label="Cheats" />
                 <Menu.Item>
                     <Toggle
-                        disabled
                         checked={settings.autoFixPencilMarks}
                         onChange={() =>
                             setSettings({
-                                autoFixPencilMarks: !settings.autoFixPencilMarks,
+                                autoFixPencilMarks:
+                                    !settings.autoFixPencilMarks,
                             })
                         }
                     >
@@ -131,7 +134,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                         checked={settings.showIncorrectMoves}
                         onChange={() =>
                             setSettings({
-                                showIncorrectMoves: !settings.showIncorrectMoves,
+                                showIncorrectMoves:
+                                    !settings.showIncorrectMoves,
                                 showInvalidMoves: settings.showIncorrectMoves,
                             })
                         }

@@ -48,6 +48,12 @@ export const regions = <T>(board: T[], pos: Position, includeSelf = false) => [
     box(board, pos, includeSelf),
 ];
 
+export const regionIndices = (pos: Position, includeSelf = false) => [
+    rowIndices(pos, includeSelf),
+    columnIndices(pos, includeSelf),
+    boxIndices(pos, includeSelf),
+];
+
 export const king = <T>(board: T[], pos: Position) =>
     kingIndices(pos).map((i) => board[i]);
 

@@ -2,6 +2,8 @@ import { PlayerCell } from 'types';
 import { _, action, merge, GetAction } from './merge';
 import { undoHistory, redoHistory, saveHistory } from './history';
 import { load, persist } from './persist';
+import { getCellAt } from 'utils/sudoku';
+import { regionIndices } from 'utils/solve/helper';
 
 type InputMode = 'digit' | 'corner' | 'centre';
 const inputModes: InputMode[] = ['digit', 'corner', 'centre'];
@@ -98,16 +100,42 @@ const setCellValue = action(
                 value: initialValue,
             } = board[index];
 
+            console.log(initialValue);
+
             // don't overwrite existing digits with pencil marks
             if (initialValue && mode !== 'digit') return;
 
-            if (mode === 'digit' || !value) {
+            if (value === undefined) {
+                // delete
                 board[index] = {
                     value,
                     color,
                     centreMarks: [],
                     cornerMarks: [],
                 };
+            } else if (mode === 'digit') {
+                // place digit
+                board[index] = {
+                    value,
+                    color,
+                    centreMarks: [],
+                    cornerMarks: [],
+                };
+                if (state.settings.autoFixPencilMarks) {
+                    regionIndices(getCellAt(index))
+                        .flat()
+                        .forEach((affectedIndex) => {
+                            board[affectedIndex] = {
+                                ...board[affectedIndex],
+                                centreMarks: board[
+                                    affectedIndex
+                                ].centreMarks.filter((m) => m !== value),
+                                cornerMarks: board[
+                                    affectedIndex
+                                ].cornerMarks.filter((m) => m !== value),
+                            };
+                        });
+                }
             } else {
                 // add/remove marks
                 let marks =
