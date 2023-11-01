@@ -57,12 +57,13 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                 Create killer cage
             </Modal.Header>
             <form
-                onSubmit={() => {
+                onSubmit={(e) => {
                     if (total < minimum || total > maximum) {
                         return false;
                     }
                     createCage({ total, cage: selection });
                     onClose();
+                    e.preventDefault();
                 }}
             >
                 <Modal.Body>

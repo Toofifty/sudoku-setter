@@ -3,6 +3,8 @@ import { _, action, merge, GetAction } from './merge';
 export interface UIState {
     contextMenu?: () => React.ReactNode;
     contextVisible: boolean;
+    modal?: () => React.ReactNode;
+    modalVisible: boolean;
     debugMode: boolean;
     hideSolution: boolean;
     focused?: number;
@@ -12,6 +14,7 @@ export interface UIState {
 const defaultState = (): UIState => ({
     debugMode: false,
     contextVisible: false,
+    modalVisible: false,
     hideSolution: false,
     selection: [],
     focused: undefined,
@@ -31,6 +34,23 @@ const toggleContextMenu = action(
     (state, contextVisible) => ({
         ...state,
         contextVisible: contextVisible ?? !state.contextVisible,
+    })
+);
+
+const setModal = action(
+    _ as UIState,
+    _ as () => React.ReactNode | undefined,
+    'ui/set-modal',
+    (state, modal) => ({ ...state, modal })
+);
+
+const toggleModal = action(
+    _ as UIState,
+    _ as boolean | undefined,
+    'ui/toggle-modal',
+    (state, modalVisible) => ({
+        ...state,
+        modalVisible: modalVisible ?? !state.modalVisible,
     })
 );
 
@@ -92,6 +112,8 @@ const clearFocus = action(
 export type UIAction =
     | GetAction<typeof setContextMenu>
     | GetAction<typeof toggleContextMenu>
+    | GetAction<typeof setModal>
+    | GetAction<typeof toggleModal>
     | GetAction<typeof toggleDebugMode>
     | GetAction<typeof toggleHideSolution>
     | GetAction<typeof setFocus>
@@ -101,6 +123,8 @@ export default merge(
     defaultState(),
     setContextMenu,
     toggleContextMenu,
+    setModal,
+    toggleModal,
     toggleDebugMode,
     toggleHideSolution,
     setFocus,

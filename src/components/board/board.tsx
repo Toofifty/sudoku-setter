@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import KillerCageModal from 'components/killer-cage-modal';
+import React, { useEffect } from 'react';
 import { isSetModeSelector } from 'utils/selectors';
 import useSelector from '../../hooks/use-selector';
 import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
@@ -20,8 +19,6 @@ const Board = () => {
     const { value: targetValue, cells: highlighted } = useHighlightedCells();
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
-
-    const [killerCageModalOpen, setKillerCageModalOpen] = useState(false);
 
     const setFocus = useAction('ui/set-focus');
     const clearFocus = useAction('ui/clear-focus');
@@ -76,12 +73,6 @@ const Board = () => {
 
     return (
         <div className="board" id="board">
-            {killerCageModalOpen && (
-                <KillerCageModal
-                    selection={selection}
-                    onClose={() => setKillerCageModalOpen(false)}
-                />
-            )}
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map(({ cell, solutionCell, playerCell, index }, i) => (
@@ -127,9 +118,6 @@ const Board = () => {
                                     });
                                 }
                             }}
-                            onCreateKillerCage={() =>
-                                setKillerCageModalOpen(true)
-                            }
                         />
                     ))}
                 </Box>

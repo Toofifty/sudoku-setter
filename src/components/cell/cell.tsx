@@ -23,8 +23,6 @@ interface CellProps {
     onFocus?: () => void;
     onMouseEnter?: (e: React.MouseEvent) => void;
     onMouseDown: (e: React.MouseEvent) => void;
-
-    onCreateKillerCage: () => void;
 }
 
 const Cell = ({
@@ -42,7 +40,6 @@ const Cell = ({
     targetValue,
     onFocus,
     onMouseEnter,
-    onCreateKillerCage,
 }: CellProps) => {
     const isSetMode = useSelector(isSetModeSelector);
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -57,10 +54,7 @@ const Cell = ({
 
     const onContextMenu = useContextMenu(
         !!focused,
-        <CellContextMenu
-            index={index}
-            onCreateKillerCage={onCreateKillerCage}
-        />
+        <CellContextMenu index={index} />
     );
 
     const selected = selection.includes(index);

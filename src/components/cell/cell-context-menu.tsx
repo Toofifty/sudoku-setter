@@ -9,16 +9,14 @@ import NumberInput from 'components/number-input';
 import UndoRedo from 'components/undo-redo';
 import Menu from 'components/menu';
 import Button from 'components/button';
+import useModal from 'hooks/use-modal';
+import KillerCageModal from 'components/killer-cage-modal';
 
 interface CellContextMenuProps {
     index: number;
-    onCreateKillerCage: () => void;
 }
 
-const CellContextMenu = ({
-    index,
-    onCreateKillerCage,
-}: CellContextMenuProps) => {
+const CellContextMenu = ({ index }: CellContextMenuProps) => {
     const color = useSelector((state) => state.puzzle.board[index].color);
     const selection = useSelector((state) => state.ui.selection);
     const { board, thermos, killerCages } = useSelector(
@@ -37,6 +35,13 @@ const CellContextMenu = ({
 
     const cell = board[index];
     const value = isFilled(cell) ? cell.value : undefined;
+
+    const openKillerCageModal = useModal(
+        <KillerCageModal
+            selection={selection}
+            onClose={() => openKillerCageModal(false)}
+        />
+    );
 
     return (
         <>
@@ -81,7 +86,10 @@ const CellContextMenu = ({
                         )}
                     {isContiguous(selection) && (
                         <Menu.Item>
-                            <Button wide onClick={onCreateKillerCage}>
+                            <Button
+                                wide
+                                onClick={() => openKillerCageModal(true)}
+                            >
                                 <i className="fa fa-border-none m-r-12" />
                                 Create killer cage
                             </Button>
