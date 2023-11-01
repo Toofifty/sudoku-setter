@@ -7,7 +7,6 @@ const useModal = (modalElement: React.ReactNode) => {
     const toggle = useAction('ui/toggle-modal');
 
     useEffect(() => {
-        console.log('setmodal', open);
         if (open) {
             setModal(() => modalElement);
         }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'components/modal';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
@@ -16,7 +16,8 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
     const solution = useSelector((state) => state.solver.solution);
     const createArrow = useAction('shared/create-arrow');
 
-    const canBeTwoDigits = selection[1] - selection[0] === 1;
+    const canBeTwoDigits =
+        selection[1] - selection[0] === 1 && selection.length > 3;
 
     const [twoDigits, setTwoDigits] = useState(false);
     const digits = twoDigits ? 2 : 1;
@@ -35,7 +36,7 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
                 );
             }
         }
-        return Math.max(sum(minimums), 12);
+        return Math.max(sum(minimums), twoDigits ? 12 : 1);
     })();
 
     const maximum = (() => {
@@ -57,10 +58,19 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
 
     const [total, setTotal] = useState(minimum);
 
+    useEffect(() => {
+        if (minimum > 10) {
+            setTwoDigits(true);
+        }
+        if (total < minimum) {
+            setTotal(minimum);
+        }
+    }, [minimum, total]);
+
     return (
         <Modal size="sm">
             <Modal.Header onClose={onClose}>
-                <i className="fad fa-border-none m-r-12" />
+                <i className="fad fa-bullseye-arrow m-r-12" />
                 Create arrow
             </Modal.Header>
             <form
