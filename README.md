@@ -13,7 +13,7 @@ Solvers
 -   [ ] Hidden tuples
 -   [x] Line-locked candidates (eliminate in row/column)
 -   [ ] Box-locked candidates (eliminate in box)
--   [ ] X wing
+-   [x] X wing
 -   [x] Y wing
 -   [x] Lookahead (trial and error) solver
 

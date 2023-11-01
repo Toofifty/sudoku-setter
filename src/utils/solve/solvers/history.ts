@@ -38,17 +38,17 @@ export const print = (history: SolveHistory) => {
                 );
             });
         } else {
-            const coords = step.affected.map(getCoord);
+            const candidates = naturalJoin(step.removedCandidates.map(String));
+            const affected = naturalJoin(step.affected.map(getCoord));
+            const culprits = step.culprits
+                ? naturalJoin(step.culprits.map(getCoord))
+                : undefined;
             console.log(
-                `solve(${step.algorithm}): ${naturalJoin(
-                    step.removedCandidates.map(String)
-                )} can be removed from ${coords.join(', ')} due to ${
+                `solve(${
+                    step.algorithm
+                }): ${candidates} can be removed from ${affected} due to ${
                     step.reason
-                }${
-                    step.culprits
-                        ? ` at ${naturalJoin(step.culprits.map(getCoord))}`
-                        : ''
-                }`
+                }${culprits ? ` at ${culprits}` : ''}`
             );
         }
     });

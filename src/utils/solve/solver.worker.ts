@@ -13,6 +13,7 @@ import {
     solveAntiKnight,
     solveNonSeqNeighbors,
     solveYWing,
+    solveXWing,
 } from './solvers';
 import { isFilled, hasEmptyCell } from './helper';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
@@ -75,7 +76,8 @@ const solveStep = ({
         .map(algorithms.hiddenPairs ? solveHiddenPairs : noop)
         .map(algorithms.nakedTuples ? solveNakedTuples : noop)
         .map(algorithms.lockedCandidates ? solveLockedCandidates : noop)
-        .map(algorithms.yWing ? solveYWing(history) : noop);
+        .map(algorithms.yWing ? solveYWing(history) : noop)
+        .map(algorithms.xWing ? solveXWing(history) : noop);
 
     // solve particular sudokus
     if (thermos && algorithms.thermos) {
