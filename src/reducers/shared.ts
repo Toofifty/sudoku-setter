@@ -146,6 +146,30 @@ const deleteThermo = action(
     }
 );
 
+const createArrow = action(
+    _ as RootState,
+    _ as { head: number[]; tail: number[] },
+    'shared/create-arrow',
+    (state, arrow, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/create-arrow', payload: arrow });
+        dispatch({ type: 'solver/trigger-solve', payload: false });
+
+        return state;
+    }
+);
+
+const deleteArrow = action(
+    _ as RootState,
+    _ as number,
+    'shared/delete-arrow',
+    (state, index, dispatch: DispatchFn) => {
+        dispatch({ type: 'puzzle/delete-arrow', payload: index });
+        dispatch({ type: 'solver/trigger-solve', payload: true });
+
+        return state;
+    }
+);
+
 const createKillerCage = action(
     _ as RootState,
     _ as { total: number; cage: number[] },
@@ -229,6 +253,8 @@ export type SharedAction =
     | GetAction<typeof setAlgorithms>
     | GetAction<typeof createThermo>
     | GetAction<typeof deleteThermo>
+    | GetAction<typeof createArrow>
+    | GetAction<typeof deleteArrow>
     | GetAction<typeof createKillerCage>
     | GetAction<typeof deleteKillerCage>
     | GetAction<typeof reset>
@@ -243,6 +269,8 @@ export default merge<RootState>(
     setAlgorithms,
     createThermo,
     deleteThermo,
+    createArrow,
+    deleteArrow,
     createKillerCage,
     deleteKillerCage,
     reset,

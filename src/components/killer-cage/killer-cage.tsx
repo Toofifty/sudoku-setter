@@ -4,7 +4,7 @@ import './killer-cage.scss';
 
 interface KillerCageProps {
     index: number;
-    killerCages?: { total: number; cage: number[] }[];
+    killerCages: { total: number; cage: number[] }[];
 }
 
 type Side = 'br' | 'b' | 'bl' | 'r' | 'l' | 'tr' | 't' | 'tl';
@@ -27,37 +27,30 @@ const getSides = (index: number, cage: number[]) =>
         return sides;
     }, [] as Side[]);
 
-const KillerCage = ({ index, killerCages }: KillerCageProps) => {
-    if (!killerCages) return null;
+const KillerCage = ({ index, killerCages }: KillerCageProps) => (
+    <>
+        {killerCages
+            .filter(({ cage }) => cage.includes(index))
+            .map(({ total, cage }, i) => {
+                const isTopLeft = Math.min(...cage) === index;
 
-    return (
-        <>
-            {killerCages
-                .filter(({ cage }) => cage.includes(index))
-                .map(({ total, cage }, i) => {
-                    const isTopLeft = Math.min(...cage) === index;
-
-                    return (
-                        <div className="killer-cage" key={i}>
-                            {isTopLeft && (
-                                <div className="killer-cage__total">
-                                    {total}
-                                </div>
+                return (
+                    <div className="killer-cage" key={i}>
+                        {isTopLeft && (
+                            <div className="killer-cage__total">{total}</div>
+                        )}
+                        <div
+                            className={cx(
+                                'killer-cage__cage',
+                                ...getSides(index, cage).map(
+                                    (side) => `killer-cage__cage--has-${side}`
+                                )
                             )}
-                            <div
-                                className={cx(
-                                    'killer-cage__cage',
-                                    ...getSides(index, cage).map(
-                                        (side) =>
-                                            `killer-cage__cage--has-${side}`
-                                    )
-                                )}
-                            />
-                        </div>
-                    );
-                })}
-        </>
-    );
-};
+                        />
+                    </div>
+                );
+            })}
+    </>
+);
 
 export default KillerCage;

@@ -8,6 +8,7 @@ export interface PuzzleState {
     mode: GameMode;
     board: PuzzleCell[];
     thermos: number[][];
+    arrows: { head: number[]; tail: number[] }[];
     killerCages: { total: number; cage: number[] }[];
     restrictions: {
         antiKing: boolean;
@@ -20,6 +21,7 @@ export interface PuzzleState {
 const trackHistoryOf: (keyof Omit<PuzzleState, 'history'>)[] = [
     'board',
     'thermos',
+    'arrows',
     'killerCages',
 ];
 
@@ -34,6 +36,7 @@ const defaultState = (): PuzzleState => ({
         uniqueDiagonals: false,
     },
     thermos: [],
+    arrows: [],
     killerCages: [],
     history: { items: [], current: 0 },
 });
@@ -67,7 +70,7 @@ const createThermo = action(
     'puzzle/create-thermo',
     (state, thermo) => ({
         ...state,
-        thermos: [...(state.thermos ?? []), thermo],
+        thermos: [...state.thermos, thermo],
     }),
     saveHistory<PuzzleState>(...trackHistoryOf)
 );
@@ -78,8 +81,30 @@ const deleteThermo = action(
     'puzzle/delete-thermo',
     (state, cellIndex) => ({
         ...state,
-        thermos: (state.thermos ?? []).filter(
-            (thermo) => !thermo.includes(cellIndex)
+        thermos: state.thermos.filter((thermo) => !thermo.includes(cellIndex)),
+    }),
+    saveHistory<PuzzleState>(...trackHistoryOf)
+);
+
+const createArrow = action(
+    _ as PuzzleState,
+    _ as { head: number[]; tail: number[] },
+    'puzzle/create-arrow',
+    (state, arrow) => ({
+        ...state,
+        arrows: [...state.arrows, arrow],
+    }),
+    saveHistory<PuzzleState>(...trackHistoryOf)
+);
+
+const deleteArrow = action(
+    _ as PuzzleState,
+    _ as number,
+    'puzzle/delete-arrow',
+    (state, cellIndex) => ({
+        ...state,
+        arrows: state.arrows.filter(
+            ({ head, tail }) => ![head, tail].flat().includes(cellIndex)
         ),
     }),
     saveHistory<PuzzleState>(...trackHistoryOf)
@@ -91,7 +116,7 @@ const createKillerCage = action(
     'puzzle/create-killer-cage',
     (state, killerCage) => ({
         ...state,
-        killerCages: [...(state.killerCages ?? []), killerCage],
+        killerCages: [...state.killerCages, killerCage],
     }),
     saveHistory<PuzzleState>(...trackHistoryOf)
 );
@@ -102,7 +127,7 @@ const deleteKillerCage = action(
     'puzzle/delete-killer-cage',
     (state, cellIndex) => ({
         ...state,
-        killerCages: (state.killerCages ?? []).filter(
+        killerCages: state.killerCages.filter(
             ({ cage }) => !cage.includes(cellIndex)
         ),
     }),
@@ -161,6 +186,8 @@ export type PuzzleAction =
     | GetAction<typeof reset>
     | GetAction<typeof createThermo>
     | GetAction<typeof deleteThermo>
+    | GetAction<typeof createArrow>
+    | GetAction<typeof deleteArrow>
     | GetAction<typeof createKillerCage>
     | GetAction<typeof deleteKillerCage>
     | GetAction<typeof setSudoku>
@@ -175,6 +202,8 @@ export default merge<PuzzleState>(
     reset,
     createThermo,
     deleteThermo,
+    createArrow,
+    deleteArrow,
     createKillerCage,
     deleteKillerCage,
     setSudoku,

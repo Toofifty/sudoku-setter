@@ -20,36 +20,32 @@ const getDirectionTo = (index: number, target: number) =>
 
 interface ThermoProps {
     index: number;
-    thermos?: number[][];
+    thermos: number[][];
 }
 
-const Thermo = ({ index, thermos }: ThermoProps) => {
-    if (!thermos) return null;
-
-    return (
-        <>
-            {thermos
-                .filter((thermo) => thermo.includes(index))
-                .map((thermo, i) => {
-                    const indexInThermo = thermo.indexOf(index);
-                    const first = indexInThermo === 0;
-                    const last = indexInThermo === thermo.length - 1;
-                    return (
-                        <div className="thermo" key={i}>
-                            {first && <div className="thermo__bulb" />}
-                            {!last && (
-                                <div
-                                    className={`thermo__line thermo__line--${getDirectionTo(
-                                        index,
-                                        thermo[indexInThermo + 1]
-                                    )}`}
-                                />
-                            )}
-                        </div>
-                    );
-                })}
-        </>
-    );
-};
+const Thermo = ({ index, thermos }: ThermoProps) => (
+    <>
+        {thermos
+            .filter((thermo) => thermo.includes(index))
+            .map((thermo, i) => {
+                const indexInThermo = thermo.indexOf(index);
+                const first = indexInThermo === 0;
+                const last = indexInThermo === thermo.length - 1;
+                return (
+                    <div className="thermo" key={i}>
+                        {first && <div className="thermo__bulb" />}
+                        {!last && (
+                            <div
+                                className={`thermo__line thermo__line--${getDirectionTo(
+                                    index,
+                                    thermo[indexInThermo + 1]
+                                )}`}
+                            />
+                        )}
+                    </div>
+                );
+            })}
+    </>
+);
 
 export default Thermo;
