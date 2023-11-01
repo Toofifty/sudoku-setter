@@ -3,7 +3,11 @@ import ColorPicker from 'components/color-picker';
 import useSelector from 'hooks/use-selector';
 import { getCellAt } from 'utils/sudoku';
 import { isFilled } from 'utils/solve/helper';
-import { isContiguous, isContiguousSequential } from 'utils/contiguous';
+import {
+    isContiguous,
+    isContiguousSequential,
+    isContiguousSequentialWithPill,
+} from 'utils/contiguous';
 import useAction from 'hooks/use-action';
 import NumberInput from 'components/number-input';
 import UndoRedo from 'components/undo-redo';
@@ -11,6 +15,7 @@ import Menu from 'components/menu';
 import Button from 'components/button';
 import useModal from 'hooks/use-modal';
 import KillerCageModal from 'components/killer-cage-modal';
+import ArrowModal from 'components/arrow-modal';
 
 interface CellContextMenuProps {
     index: number;
@@ -43,6 +48,13 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
         />
     );
 
+    const openArrowModal = useModal(
+        <ArrowModal
+            selection={selection}
+            onClose={() => openArrowModal(false)}
+        />
+    );
+
     return (
         <>
             <Menu.Item>
@@ -72,25 +84,42 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
             {selection.length <= 9 && isContiguous(selection, true) && (
                 <>
                     <Menu.Divider label={`Selection (${selection.length})`} />
-                    {selection.length > 1 &&
-                        isContiguousSequential(selection, true) && (
-                            <Menu.Item>
-                                <Button
-                                    wide
-                                    onClick={() => createThermo(selection)}
-                                >
-                                    <i className="fa fa-temperature-up m-r-12" />
-                                    Create thermo
-                                </Button>
-                            </Menu.Item>
-                        )}
+                    {selection.length > 1 && (
+                        <>
+                            {isContiguousSequential(selection, true) && (
+                                <Menu.Item>
+                                    <Button
+                                        wide
+                                        onClick={() => createThermo(selection)}
+                                    >
+                                        <i className="fad fa-temperature-up m-r-12" />
+                                        Create thermo
+                                    </Button>
+                                </Menu.Item>
+                            )}
+                            {isContiguousSequentialWithPill(
+                                selection,
+                                true
+                            ) && (
+                                <Menu.Item>
+                                    <Button
+                                        wide
+                                        onClick={() => openArrowModal(true)}
+                                    >
+                                        <i className="fad fa-bullseye-arrow m-r-12" />
+                                        Create arrow
+                                    </Button>
+                                </Menu.Item>
+                            )}
+                        </>
+                    )}
                     {isContiguous(selection) && (
                         <Menu.Item>
                             <Button
                                 wide
                                 onClick={() => openKillerCageModal(true)}
                             >
-                                <i className="fa fa-border-none m-r-12" />
+                                <i className="fad fa-border-none m-r-12" />
                                 Create killer cage
                             </Button>
                         </Menu.Item>

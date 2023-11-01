@@ -6,8 +6,6 @@ const ModalHost = () => {
     const content = useSelector((state) => state.ui.modal);
     const isVisible = useSelector((state) => state.ui.modalVisible);
 
-    console.log({ content, isVisible });
-
     if (!content || !isVisible) return null;
 
     return <Portal>{content()}</Portal>;

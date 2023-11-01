@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
-import useSelector from 'hooks/use-selector';
-import { isFilled } from 'utils/solve/helper';
-import useAction from 'hooks/use-action';
 import Modal from 'components/modal';
+import useSelector from 'hooks/use-selector';
+import useAction from 'hooks/use-action';
 import Button from 'components/button';
+import Toggle from 'components/toggle';
+import { isFilled } from 'utils/solve/helper';
 import { sum } from 'utils/misc';
 
-interface KillerCageModalProps {
+interface ArrowModalProps {
     selection: number[];
     onClose: () => void;
 }
 
-const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
+const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
     const solution = useSelector((state) => state.solver.solution);
-    const createCage = useAction('shared/create-killer-cage');
+    const createArrow = useAction('shared/create-arrow');
+
+    const canBeTwoDigits = selection[1] - selection[0] === 1;
+
+    const [twoDigits, setTwoDigits] = useState(false);
+    const digits = twoDigits ? 2 : 1;
 
     const minimum = (() => {
         const minimums: number[] = [];
-        for (let index of selection) {
+        for (let index of selection.slice(digits)) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 minimums.push(cell.value);
@@ -29,12 +35,12 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                 );
             }
         }
-        return sum(minimums);
+        return Math.max(sum(minimums), 12);
     })();
 
     const maximum = (() => {
         const maximums: number[] = [];
-        for (let index of selection) {
+        for (let index of selection.slice(digits)) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 maximums.push(cell.value);
@@ -55,14 +61,17 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
         <Modal size="sm">
             <Modal.Header onClose={onClose}>
                 <i className="fad fa-border-none m-r-12" />
-                Create killer cage
+                Create arrow
             </Modal.Header>
             <form
                 onSubmit={(e) => {
                     if (total < minimum || total > maximum) {
                         return false;
                     }
-                    createCage({ total, cage: selection });
+                    createArrow({
+                        head: selection.slice(0, digits),
+                        tail: selection.slice(digits),
+                    });
                     onClose();
                     e.preventDefault();
                 }}
@@ -70,10 +79,33 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                 <Modal.Body>
                     <div className="content">
                         <p>
-                            Over <strong>{selection.length}</strong> cell
-                            {selection.length === 1 ? '' : 's'}
+                            {twoDigits ? (
+                                <>
+                                    <strong>Two</strong> total cells
+                                </>
+                            ) : (
+                                <>
+                                    <strong>One</strong> total cell
+                                </>
+                            )}{' '}
+                            summing{' '}
+                            <strong>
+                                {selection.length - (twoDigits ? 2 : 1)}
+                            </strong>{' '}
+                            cell
+                            {selection.length - (twoDigits ? 2 : 1) === 1
+                                ? ''
+                                : 's'}
                         </p>
                         <div className="form-group">
+                            {canBeTwoDigits && (
+                                <Toggle
+                                    checked={twoDigits}
+                                    onChange={() => setTwoDigits(!twoDigits)}
+                                >
+                                    2-digit sum
+                                </Toggle>
+                            )}
                             <label className="form-label" htmlFor="value">
                                 Value
                             </label>
@@ -110,10 +142,10 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
                                     }
                                 }}
                             />
+                            <p>
+                                min: {minimum} max: {maximum}
+                            </p>
                         </div>
-                        <p>
-                            min: {minimum} max: {maximum}
-                        </p>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -134,4 +166,4 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
     );
 };
 
-export default KillerCageModal;
+export default ArrowModal;

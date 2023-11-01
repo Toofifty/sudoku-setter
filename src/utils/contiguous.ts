@@ -18,6 +18,22 @@ export const isContiguousSequential = (
     return true;
 };
 
+/**
+ * Identical to isContiguousSequential, but allows the third
+ * element to be contiguous with the first. Used for arrows
+ */
+export const isContiguousSequentialWithPill = (
+    [...cells]: number[],
+    allowDiagonals = false
+): boolean => {
+    if (cells.length === 0) return false;
+    if (isContiguousSequential([...cells], allowDiagonals)) {
+        return true;
+    }
+    cells.splice(1);
+    return isContiguousSequential([...cells], allowDiagonals);
+};
+
 export const isContiguous = (
     [...cells]: number[],
     allowDiagonals = false
