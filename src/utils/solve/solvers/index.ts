@@ -9,3 +9,4 @@ export { solveNakedSingles } from './naked-singles';
 export { solveNakedTuples } from './naked-tuples';
 export { solveNonSeqNeighbors } from './non-seq-neighbors';
 export { solveThermos } from './thermos';
+export { solveYWing } from './y-wing';

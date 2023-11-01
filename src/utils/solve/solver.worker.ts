@@ -12,10 +12,11 @@ import {
     solveAntiKing,
     solveAntiKnight,
     solveNonSeqNeighbors,
+    solveYWing,
 } from './solvers';
 import { isFilled, hasEmptyCell } from './helper';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
-import { SolveHistory } from './solvers/types';
+import { SolveHistory, print } from './solvers/history';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };
 
@@ -47,29 +48,6 @@ const SOLVE_PASSES = 20;
 
 const noop = (a: any) => a;
 
-const printHistory = (history: SolveHistory) => {
-    history.forEach((step) => {
-        if ('placed' in step) {
-            step.affected.forEach((index) => {
-                console.log(
-                    `solve(${step.algorithm}): ${
-                        step.placed
-                    } can be placed at ${getCoord(index)}`
-                );
-            });
-        } else {
-            const coords = step.affected.map(getCoord);
-            console.log(
-                `solve(${step.algorithm}): ${step.removedCandidates.join(
-                    ', '
-                )} can be removed from ${coords.join(', ')} due to ${
-                    step.reason
-                }`
-            );
-        }
-    });
-};
-
 const solveStep = ({
     board,
     thermos,
@@ -96,7 +74,8 @@ const solveStep = ({
         .map(algorithms.nakedPairs ? solveNakedPairs(history) : noop)
         .map(algorithms.hiddenPairs ? solveHiddenPairs : noop)
         .map(algorithms.nakedTuples ? solveNakedTuples : noop)
-        .map(algorithms.lockedCandidates ? solveLockedCandidates : noop);
+        .map(algorithms.lockedCandidates ? solveLockedCandidates : noop)
+        .map(algorithms.yWing ? solveYWing(history) : noop);
 
     // solve particular sudokus
     if (thermos && algorithms.thermos) {
@@ -158,7 +137,7 @@ const solveStep = ({
                 history.push({
                     algorithm: 'naked-singles',
                     affected: [i],
-                    placed: cell.marks[0],
+                    digit: cell.marks[0],
                 });
             }
 
@@ -178,7 +157,7 @@ const solveStep = ({
     });
 
     // console.timeEnd('solve step');
-    printHistory(history);
+    print(history);
     return {
         updatedBoard: intermediate,
         hasChanged,

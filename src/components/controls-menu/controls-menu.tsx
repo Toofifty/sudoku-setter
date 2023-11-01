@@ -187,6 +187,18 @@ const ControlsMenu = () => {
                 </Menu.Item>
                 <Menu.Item>
                     <Toggle
+                        checked={algorithms.yWing}
+                        onChange={() =>
+                            setAlgorithms({
+                                yWing: !algorithms.yWing,
+                            })
+                        }
+                    >
+                        Y-Wings
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
                         checked={algorithms.thermos}
                         onChange={() =>
                             setAlgorithms({

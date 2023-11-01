@@ -1,7 +1,8 @@
-import { CellSolver, SolveHistory } from './types';
+import { CellSolver } from './types';
 import { getCellAt } from '../../sudoku';
 import { isFilled, getMarks, regions } from '../helper';
 import { InterCell } from '../types';
+import { SolveHistory } from './history';
 
 /**
  * Solves hidden-singles by determining if this is the only cell
@@ -23,7 +24,7 @@ export const solveHiddenSingles =
                 history.push({
                     algorithm: 'hidden-singles',
                     affected: [i],
-                    placed: marks[0],
+                    digit: marks[0],
                 });
                 return { ...cell, marks };
             }

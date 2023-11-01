@@ -1,6 +1,7 @@
-import { CellSolver, SolveHistory } from './types';
-import { getCellAt, getCoord } from '../../sudoku';
+import { CellSolver } from './types';
+import { getCellAt } from '../../sudoku';
 import { isFilled, getMarks, regions } from '../helper';
+import { SolveHistory } from './history';
 
 /**
  * Solves naked pairs by looking for paired cells with
@@ -53,9 +54,8 @@ export const solveNakedPairs =
                             algorithm: 'naked-pairs',
                             affected,
                             removedCandidates: cell.marks,
-                            reason: `${cell.marks.join('-')} pair at ${getCoord(
-                                i
-                            )}/${getCoord(pairCell.index)}`,
+                            reason: `${cell.marks.join('-')} pair`,
+                            culprits: [i, pairCell.index],
                         });
                     }
                 }

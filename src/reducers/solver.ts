@@ -8,6 +8,7 @@ export interface SolverState {
         hiddenPairs: boolean;
         nakedTuples: boolean;
         lockedCandidates: boolean;
+        yWing: boolean;
         thermos: boolean;
         killerCages: boolean;
         antiKing: boolean;
@@ -33,6 +34,7 @@ const defaultState = (): SolverState => ({
         hiddenPairs: true,
         nakedTuples: true,
         lockedCandidates: true,
+        yWing: true,
         thermos: true,
         killerCages: true,
         antiKing: false,

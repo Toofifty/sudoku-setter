@@ -76,7 +76,7 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
 
         if (matchingDigits.length > 0) {
             cell.marks = [...matchingDigits];
-            (cells[matchIndex] as MarkedCell).marks = [...matchingDigits];
+            cells[matchIndex].marks = [...matchingDigits];
         }
     });
 
