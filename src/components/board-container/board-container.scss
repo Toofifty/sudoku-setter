@@ -9,7 +9,7 @@ $a: 200px;
 
 .board-container {
     position: relative;
-    background: $grey-300;
+    background: $cell-outline;
     border-radius: 4px;
     --scale: 100;
     --mobile-scale: 100;
@@ -74,5 +74,5 @@ $a: 200px;
 // }
 
 .theme-dark .board-container {
-    background: $grey-800;
+    background: $cell-outline-dark;
 }

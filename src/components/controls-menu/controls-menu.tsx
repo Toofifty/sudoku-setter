@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Button from 'components/button';
@@ -6,6 +6,7 @@ import Menu from 'components/menu';
 import './controls-menu.scss';
 import Toggle from 'components/toggle';
 import SettingsModal from 'components/settings-modal';
+import useModal from 'hooks/use-modal';
 
 const ControlsMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -27,7 +28,9 @@ const ControlsMenu = () => {
 
     const _reset = useAction('shared/reset');
 
-    const [showSettingsModal, setShowSettingsModal] = useState(false);
+    const openSettingsModal = useModal(
+        <SettingsModal onClose={() => openSettingsModal(false)} />
+    );
 
     const reset = () => {
         _reset();
@@ -67,15 +70,10 @@ const ControlsMenu = () => {
                     </Toggle>
                 </Menu.Item>
                 <Menu.Item>
-                    <Button wide onClick={() => setShowSettingsModal(true)}>
+                    <Button wide onClick={() => openSettingsModal(true)}>
                         <i className="fad fa-wrench m-r-12" />
                         Player settings
                     </Button>
-                    {showSettingsModal && (
-                        <SettingsModal
-                            onClose={() => setShowSettingsModal(false)}
-                        />
-                    )}
                 </Menu.Item>
             </Menu.Collapse>
             <Menu.Collapse label="Restrictions">

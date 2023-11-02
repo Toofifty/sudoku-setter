@@ -10,6 +10,7 @@ interface KeyListenerProps {
 const KeyListener = ({ children }: KeyListenerProps) => {
     const undo = useAction('shared/undo');
     const redo = useAction('shared/redo');
+    const settings = useSelector((state) => state.player.settings);
     const setSelectionValue = useAction('shared/set-selection-value');
     const setFocus = useAction('ui/set-focus');
     const cycleInputMode = useAction('player/cycle-input-mode');
@@ -60,7 +61,10 @@ const KeyListener = ({ children }: KeyListenerProps) => {
                     isKeyPress: true,
                     addToSelection: shiftKey,
                 });
-            } else if (key === ' ') {
+            } else if (
+                key === ' ' ||
+                (key === 'Tab' && settings.tabSwitchesInputMode)
+            ) {
                 cycleInputMode(shiftKey);
                 e.preventDefault();
             }
@@ -72,7 +76,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
             window.removeEventListener('keydown', keyListener);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [focused]);
+    }, [focused, settings]);
 
     return <>{children}</>;
 };

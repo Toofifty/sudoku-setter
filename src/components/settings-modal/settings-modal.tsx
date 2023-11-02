@@ -22,7 +22,7 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                 Player settings
             </Modal.Header>
             <Menu className="settings-modal__menu">
-                <Menu.Divider label="Multi-input mode" />
+                <Menu.Divider label="Input modes" />
                 <Menu.Item>
                     <Toggle
                         radio
@@ -33,7 +33,7 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                             })
                         }
                     >
-                        Centre
+                        Multi-input places centre marks
                     </Toggle>
                     <Toggle
                         radio
@@ -44,7 +44,18 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                             })
                         }
                     >
-                        Corner
+                        Multi-input places corner marks
+                    </Toggle>
+                    <Toggle
+                        checked={!!settings.tabSwitchesInputMode}
+                        onChange={() =>
+                            setSettings({
+                                tabSwitchesInputMode:
+                                    !settings.tabSwitchesInputMode,
+                            })
+                        }
+                    >
+                        Tab switches input mode
                     </Toggle>
                 </Menu.Item>
                 <Menu.Divider label="Highlighting" />

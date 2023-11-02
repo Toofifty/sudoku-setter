@@ -7,7 +7,7 @@
     height: 100%;
     z-index: 0;
 
-    background: white;
+    background: $cell-bg;
 
     display: grid;
     grid-template-columns: auto auto auto;
@@ -65,7 +65,7 @@
 
 .theme-dark {
     .background {
-        background: $black;
+        background: $cell-bg-dark;
     }
 
     .background-cell {

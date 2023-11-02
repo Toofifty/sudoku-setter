@@ -31,11 +31,11 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
             if (isFilled(cell)) {
                 minimums.push(cell.value);
             } else {
-                minimums.push(
-                    Math.min(
-                        ...cell.candidates.filter((c) => !minimums.includes(c))
-                    )
-                );
+                // minimums.push(
+                //     Math.min(
+                //         ...cell.candidates.filter((c) => !minimums.includes(c))
+                //     )
+                // );
             }
         }
         return Math.max(sum(minimums), twoDigits ? 12 : 1);

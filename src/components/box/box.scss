@@ -1,12 +1,12 @@
 @import 'styles';
 
 .box {
-    border: 1px solid $grey-300;
+    box-shadow: 0 0 0 2px $cell-outline;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
 }
 
 .theme-dark .box {
-    border-color: $grey-800;
+    box-shadow: 0 0 0 2px $cell-outline-dark;
 }

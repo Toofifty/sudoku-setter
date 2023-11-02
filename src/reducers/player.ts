@@ -15,6 +15,11 @@ type PlayerSettings = {
      */
     multiInputMode: Exclude<InputMode, 'digit'>;
     /**
+     * Whether tab can also be used to switch input mode.
+     * The space bar can always be used.
+     */
+    tabSwitchesInputMode: boolean;
+    /**
      * Highlight row/column/box
      */
     highlightSudokuRestrictions: boolean;
@@ -71,6 +76,7 @@ const defaultState = (): PlayerState => ({
     ...load('player.settings', {
         settings: {
             multiInputMode: 'corner',
+            tabSwitchesInputMode: false,
             highlightSudokuRestrictions: true,
             highlightMiscRestrictions: true,
             highlightMatchingNumbers: true,

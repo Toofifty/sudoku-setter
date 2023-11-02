@@ -3,14 +3,13 @@ import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
 import ControlBox from 'components/control-box';
-import SettingsModal from 'components/settings-modal/settings-modal';
 import PageLayout from 'components/page-layout';
+import ModalHost from 'components/modal-host';
 
 const PlayerPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
     const setSudoku = useAction('puzzle/set-sudoku');
     const triggerSolve = useAction('solver/trigger-solve');
-    const [showSettingsModal, setShowSettingsModal] = useState(false);
 
     useEffect(() => {
         if (!hasLoadedFromHash) {
@@ -26,17 +25,8 @@ const PlayerPage = () => {
 
     return (
         <>
-            <PageLayout
-                board={<BoardContainer />}
-                controls={
-                    <ControlBox
-                        onShowSettings={() => setShowSettingsModal(true)}
-                    />
-                }
-            />
-            {showSettingsModal && (
-                <SettingsModal onClose={() => setShowSettingsModal(false)} />
-            )}
+            <PageLayout board={<BoardContainer />} controls={<ControlBox />} />
+            <ModalHost />
         </>
     );
 };

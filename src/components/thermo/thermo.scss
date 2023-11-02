@@ -1,6 +1,8 @@
 @import 'styles';
 
 $thickness: 8px;
+$color: $grey-400;
+$dark-color: $grey-600;
 
 @mixin fill {
     position: absolute;
@@ -14,9 +16,9 @@ $thickness: 8px;
     box-sizing: content-box;
     position: absolute;
     content: '';
-    border: $thickness solid $grey-300;
+    border: $thickness solid $color;
     border-radius: calc(#{$thickness} * 2);
-    background: $grey-300;
+    background: $color;
 }
 
 $straight-len: calc(100% + 2px);
@@ -40,7 +42,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         border-radius: 100%;
 
-        background: $grey-300;
+        background: $color;
     }
 
     &__line {
@@ -84,7 +86,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         &--br::before {
             @include thermo-part;
-            width: 145%;
+            width: 100% * sqrt(2);
             transform-origin: $thickness 50%;
             transform: rotate(45deg);
             top: calc(50% - #{$thickness});
@@ -93,7 +95,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         &--bl::before {
             @include thermo-part;
-            width: 145%;
+            width: 100% * sqrt(2);
             transform-origin: $thickness 50%;
             transform: rotate(135deg);
             top: calc(50% - #{$thickness});
@@ -102,7 +104,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         &--tl::before {
             @include thermo-part;
-            width: 145%;
+            width: 100% * sqrt(2);
             transform-origin: $thickness 50%;
             transform: rotate(-135deg);
             top: calc(50% - #{$thickness});
@@ -111,7 +113,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         &--tr::before {
             @include thermo-part;
-            width: 145%;
+            width: 100% * sqrt(2);
             transform-origin: $thickness 50%;
             transform: rotate(-45deg);
             top: calc(50% - #{$thickness});
@@ -123,7 +125,7 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 .theme-dark .thermo {
     &__bulb::before,
     &__line::before {
-        background: $grey-600;
-        border-color: $grey-600;
+        background: $dark-color;
+        border-color: $dark-color;
     }
 }
