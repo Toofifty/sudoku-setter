@@ -61,6 +61,31 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                 <Menu.Divider label="Highlighting" />
                 <Menu.Item>
                     <Toggle
+                        checked={settings.highlightSelection}
+                        onChange={() =>
+                            setSettings({
+                                highlightSelection:
+                                    !settings.highlightSelection,
+                            })
+                        }
+                    >
+                        Highlight selection
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
+                        checked={settings.outlineSelection}
+                        onChange={() =>
+                            setSettings({
+                                outlineSelection: !settings.outlineSelection,
+                            })
+                        }
+                    >
+                        Outline selection
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
                         checked={settings.highlightSudokuRestrictions}
                         onChange={() =>
                             setSettings({

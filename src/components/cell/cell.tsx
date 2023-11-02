@@ -44,6 +44,7 @@ const Cell = ({
     const isSetMode = useSelector(isSetModeSelector);
     const debugMode = useSelector((state) => state.ui.debugMode);
     const hideSolution = useSelector((state) => state.ui.hideSolution);
+    const settings = useSelector((state) => state.player.settings);
     const btn = useRef<HTMLButtonElement>(null!);
 
     useEffect(() => {
@@ -74,7 +75,7 @@ const Cell = ({
                 'cell',
                 given && 'cell--given',
                 value && 'cell--filled',
-                selected && 'cell--selected',
+                settings.highlightSelection && selected && 'cell--selected',
                 isSetMode && focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
                 matches && 'cell--matches',

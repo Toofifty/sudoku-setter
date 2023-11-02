@@ -1,0 +1,97 @@
+@import 'styles';
+
+$border-width: 12px;
+$border-radius: 4px;
+
+.selection {
+    --border-color: #{$cell-selected-border};
+    $c: &;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    &__edge {
+        $c: &;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 0 solid var(--border-color);
+
+        &--r {
+            border-right-width: $border-width;
+
+            &#{$c}--t {
+                border-top-right-radius: $border-radius;
+            }
+
+            &#{$c}--b {
+                border-bottom-right-radius: $border-radius;
+            }
+        }
+
+        &--l {
+            border-left-width: $border-width;
+
+            &#{$c}--t {
+                border-top-left-radius: $border-radius;
+            }
+
+            &#{$c}--b {
+                border-bottom-left-radius: $border-radius;
+            }
+        }
+
+        &--t {
+            border-top-width: $border-width;
+        }
+
+        &--b {
+            border-bottom-width: $border-width;
+        }
+    }
+
+    &__corner {
+        position: absolute;
+        border: 0 solid var(--border-color);
+
+        &--tl {
+            top: 0;
+            left: 0;
+            border-right-width: $border-width;
+            border-bottom-width: $border-width;
+            border-bottom-right-radius: $border-radius;
+        }
+
+        &--tr {
+            top: 0;
+            right: 0;
+            border-left-width: $border-width;
+            border-bottom-width: $border-width;
+            border-bottom-left-radius: $border-radius;
+        }
+
+        &--bl {
+            bottom: 0;
+            left: 0;
+            border-right-width: $border-width;
+            border-top-width: $border-width;
+            border-top-right-radius: $border-radius;
+        }
+
+        &--br {
+            bottom: 0;
+            right: 0;
+            border-left-width: $border-width;
+            border-top-width: $border-width;
+            border-top-left-radius: $border-radius;
+        }
+    }
+}
+
+.theme-dark .selection {
+    --border-color: #{$cell-selected-border-dark};
+}

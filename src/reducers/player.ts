@@ -19,6 +19,8 @@ type PlayerSettings = {
      * The space bar can always be used.
      */
     tabSwitchesInputMode: boolean;
+    highlightSelection: boolean;
+    outlineSelection: boolean;
     /**
      * Highlight row/column/box
      */
@@ -77,6 +79,8 @@ const defaultState = (): PlayerState => ({
         settings: {
             multiInputMode: 'corner',
             tabSwitchesInputMode: false,
+            highlightSelection: false,
+            outlineSelection: true,
             highlightSudokuRestrictions: true,
             highlightMiscRestrictions: true,
             highlightMatchingNumbers: true,

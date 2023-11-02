@@ -16,10 +16,12 @@ const boxes = range(0, 81).reduce(
 );
 
 const Background = () => {
+    const selection = useSelector((state) => state.ui.selection);
     const { board, arrows, thermos, killerCages, restrictions } = useSelector(
         (state) => state.puzzle
     );
     const solution = useSelector((state) => state.solver.solution);
+    const settings = useSelector((state) => state.player.settings);
 
     return (
         <div
@@ -36,6 +38,9 @@ const Background = () => {
                             index={n}
                             color={
                                 solution[n].color ?? board[n].color ?? 'white'
+                            }
+                            selection={
+                                settings.outlineSelection ? selection : []
                             }
                             thermos={thermos}
                             arrows={arrows}

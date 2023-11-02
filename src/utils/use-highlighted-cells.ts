@@ -50,7 +50,12 @@ const useHighlightedCells = () => {
                 ? implicitValue
                 : 0;
 
-        return { value, cells: sees(selection) };
+        return {
+            value,
+            cells: sees(selection).filter(
+                (index) => !selection.includes(index)
+            ),
+        };
     }, [
         selection,
         board,

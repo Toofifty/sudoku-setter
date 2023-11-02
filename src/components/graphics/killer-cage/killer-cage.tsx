@@ -1,7 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
-import './killer-cage.scss';
 import { KillerCage } from 'utils/sudoku-types';
+
+import './killer-cage.scss';
 
 type Side = 'br' | 'b' | 'bl' | 'r' | 'l' | 'tr' | 't' | 'tl';
 
