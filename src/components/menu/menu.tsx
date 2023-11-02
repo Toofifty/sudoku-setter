@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
 import './menu.scss';
 import Button from 'components/button';
 
+const MenuContext = createContext<{
+    exclusive: boolean;
+    selected: string | undefined;
+    setSelected: (value: string | undefined) => void;
+}>(undefined!);
+
 interface MenuProps {
     children: React.ReactNode;
+    exclusive?: boolean;
     className?: string;
 }
 
-const Menu = ({ children, className }: MenuProps) => (
-    <ul className={cx('menu', className)}>{children}</ul>
-);
+const Menu = ({ children, exclusive = false, className }: MenuProps) => {
+    const [selected, setSelected] = useState<string>();
+
+    return (
+        <MenuContext.Provider value={{ exclusive, selected, setSelected }}>
+            <ul className={cx('menu', className)}>{children}</ul>
+        </MenuContext.Provider>
+    );
+};
 
 interface MenuItemProps {
     children: React.ReactNode;
@@ -43,9 +56,26 @@ const MenuCollapse = ({
     label,
     expandedByDefault = false,
 }: MenuCollapseProps) => {
-    const [expanded, setExpanded] = useState(expandedByDefault);
+    const { exclusive, selected, setSelected } = useContext(MenuContext);
+    const [locallyExpanded, setLocallyExpanded] = useState(expandedByDefault);
 
     const [contentHeight, setContentHeight] = useState(0);
+
+    const expanded = exclusive ? selected === label : locallyExpanded;
+
+    const toggle = () => {
+        if (exclusive) {
+            setSelected(selected === label ? undefined : label);
+        } else {
+            setLocallyExpanded(!locallyExpanded);
+        }
+    };
+
+    useEffect(() => {
+        if (exclusive && expandedByDefault) {
+            setSelected(label);
+        }
+    }, [exclusive, expandedByDefault, label, setSelected]);
 
     const computeContentHeight = (instance: HTMLUListElement | null) => {
         if (instance) {
@@ -65,10 +95,7 @@ const MenuCollapse = ({
                 expanded && 'collapse--expanded'
             )}
         >
-            <Button
-                className="collapse__button"
-                onClick={() => setExpanded(!expanded)}
-            >
+            <Button className="collapse__button" onClick={toggle}>
                 <span>{label}</span>
                 {expanded ? (
                     <i className="fa fa-chevron-up" />

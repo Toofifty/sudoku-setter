@@ -35,7 +35,7 @@ const ControlsMenu = () => {
     };
 
     return (
-        <Menu className="controls">
+        <Menu exclusive className="controls">
             <Menu.Item>
                 <Button
                     primary
