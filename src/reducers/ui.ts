@@ -15,7 +15,7 @@ const defaultState = (): UIState => ({
     debugMode: false,
     contextVisible: false,
     modalVisible: false,
-    hideSolution: false,
+    hideSolution: true,
     selection: [],
     focused: undefined,
 });

@@ -17,7 +17,9 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
     const createArrow = useAction('shared/create-arrow');
 
     const canBeTwoDigits =
-        selection[1] - selection[0] === 1 && selection.length > 3;
+        (selection[1] - selection[0] === 1 ||
+            selection[1] - selection[0] === 9) &&
+        selection.length > 3;
 
     const [twoDigits, setTwoDigits] = useState(false);
     const digits = twoDigits ? 2 : 1;
@@ -56,16 +58,11 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
         return sum(maximums);
     })();
 
-    const [total, setTotal] = useState(minimum);
-
     useEffect(() => {
         if (minimum > 10) {
             setTwoDigits(true);
         }
-        if (total < minimum) {
-            setTotal(minimum);
-        }
-    }, [minimum, total]);
+    }, [minimum]);
 
     return (
         <Modal size="sm">
@@ -75,9 +72,6 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
             </Modal.Header>
             <form
                 onSubmit={(e) => {
-                    if (total < minimum || total > maximum) {
-                        return false;
-                    }
                     createArrow({
                         head: selection.slice(0, digits),
                         tail: selection.slice(digits),
@@ -108,53 +102,17 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
                                 : 's'}
                         </p>
                         <div className="form-group">
+                            <p>
+                                min: {minimum} max: {maximum}
+                            </p>
                             {canBeTwoDigits && (
                                 <Toggle
                                     checked={twoDigits}
                                     onChange={() => setTwoDigits(!twoDigits)}
                                 >
-                                    2-digit sum
+                                    2-digit arrow sum
                                 </Toggle>
                             )}
-                            <label className="form-label" htmlFor="value">
-                                Value
-                            </label>
-                            <input
-                                name="total"
-                                className="form-input"
-                                type="text"
-                                min={minimum}
-                                max={maximum}
-                                step={1}
-                                placeholder="Total value"
-                                id="value"
-                                onChange={(e) => {
-                                    setTotal(Number(e.target.value));
-                                }}
-                                value={total ?? minimum}
-                                autoFocus
-                                onFocus={(e) =>
-                                    e.target.setSelectionRange(
-                                        0,
-                                        e.target.value.length
-                                    )
-                                }
-                                onKeyDown={({ key, target }) => {
-                                    if (key === 'ArrowUp') {
-                                        setTotal(
-                                            Number((target as any).value) + 1
-                                        );
-                                    }
-                                    if (key === 'ArrowDown') {
-                                        setTotal(
-                                            Number((target as any).value) - 1
-                                        );
-                                    }
-                                }}
-                            />
-                            <p>
-                                min: {minimum} max: {maximum}
-                            </p>
                         </div>
                     </div>
                 </Modal.Body>
@@ -162,11 +120,7 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
                     <Button danger className="m-r-12" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button
-                        primary
-                        submit
-                        disabled={total < minimum || total > maximum}
-                    >
+                    <Button primary submit>
                         <i className="fad fa-check m-r-12" />
                         Create
                     </Button>

@@ -5,16 +5,22 @@ import { isFilled } from './solve/helper';
 type EncodedData = {
     givens: string;
     thermos?: string;
+    arrows?: string;
     killerCages?: string;
 };
 
 type DecodedData = {
     board?: PuzzleCell[];
     thermos?: number[][];
+    arrows?: { head: number[]; tail: number[] }[];
     killerCages?: { total: number; cage: number[] }[];
 };
 
 const RADIX = 36;
+const encodeNumber = (n: number) => n.toString(RADIX);
+const encodeArray = (n: number[]) => n.map(encodeNumber).join(',');
+const decodeNumber = (s: string) => parseInt(s, RADIX);
+const decodeArray = (s: string) => s.split(',').map(decodeNumber);
 
 const encodeGivens = (givens: number[]) =>
     givens
@@ -40,25 +46,30 @@ const decodeGivens = (encoded: string) => {
     return board;
 };
 
-export const encode = ({ board, thermos, killerCages }: PuzzleState) => {
+export const encode = ({
+    board,
+    thermos,
+    arrows,
+    killerCages,
+}: PuzzleState) => {
     const data: EncodedData = {
         givens: encodeGivens(
             board.map((cell) => (isFilled(cell) && cell.given ? cell.value : 0))
         ),
-        thermos: thermos
-            ?.map((thermo) => thermo.map((n) => n.toString(RADIX)).join(','))
-            .join(';'),
-        killerCages: killerCages
-            ?.map(
-                ({ total, cage }) =>
-                    `${total}:${cage.map((n) => n.toString(RADIX)).join(',')}`
+        thermos: thermos.map(encodeArray).join(';'),
+        arrows: arrows
+            .map(
+                ({ head, tail }) => `${encodeArray(head)}:${encodeArray(tail)}`
             )
             .join(';'),
+        killerCages: killerCages
+            .map(({ total, cage }) => `${total}:${encodeArray(cage)}`)
+            .join(';'),
     };
-    let encoded = data.givens ? `G:${data.givens}` : '';
-    if (data.thermos) encoded += data.thermos ? `!T:${data.thermos}` : '';
-    if (data.killerCages)
-        encoded += data.killerCages ? `!K:${data.killerCages}` : '';
+    let encoded = `G:${data.givens}`;
+    if (data.thermos) encoded += `!T:${data.thermos}`;
+    if (data.arrows) encoded += `!A:${data.arrows}`;
+    if (data.killerCages) encoded += `!K:${data.killerCages}`;
 
     return encoded;
 };
@@ -73,12 +84,20 @@ export const decode = (encoded: string): DecodedData => {
         }
 
         if (part.startsWith('T')) {
-            decoded.thermos = part
-                .substr(2)
+            decoded.thermos = part.substr(2).split(';').map(decodeArray);
+        }
+
+        if (part.startsWith('A')) {
+            decoded.arrows = part
+                .substring(2)
                 .split(';')
-                .map((thermo) =>
-                    thermo.split(',').map((v) => parseInt(v, RADIX))
-                );
+                .map((part) => {
+                    const [head, tail] = part.split(':');
+                    return {
+                        head: decodeArray(head),
+                        tail: decodeArray(tail),
+                    };
+                });
         }
 
         if (part.startsWith('K')) {
@@ -89,7 +108,7 @@ export const decode = (encoded: string): DecodedData => {
                     const [total, cage] = part.split(':');
                     return {
                         total: Number(total),
-                        cage: cage.split(',').map((v) => parseInt(v, RADIX)),
+                        cage: decodeArray(cage),
                     };
                 });
         }

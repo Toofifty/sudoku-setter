@@ -24,19 +24,23 @@ interface CellContextMenuProps {
 const CellContextMenu = ({ index }: CellContextMenuProps) => {
     const color = useSelector((state) => state.puzzle.board[index].color);
     const selection = useSelector((state) => state.ui.selection);
-    const { board, thermos, killerCages } = useSelector(
+    const { board, thermos, arrows, killerCages } = useSelector(
         (state) => state.puzzle
     );
     const setColor = useAction('puzzle/set-color');
     const createThermo = useAction('shared/create-thermo');
     const deleteThermo = useAction('shared/delete-thermo');
+    const deleteArrow = useAction('shared/delete-arrow');
     const deleteKillerCage = useAction('shared/delete-killer-cage');
     const setValue = useAction('shared/set-cell-value');
 
     const pos = getCellAt(index);
 
-    const hasThermo = thermos?.some((thermo) => thermo.includes(index));
-    const hasKillerCage = killerCages?.some(({ cage }) => cage.includes(index));
+    const hasThermo = thermos.some((thermo) => thermo.includes(index));
+    const hasArrow = arrows.some(
+        ({ head, tail }) => head.includes(index) || tail.includes(index)
+    );
+    const hasKillerCage = killerCages.some(({ cage }) => cage.includes(index));
 
     const cell = board[index];
     const value = isFilled(cell) ? cell.value : undefined;
@@ -126,7 +130,7 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                     )}
                 </>
             )}
-            {(hasThermo || hasKillerCage) && (
+            {(hasThermo || hasArrow || hasKillerCage) && (
                 <>
                     <li className="divider" data-content="Variants" />
                     {hasThermo && (
@@ -138,6 +142,21 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                             >
                                 <i className="fa fa-trash m-r-12" />
                                 Delete thermo at{' '}
+                                <strong>
+                                    r{pos.y + 1}c{pos.x + 1}
+                                </strong>
+                            </Button>
+                        </Menu.Item>
+                    )}
+                    {hasArrow && (
+                        <Menu.Item>
+                            <Button
+                                danger
+                                wide
+                                onClick={() => deleteArrow(index)}
+                            >
+                                <i className="fa fa-trash m-r-12" />
+                                Delete arrow at{' '}
                                 <strong>
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>

@@ -16,7 +16,7 @@ const boxes = range(0, 81).reduce(
 );
 
 const Background = () => {
-    const { board, thermos, killerCages, restrictions } = useSelector(
+    const { board, arrows, thermos, killerCages, restrictions } = useSelector(
         (state) => state.puzzle
     );
     const solution = useSelector((state) => state.solver.solution);
@@ -38,6 +38,7 @@ const Background = () => {
                                 solution[n].color ?? board[n].color ?? 'white'
                             }
                             thermos={thermos}
+                            arrows={arrows}
                             killerCages={killerCages}
                         />
                     ))}
