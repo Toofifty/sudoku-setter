@@ -1,15 +1,16 @@
 import { PuzzleCell } from 'types';
 import { _, action, merge, GetAction } from './merge';
 import { undoHistory, redoHistory, saveHistory } from './history';
+import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 
 export type GameMode = 'set' | 'play';
 
 export interface PuzzleState {
     mode: GameMode;
     board: PuzzleCell[];
-    thermos: number[][];
-    arrows: { head: number[]; tail: number[] }[];
-    killerCages: { total: number; cage: number[] }[];
+    thermos: Thermo[];
+    arrows: Arrow[];
+    killerCages: KillerCage[];
     restrictions: {
         antiKing: boolean;
         antiKnight: boolean;
@@ -66,7 +67,7 @@ const reset = action(
 
 const createThermo = action(
     _ as PuzzleState,
-    _ as number[],
+    _ as Thermo,
     'puzzle/create-thermo',
     (state, thermo) => ({
         ...state,
@@ -88,7 +89,7 @@ const deleteThermo = action(
 
 const createArrow = action(
     _ as PuzzleState,
-    _ as { head: number[]; tail: number[] },
+    _ as Arrow,
     'puzzle/create-arrow',
     (state, arrow) => ({
         ...state,
@@ -112,7 +113,7 @@ const deleteArrow = action(
 
 const createKillerCage = action(
     _ as PuzzleState,
-    _ as { total: number; cage: number[] },
+    _ as KillerCage,
     'puzzle/create-killer-cage',
     (state, killerCage) => ({
         ...state,

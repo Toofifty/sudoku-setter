@@ -1,11 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import './killer-cage.scss';
-
-interface KillerCageProps {
-    index: number;
-    killerCages: { total: number; cage: number[] }[];
-}
+import { KillerCage } from 'utils/sudoku-types';
 
 type Side = 'br' | 'b' | 'bl' | 'r' | 'l' | 'tr' | 't' | 'tl';
 
@@ -27,7 +23,15 @@ const getSides = (index: number, cage: number[]) =>
         return sides;
     }, [] as Side[]);
 
-const KillerCage = ({ index, killerCages }: KillerCageProps) => (
+interface GraphicsKillerCageProps {
+    index: number;
+    killerCages: KillerCage[];
+}
+
+const GraphicsKillerCage = ({
+    index,
+    killerCages,
+}: GraphicsKillerCageProps) => (
     <>
         {killerCages
             .filter(({ cage }) => cage.includes(index))
@@ -53,4 +57,4 @@ const KillerCage = ({ index, killerCages }: KillerCageProps) => (
     </>
 );
 
-export default KillerCage;
+export default GraphicsKillerCage;

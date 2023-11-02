@@ -1,6 +1,7 @@
 import { PuzzleState } from 'reducers/puzzle';
 import { PuzzleCell } from '../types';
 import { isFilled } from './solve/helper';
+import { Arrow, KillerCage, Thermo } from './sudoku-types';
 
 type EncodedData = {
     givens: string;
@@ -11,9 +12,9 @@ type EncodedData = {
 
 type DecodedData = {
     board?: PuzzleCell[];
-    thermos?: number[][];
-    arrows?: { head: number[]; tail: number[] }[];
-    killerCages?: { total: number; cage: number[] }[];
+    thermos?: Thermo[];
+    arrows?: Arrow[];
+    killerCages?: KillerCage[];
 };
 
 const RADIX = 36;

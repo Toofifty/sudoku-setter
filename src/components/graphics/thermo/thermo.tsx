@@ -18,12 +18,12 @@ const directionMap: Record<
 const getDirectionTo = (index: number, target: number) =>
     directionMap[target - index];
 
-interface ThermoProps {
+interface GraphicsThermo {
     index: number;
     thermos: number[][];
 }
 
-const Thermo = ({ index, thermos }: ThermoProps) => (
+const GraphicsThermo = ({ index, thermos }: GraphicsThermo) => (
     <>
         {thermos
             .filter((thermo) => thermo.includes(index))
@@ -48,4 +48,4 @@ const Thermo = ({ index, thermos }: ThermoProps) => (
     </>
 );
 
-export default Thermo;
+export default GraphicsThermo;

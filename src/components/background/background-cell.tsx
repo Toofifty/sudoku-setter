@@ -1,14 +1,15 @@
 import React from 'react';
-import Thermo from 'components/thermo';
-import KillerCage from 'components/killer-cage';
-import Arrow from 'components/arrow';
+import GraphicsThermo from 'components/graphics/thermo';
+import GraphicsArrow from 'components/graphics/arrow';
+import GraphicsKillerCage from 'components/graphics/killer-cage';
+import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 
 interface BackgroundCellProps {
     index: number;
     color: string;
-    thermos?: number[][];
-    arrows?: { head: number[]; tail: number[] }[];
-    killerCages?: { total: number; cage: number[] }[];
+    thermos?: Thermo[];
+    arrows?: Arrow[];
+    killerCages?: KillerCage[];
 }
 
 const BackgroundCell = ({
@@ -20,11 +21,13 @@ const BackgroundCell = ({
 }: BackgroundCellProps) => (
     <div className={`background-cell background-cell--${color}`}>
         {thermos && thermos.length > 0 && (
-            <Thermo index={index} thermos={thermos} />
+            <GraphicsThermo index={index} thermos={thermos} />
         )}
-        {arrows && arrows.length > 0 && <Arrow index={index} arrows={arrows} />}
+        {arrows && arrows.length > 0 && (
+            <GraphicsArrow index={index} arrows={arrows} />
+        )}
         {killerCages && killerCages.length > 0 && (
-            <KillerCage index={index} killerCages={killerCages} />
+            <GraphicsKillerCage index={index} killerCages={killerCages} />
         )}
     </div>
 );

@@ -2,6 +2,7 @@ import { CellSolver } from './types';
 import { isFilled } from '../helper';
 import { range, sum } from 'utils/misc';
 import { InterCell } from '../types';
+import { KillerCage } from 'utils/sudoku-types';
 
 const validOptions = (total: number, cells: number, perm: number[] = []) => {
     let valid: number[][] = [];
@@ -46,29 +47,29 @@ const canFillCage = (options: number[], cage: InterCell[]) => {
     return false;
 };
 
-export const solveKillerCages = (
-    killerCages: { total: number; cage: number[] }[]
-): CellSolver => (cell, i, board) => {
-    if (isFilled(cell)) return cell;
+export const solveKillerCages =
+    (killerCages: KillerCage[]): CellSolver =>
+    (cell, i, board) => {
+        if (isFilled(cell)) return cell;
 
-    for (let { total, cage } of killerCages.filter(({ cage }) =>
-        cage.includes(i)
-    )) {
-        const options = validOptions(total, cage.length);
-        const otherCells = except(cage, i).map((index) => board[index]);
+        for (let { total, cage } of killerCages.filter(({ cage }) =>
+            cage.includes(i)
+        )) {
+            const options = validOptions(total, cage.length);
+            const otherCells = except(cage, i).map((index) => board[index]);
 
-        cell.marks = cell.marks.filter((n) =>
-            options.some((option) => {
-                if (!option.includes(n)) return false;
-                if (option.length === 1) return true;
+            cell.marks = cell.marks.filter((n) =>
+                options.some((option) => {
+                    if (!option.includes(n)) return false;
+                    if (option.length === 1) return true;
 
-                // ensure other caged cells can contain the
-                // other options
-                const otherOptions = except(option, n);
-                return canFillCage(otherOptions, otherCells);
-            })
-        );
-    }
+                    // ensure other caged cells can contain the
+                    // other options
+                    const otherOptions = except(option, n);
+                    return canFillCage(otherOptions, otherCells);
+                })
+            );
+        }
 
-    return cell;
-};
+        return cell;
+    };

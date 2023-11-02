@@ -1,4 +1,6 @@
 import React from 'react';
+import { Arrow } from 'utils/sudoku-types';
+
 import './arrow.scss';
 
 const directionMap: Record<
@@ -29,12 +31,12 @@ const getClosestHead = (head: number[], index: number): number => {
     return head[1];
 };
 
-interface ArrowProps {
+interface GraphicsArrowProps {
     index: number;
-    arrows: { head: number[]; tail: number[] }[];
+    arrows: Arrow[];
 }
 
-const Arrow = ({ index, arrows }: ArrowProps) => (
+const GraphicsArrow = ({ index, arrows }: GraphicsArrowProps) => (
     <>
         {arrows
             .filter(
@@ -84,4 +86,4 @@ const Arrow = ({ index, arrows }: ArrowProps) => (
     </>
 );
 
-export default Arrow;
+export default GraphicsArrow;

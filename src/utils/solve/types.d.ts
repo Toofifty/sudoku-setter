@@ -1,4 +1,5 @@
 import { SolverState } from 'reducers/solver';
+import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 
 export type InterCell = {
     value?: number;
@@ -12,8 +13,9 @@ export type InterCell = {
 
 export type SolvePayload = {
     board: InterCell[];
-    thermos?: number[][];
-    killerCages?: { total: number; cage: number[] }[];
+    thermos?: Thermo[];
+    arrows?: Arrow[];
+    killerCages?: KillerCage[];
     stepSolve: boolean;
     algorithms: SolverState['algorithms'];
 };

@@ -1,6 +1,7 @@
 import { RootState, DispatchFn } from 'store';
 import { _, action, merge, GetAction } from './merge';
 import { isPlayModeSelector } from 'utils/selectors';
+import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 
 // put reducers here if:
 // - they require reading root state (or state from another slice)
@@ -124,7 +125,7 @@ const setAlgorithms = action(
 
 const createThermo = action(
     _ as RootState,
-    _ as number[],
+    _ as Thermo,
     'shared/create-thermo',
     (state, thermo, dispatch: DispatchFn) => {
         dispatch({ type: 'puzzle/create-thermo', payload: thermo });
@@ -148,7 +149,7 @@ const deleteThermo = action(
 
 const createArrow = action(
     _ as RootState,
-    _ as { head: number[]; tail: number[] },
+    _ as Arrow,
     'shared/create-arrow',
     (state, arrow, dispatch: DispatchFn) => {
         dispatch({ type: 'puzzle/create-arrow', payload: arrow });
@@ -172,7 +173,7 @@ const deleteArrow = action(
 
 const createKillerCage = action(
     _ as RootState,
-    _ as { total: number; cage: number[] },
+    _ as KillerCage,
     'shared/create-killer-cage',
     (state, killerCage, dispatch: DispatchFn) => {
         dispatch({ type: 'puzzle/create-killer-cage', payload: killerCage });
