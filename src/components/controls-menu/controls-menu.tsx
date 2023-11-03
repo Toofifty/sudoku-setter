@@ -43,7 +43,7 @@ const ControlsMenu = () => {
                 <Button
                     primary
                     wide
-                    href={`puzzle/${window.location.hash}`}
+                    href={`/puzzle/${window.location.hash}`}
                     target="blank"
                 >
                     <i className="fad fa-play m-r-12" />

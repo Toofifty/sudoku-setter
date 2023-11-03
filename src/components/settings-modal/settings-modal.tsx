@@ -139,6 +139,30 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                 </Menu.Item>
                 <Menu.Item>
                     <Toggle
+                        checked={settings.autoPairs}
+                        onChange={() =>
+                            setSettings({
+                                autoPairs: !settings.autoPairs,
+                            })
+                        }
+                    >
+                        Auto-centre pairs
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
+                        checked={settings.autoWriteSnyder}
+                        onChange={() =>
+                            setSettings({
+                                autoWriteSnyder: !settings.autoWriteSnyder,
+                            })
+                        }
+                    >
+                        Auto-complete with Snyder notation
+                    </Toggle>
+                </Menu.Item>
+                <Menu.Item>
+                    <Toggle
                         radio
                         checked={
                             !settings.showInvalidMoves &&

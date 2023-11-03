@@ -2,10 +2,9 @@ import { PlayerCell } from 'types';
 import { _, action, merge, GetAction } from './merge';
 import { undoHistory, redoHistory, saveHistory } from './history';
 import { load, persist } from './persist';
-import { getCellAt } from 'utils/sudoku';
-import { regionIndices } from 'utils/solve/helper';
+import { runAutomations } from 'utils/automations';
 
-type InputMode = 'digit' | 'corner' | 'centre';
+export type InputMode = 'digit' | 'corner' | 'centre';
 const inputModes: InputMode[] = ['digit', 'corner', 'centre'];
 
 type PlayerSettings = {
@@ -38,6 +37,17 @@ type PlayerSettings = {
      * when a digit is placed
      */
     autoFixPencilMarks: boolean;
+    /**
+     * Replace pencil mark pairs with centre pairs
+     * when writing the second pencil mark value into
+     * the same two cells
+     */
+    autoPairs: boolean;
+    /**
+     * Replace the final Snyder pencil mark in a region
+     * with the value
+     */
+    autoWriteSnyder: boolean;
     /**
      * Highlight digits that don't match the solution
      */
@@ -85,6 +95,8 @@ const defaultState = (): PlayerState => ({
             highlightMiscRestrictions: true,
             highlightMatchingNumbers: true,
             autoFixPencilMarks: false,
+            autoPairs: false,
+            autoWriteSnyder: false,
             showIncorrectMoves: false,
             showInvalidMoves: true,
             darkMode: false,
@@ -94,23 +106,24 @@ const defaultState = (): PlayerState => ({
 
 const setCellValue = action(
     _ as PlayerState,
-    _ as { index: number; value?: number }[],
+    _ as { selection: number[]; value?: number },
     'player/set-cell-value',
-    (state, cells) => {
+    (state, { selection, value }) => {
+        if (selection.length === 0) {
+            return state;
+        }
         let board = [...state.board];
         let mode = state.inputMode;
-        if (cells.length > 1 && mode === 'digit') {
+        if (selection.length > 1 && mode === 'digit') {
             mode = state.settings.multiInputMode;
         }
-        cells.forEach(({ index, value }) => {
+        selection.forEach((index) => {
             const {
                 color,
                 centreMarks,
                 cornerMarks,
                 value: initialValue,
             } = board[index];
-
-            console.log(initialValue);
 
             // don't overwrite existing digits with pencil marks
             if (initialValue && mode !== 'digit') return;
@@ -131,21 +144,6 @@ const setCellValue = action(
                     centreMarks: [],
                     cornerMarks: [],
                 };
-                if (state.settings.autoFixPencilMarks) {
-                    regionIndices(getCellAt(index))
-                        .flat()
-                        .forEach((affectedIndex) => {
-                            board[affectedIndex] = {
-                                ...board[affectedIndex],
-                                centreMarks: board[
-                                    affectedIndex
-                                ].centreMarks.filter((m) => m !== value),
-                                cornerMarks: board[
-                                    affectedIndex
-                                ].cornerMarks.filter((m) => m !== value),
-                            };
-                        });
-                }
             } else {
                 // add/remove marks
                 let marks =
@@ -162,6 +160,15 @@ const setCellValue = action(
                 };
             }
         });
+
+        runAutomations(
+            state.settings,
+            {
+                get: (index) => board[index],
+                set: (index, cell) => (board[index] = cell),
+            },
+            { selection, value, mode }
+        );
         return { ...state, board };
     },
     saveHistory<PlayerState>(...trackHistoryOf)

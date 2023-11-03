@@ -60,6 +60,7 @@ const GraphicsBorderSelection = ({
             />
             {corners.map((corner) => (
                 <div
+                    key={corner}
                     className={`selection__corner selection__corner--${corner}`}
                 />
             ))}

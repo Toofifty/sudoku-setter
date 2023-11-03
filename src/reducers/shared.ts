@@ -16,7 +16,10 @@ const setCellValue = action(
         if (isPlayMode) {
             dispatch({
                 type: 'player/set-cell-value',
-                payload: [{ index, value }],
+                payload: {
+                    selection: [index],
+                    value,
+                },
             });
         } else {
             dispatch({ type: 'puzzle/set-given', payload: { index, value } });
@@ -50,7 +53,10 @@ const setSelectionValue = action(
 
             dispatch({
                 type: 'player/set-cell-value',
-                payload: filteredSelection.map((index) => ({ index, value })),
+                payload: {
+                    selection: filteredSelection,
+                    value,
+                },
             });
             fromScratchSolve = selection.some((index) => {
                 const prevValue = state.puzzle.board[index].value;
