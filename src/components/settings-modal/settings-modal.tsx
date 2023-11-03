@@ -2,7 +2,7 @@ import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Modal from 'components/modal';
-import Menu from 'components/menu';
+import Menu, { MenuDivider, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
 import Button from 'components/button';
 import './settings-modal.scss';
@@ -22,8 +22,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                 Player settings
             </Modal.Header>
             <Menu className="settings-modal__menu">
-                <Menu.Divider label="Input modes" />
-                <Menu.Item>
+                <MenuDivider label="Input modes" />
+                <MenuItem>
                     <Toggle
                         radio
                         checked={settings.multiInputMode === 'centre'}
@@ -67,9 +67,9 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Q swaps corner & centre marks
                     </Toggle>
-                </Menu.Item>
-                <Menu.Divider label="Highlighting" />
-                <Menu.Item>
+                </MenuItem>
+                <MenuDivider label="Highlighting" />
+                <MenuItem>
                     <Toggle
                         checked={settings.highlightSelection}
                         onChange={() =>
@@ -81,8 +81,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Highlight selection
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.outlineSelection}
                         onChange={() =>
@@ -93,8 +93,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Outline selection
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.highlightSudokuRestrictions}
                         onChange={() =>
@@ -106,8 +106,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Highlight box / row / column
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.highlightMatchingNumbers}
                         onChange={() =>
@@ -119,8 +119,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Highlight matching numbers
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.highlightMiscRestrictions}
                         onChange={() =>
@@ -132,9 +132,9 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Highlight extra restrictions
                     </Toggle>
-                </Menu.Item>
-                <Menu.Divider label="Cheats" />
-                <Menu.Item>
+                </MenuItem>
+                <MenuDivider label="Cheats" />
+                <MenuItem>
                     <Toggle
                         checked={settings.autoFixPencilMarks}
                         onChange={() =>
@@ -146,8 +146,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Auto-remove pencil marks
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.autoPairs}
                         onChange={() =>
@@ -158,8 +158,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Auto-centre pairs
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={settings.autoWriteSnyder}
                         onChange={() =>
@@ -170,8 +170,8 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Auto-complete with Snyder notation
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         radio
                         checked={
@@ -212,7 +212,7 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Highlight moves that don't match the solution
                     </Toggle>
-                </Menu.Item>
+                </MenuItem>
             </Menu>
             <Modal.Footer>
                 <Button primary onClick={onClose}>

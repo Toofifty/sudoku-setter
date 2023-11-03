@@ -11,7 +11,7 @@ import {
 import useAction from 'hooks/use-action';
 import NumberInput from 'components/number-input';
 import UndoRedo from 'components/undo-redo';
-import Menu from 'components/menu';
+import { MenuDivider, MenuItem } from 'components/menu';
 import Button from 'components/button';
 import useModal from 'hooks/use-modal';
 import KillerCageModal from 'components/killer-cage-modal';
@@ -61,37 +61,37 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
 
     return (
         <>
-            <Menu.Item>
+            <MenuItem>
                 <NumberInput
                     onSetNumber={(value) =>
                         setValue({ index, value: value || undefined })
                     }
                     selected={value}
                 />
-            </Menu.Item>
-            <Menu.Item>
+            </MenuItem>
+            <MenuItem>
                 <UndoRedo />
-            </Menu.Item>
-            <Menu.Divider
+            </MenuItem>
+            <MenuDivider
                 label={`Set ${
                     selection.length > 1
                         ? 'selection'
                         : `r${pos.y + 1}c${pos.x + 1}`
                 } color`}
             />
-            <Menu.Item>
+            <MenuItem>
                 <ColorPicker
                     color={color ?? 'white'}
                     onSelect={(color) => setColor({ index: selection, color })}
                 />
-            </Menu.Item>
+            </MenuItem>
             {selection.length <= 9 && isContiguous(selection, true) && (
                 <>
-                    <Menu.Divider label={`Selection (${selection.length})`} />
+                    <MenuDivider label={`Selection (${selection.length})`} />
                     {selection.length > 1 && (
                         <>
                             {isContiguousSequential(selection, true) && (
-                                <Menu.Item>
+                                <MenuItem>
                                     <Button
                                         wide
                                         onClick={() => createThermo(selection)}
@@ -99,13 +99,13 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                         <i className="fad fa-temperature-up m-r-12" />
                                         Create thermo
                                     </Button>
-                                </Menu.Item>
+                                </MenuItem>
                             )}
                             {isContiguousSequentialWithPill(
                                 selection,
                                 true
                             ) && (
-                                <Menu.Item>
+                                <MenuItem>
                                     <Button
                                         wide
                                         onClick={() => openArrowModal(true)}
@@ -113,12 +113,12 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                         <i className="fad fa-bullseye-arrow m-r-12" />
                                         Create arrow
                                     </Button>
-                                </Menu.Item>
+                                </MenuItem>
                             )}
                         </>
                     )}
                     {isContiguous(selection) && (
-                        <Menu.Item>
+                        <MenuItem>
                             <Button
                                 wide
                                 onClick={() => openKillerCageModal(true)}
@@ -126,7 +126,7 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                 <i className="fad fa-border-none m-r-12" />
                                 Create killer cage
                             </Button>
-                        </Menu.Item>
+                        </MenuItem>
                     )}
                 </>
             )}
@@ -134,7 +134,7 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                 <>
                     <li className="divider" data-content="Variants" />
                     {hasThermo && (
-                        <Menu.Item>
+                        <MenuItem>
                             <Button
                                 danger
                                 wide
@@ -146,10 +146,10 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>
                             </Button>
-                        </Menu.Item>
+                        </MenuItem>
                     )}
                     {hasArrow && (
-                        <Menu.Item>
+                        <MenuItem>
                             <Button
                                 danger
                                 wide
@@ -161,10 +161,10 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>
                             </Button>
-                        </Menu.Item>
+                        </MenuItem>
                     )}
                     {hasKillerCage && (
-                        <Menu.Item>
+                        <MenuItem>
                             <Button
                                 danger
                                 wide
@@ -176,7 +176,7 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
                                     r{pos.y + 1}c{pos.x + 1}
                                 </strong>
                             </Button>
-                        </Menu.Item>
+                        </MenuItem>
                     )}
                 </>
             )}

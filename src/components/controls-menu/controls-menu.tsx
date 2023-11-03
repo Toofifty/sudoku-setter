@@ -2,7 +2,7 @@ import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Button from 'components/button';
-import Menu from 'components/menu';
+import Menu, { MenuCollapse, MenuDivider, MenuItem } from 'components/menu';
 import './controls-menu.scss';
 import Toggle from 'components/toggle';
 import SettingsModal from 'components/settings-modal';
@@ -39,7 +39,7 @@ const ControlsMenu = () => {
 
     return (
         <Menu exclusive className="controls">
-            <Menu.Item>
+            <MenuItem>
                 <Button
                     primary
                     wide
@@ -49,9 +49,9 @@ const ControlsMenu = () => {
                     <i className="fad fa-play m-r-12" />
                     Test puzzle
                 </Button>
-            </Menu.Item>
-            <Menu.Collapse label="View">
-                <Menu.Item>
+            </MenuItem>
+            <MenuCollapse label="View">
+                <MenuItem>
                     <Toggle
                         sw
                         checked={debugMode}
@@ -59,8 +59,8 @@ const ControlsMenu = () => {
                     >
                         Debug mode
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         sw
                         checked={hideSolution}
@@ -68,19 +68,19 @@ const ControlsMenu = () => {
                     >
                         Hide solution
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Button wide onClick={() => openSettingsModal(true)}>
                         <i className="fad fa-wrench m-r-12" />
                         Player settings
                     </Button>
-                </Menu.Item>
-            </Menu.Collapse>
-            <Menu.Collapse label="Restrictions">
-                <Menu.Item>
+                </MenuItem>
+            </MenuCollapse>
+            <MenuCollapse label="Restrictions">
+                <MenuItem>
                     <Toggle disabled>Enable perimeter cells</Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={restrictions.antiKnight}
                         onChange={() =>
@@ -91,8 +91,8 @@ const ControlsMenu = () => {
                     >
                         Anti-knight
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={restrictions.antiKing}
                         onChange={() =>
@@ -103,8 +103,8 @@ const ControlsMenu = () => {
                     >
                         Anti-king
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={restrictions.uniqueDiagonals}
                         onChange={() =>
@@ -115,15 +115,15 @@ const ControlsMenu = () => {
                     >
                         Unique diagonals
                     </Toggle>
-                </Menu.Item>
-            </Menu.Collapse>
-            <Menu.Collapse label="Solve algorithms" expandedByDefault>
-                <Menu.Item>
+                </MenuItem>
+            </MenuCollapse>
+            <MenuCollapse label="Solve algorithms" expandedByDefault>
+                <MenuItem>
                     <Toggle checked disabled>
                         Naked singles
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.hiddenSingles}
                         onChange={() =>
@@ -134,8 +134,8 @@ const ControlsMenu = () => {
                     >
                         Hidden singles
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.nakedPairs}
                         onChange={() =>
@@ -146,8 +146,8 @@ const ControlsMenu = () => {
                     >
                         Naked pairs
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.hiddenPairs}
                         onChange={() =>
@@ -158,8 +158,8 @@ const ControlsMenu = () => {
                     >
                         Hidden pairs
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.nakedTuples}
                         onChange={() =>
@@ -170,8 +170,8 @@ const ControlsMenu = () => {
                     >
                         Naked tuples (3+)
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.lockedCandidates}
                         onChange={() =>
@@ -182,8 +182,8 @@ const ControlsMenu = () => {
                     >
                         Locked candidates
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.xWing}
                         onChange={() =>
@@ -194,8 +194,8 @@ const ControlsMenu = () => {
                     >
                         X-wings
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.yWing}
                         onChange={() =>
@@ -206,8 +206,8 @@ const ControlsMenu = () => {
                     >
                         Y-wings
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.thermos}
                         onChange={() =>
@@ -218,8 +218,8 @@ const ControlsMenu = () => {
                     >
                         Thermo sudoku
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.killerCages}
                         onChange={() =>
@@ -230,11 +230,11 @@ const ControlsMenu = () => {
                     >
                         Killer cage sudoku
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle disabled>Sandwich sudoku</Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.antiKnight}
                         onChange={() =>
@@ -245,8 +245,8 @@ const ControlsMenu = () => {
                     >
                         Anti-knight
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.antiKing}
                         onChange={() =>
@@ -257,8 +257,8 @@ const ControlsMenu = () => {
                     >
                         Anti-king
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.uniqueDiagonals}
                         onChange={() =>
@@ -269,8 +269,8 @@ const ControlsMenu = () => {
                     >
                         Unique diagonals
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={algorithms.nonSeqNeighbors}
                         onChange={() =>
@@ -281,57 +281,57 @@ const ControlsMenu = () => {
                     >
                         Non-sequential neighbors
                     </Toggle>
-                </Menu.Item>
-            </Menu.Collapse>
-            <Menu.Collapse label="Solve configuration">
-                <Menu.Item>
+                </MenuItem>
+            </MenuCollapse>
+            <MenuCollapse label="Solve configuration">
+                <MenuItem>
                     <Toggle
                         checked={lookahead}
                         onChange={() => setLookahead(!lookahead)}
                     >
                         Enable look-ahead solve
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Toggle
                         checked={stepSolve}
                         onChange={() => setStepSolve(!stepSolve)}
                     >
                         Step-by-step solve
                     </Toggle>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Button wide onClick={() => triggerSolve()}>
                         <i className="fad fa-stopwatch m-r-12" />
                         Run solve step
                     </Button>
-                </Menu.Item>
-                <Menu.Item>
+                </MenuItem>
+                <MenuItem>
                     <Button wide onClick={() => triggerSolve(true)}>
                         <i className="fad fa-redo m-r-12" />
                         Solve from scratch
                     </Button>
-                </Menu.Item>
-            </Menu.Collapse>
-            <Menu.Divider label="Puzzle" />
-            <Menu.Item>
+                </MenuItem>
+            </MenuCollapse>
+            <MenuDivider label="Puzzle" />
+            <MenuItem>
                 <Button wide onClick={() => reset()}>
                     <i className="fad fa-times m-r-12" />
                     Reset grid
                 </Button>
-            </Menu.Item>
-            <Menu.Item>
+            </MenuItem>
+            <MenuItem>
                 <Button wide disabled onClick={() => {}}>
                     <i className="fad fa-save m-r-12" />
                     Save draft
                 </Button>
-            </Menu.Item>
-            <Menu.Item>
+            </MenuItem>
+            <MenuItem>
                 <Button wide primary disabled onClick={() => {}}>
                     <i className="fad fa-check m-r-12" />
                     Publish
                 </Button>
-            </Menu.Item>
+            </MenuItem>
         </Menu>
     );
 };

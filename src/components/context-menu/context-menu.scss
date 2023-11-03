@@ -1,7 +1,8 @@
+@import 'styles';
+
 :root .context-menu {
     width: min-content;
     min-width: 280px;
-    box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
 
     position: fixed;
@@ -9,12 +10,16 @@
     top: var(--y, -10000px);
 
     opacity: 0;
-    transition: 0s;
     pointer-events: none;
+    box-shadow: 0 0 0 2px $purple-200-2;
+
+    &:hover {
+        box-shadow: 0 0 0 4px $purple-200-2;
+    }
 
     &--visible {
         opacity: 1;
-        transition: opacity 0.25s;
+        transition: opacity 0.1s, box-shadow 0.1s;
         pointer-events: initial;
     }
 

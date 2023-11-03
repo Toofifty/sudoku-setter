@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+    createContext,
+    forwardRef,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import cx from 'classnames';
 import './menu.scss';
 import Button from 'components/button';
@@ -11,26 +17,40 @@ const MenuContext = createContext<{
 
 interface MenuProps {
     children: React.ReactNode;
+    noPadding?: boolean;
     exclusive?: boolean;
     className?: string;
+    style?: React.CSSProperties;
 }
 
-const Menu = ({ children, exclusive = false, className }: MenuProps) => {
-    const [selected, setSelected] = useState<string>();
+const Menu = forwardRef<HTMLUListElement, MenuProps>(
+    ({ children, exclusive = false, className, noPadding, style }, ref) => {
+        const [selected, setSelected] = useState<string>();
 
-    return (
-        <MenuContext.Provider value={{ exclusive, selected, setSelected }}>
-            <ul className={cx('menu', className)}>{children}</ul>
-        </MenuContext.Provider>
-    );
-};
+        return (
+            <MenuContext.Provider value={{ exclusive, selected, setSelected }}>
+                <ul
+                    ref={ref}
+                    className={cx(
+                        'menu',
+                        noPadding && 'menu--no-padding',
+                        className
+                    )}
+                    style={style}
+                >
+                    {children}
+                </ul>
+            </MenuContext.Provider>
+        );
+    }
+);
 
 interface MenuItemProps {
     children: React.ReactNode;
     className?: string;
 }
 
-const MenuItem = ({ children, className }: MenuItemProps) => (
+export const MenuItem = ({ children, className }: MenuItemProps) => (
     <li className={cx('menu-item', className)}>{children}</li>
 );
 
@@ -39,7 +59,7 @@ interface MenuDividerProps {
     label?: string;
 }
 
-const MenuDivider = ({ className, label }: MenuDividerProps) => (
+export const MenuDivider = ({ className, label }: MenuDividerProps) => (
     <li className={cx('divider', className)} data-content={label} />
 );
 
@@ -50,7 +70,7 @@ interface MenuCollapseProps {
     expandedByDefault?: boolean;
 }
 
-const MenuCollapse = ({
+export const MenuCollapse = ({
     children,
     className,
     label,
@@ -113,9 +133,5 @@ const MenuCollapse = ({
         </li>
     );
 };
-
-Menu.Item = MenuItem;
-Menu.Divider = MenuDivider;
-Menu.Collapse = MenuCollapse;
 
 export default Menu;

@@ -1,1 +1,1 @@
-export { default } from './menu';
+export { default, MenuItem, MenuDivider, MenuCollapse } from './menu';

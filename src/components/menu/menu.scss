@@ -1,133 +1,136 @@
 @import 'styles';
-:root:root {
-    .menu {
-        padding: $sp-16;
-        box-shadow: none;
-        border: 1px solid $grey-300;
-        border-radius: 2px;
 
-        .menu-item {
-            padding: 0;
-            margin: $sp-1 0;
+.menu {
+    padding: $sp-16;
+    box-shadow: none;
+    border: 1px solid $grey-300;
+    border-radius: 2px;
+
+    &--no-padding {
+        padding: 0;
+    }
+
+    .menu-item {
+        padding: 0;
+        margin: $sp-1 0;
+    }
+
+    .divider {
+        border-top: 1px solid $grey-300;
+        margin: $sp-16 -#{$sp-16};
+        margin-top: $sp-24;
+
+        &::after {
+            color: $grey-500;
+            transform: translateY(calc(-50% - 6px));
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: 17px;
         }
+    }
 
-        .divider {
-            border-top: 1px solid $grey-300;
-            margin: $sp-16 -#{$sp-16};
-            margin-top: $sp-24;
+    .collapse {
+        &__button {
+            position: relative;
+            color: $grey-500;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 12px;
 
-            &::after {
-                color: $grey-500;
-                transform: translateY(calc(-50% - 6px));
-                text-transform: uppercase;
-                font-weight: bold;
-                font-size: 12px;
-                margin-left: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: -#{$sp-12};
+            margin-top: $sp-8;
+            margin-bottom: 0;
+
+            width: calc(100% + #{$sp-24});
+            z-index: 0;
+
+            span,
+            i {
+                background: white;
+                padding: 0 $sp-8;
+                transition: background 0.1s;
+                min-width: $sp-24;
             }
-        }
 
-        .collapse {
-            &__button {
-                position: relative;
-                color: $grey-500;
-                text-transform: uppercase;
-                font-weight: bold;
-                font-size: 12px;
-
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin: -#{$sp-12};
-                margin-top: $sp-8;
-                margin-bottom: 0;
-
-                width: calc(100% + #{$sp-24});
-                z-index: 0;
-
+            &:hover {
                 span,
                 i {
-                    background: white;
-                    padding: 0 $sp-8;
-                    transition: background 0.1s;
-                    min-width: $sp-24;
-                }
-
-                &:hover {
-                    span,
-                    i {
-                        background: $grey-200;
-                    }
-                }
-
-                &::after {
-                    position: absolute;
-                    content: '';
-                    border-top: 1px solid $grey-300;
-                    width: calc(100% + #{$sp-8} + 2px);
-                    height: 0px;
-                    left: -$sp-4 - 1px;
-                    z-index: -1;
+                    background: $grey-200;
                 }
             }
 
-            &__list {
-                list-style-type: none;
-                margin: 0 #{-$sp-4};
-                padding: 0 $sp-4;
-                overflow: hidden;
-                transition: max-height 0.1s, opacity 0.1s;
-                opacity: 0;
+            &::after {
+                position: absolute;
+                content: '';
+                border-top: 1px solid $grey-300;
+                width: calc(100% + #{$sp-8} + 2px);
+                height: 0px;
+                left: -$sp-4 - 1px;
+                z-index: -1;
+            }
+        }
+
+        &__list {
+            list-style-type: none;
+            margin: 0 #{-$sp-4};
+            padding: 0 $sp-4;
+            overflow: hidden;
+            transition: max-height 0.1s, opacity 0.1s;
+            opacity: 0;
+
+            > * {
+                visibility: hidden;
+            }
+        }
+
+        &--expanded {
+            .collapse__button {
+                margin-bottom: $sp-12;
+            }
+
+            .collapse__list {
+                opacity: 1;
 
                 > * {
-                    visibility: hidden;
-                }
-            }
-
-            &--expanded {
-                .collapse__button {
-                    margin-bottom: $sp-12;
-                }
-
-                .collapse__list {
-                    opacity: 1;
-
-                    > * {
-                        visibility: unset;
-                    }
+                    visibility: unset;
                 }
             }
         }
     }
+}
 
-    .theme-dark .menu {
-        background: $grey-900;
-        border-color: transparent;
+.theme-dark .menu {
+    background: $grey-900;
+    border-color: transparent;
 
-        .divider {
-            border-color: $black;
+    .divider {
+        border-color: $black;
 
-            &::after {
+        &::after {
+            background: $grey-900;
+        }
+    }
+
+    .collapse {
+        &__button {
+            span,
+            i {
                 background: $grey-900;
             }
-        }
 
-        .collapse {
-            &__button {
+            &:hover {
                 span,
                 i {
-                    background: $grey-900;
+                    background: $grey-800;
                 }
+            }
 
-                &:hover {
-                    span,
-                    i {
-                        background: $grey-800;
-                    }
-                }
-
-                &::after {
-                    border-color: $black;
-                }
+            &::after {
+                border-color: $black;
             }
         }
     }
