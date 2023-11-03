@@ -187,7 +187,16 @@ const setCellValue = action(
             {
                 get: (index) => mutableBoard[index],
                 set: (index, cell) => (mutableBoard[index] = cell),
-                commit: (index, cell) => (board[index] = cell),
+                commit: (index, cell) =>
+                    (mutableBoard[index] = board[index] = cell),
+                write: (index, value) =>
+                    dispatch({
+                        type: 'player/set-cell-value',
+                        payload: {
+                            selection: [index],
+                            value,
+                        },
+                    }),
                 flush: () =>
                     dispatch({
                         type: 'player/commit-board',

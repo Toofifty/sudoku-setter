@@ -1,10 +1,11 @@
-import { regionIndices } from 'utils/solve/helper';
+import { allBoxIndices, regionIndices } from 'utils/solve/helper';
 import { getCellAt } from 'utils/sudoku';
 import { intersection } from 'utils/intersection';
 import { Automation } from './types';
+import { range } from 'utils/misc';
 
 export const autoFixPencilMarks: Automation = (
-    { get, commit, flush },
+    { get, commit },
     { selection, value, mode }
 ) => {
     if (mode !== 'digit') return;
@@ -86,13 +87,25 @@ export const autoPairs: Automation = (
 };
 
 export const autoWriteSnyder: Automation = (
-    { get, set },
-    { selection, value, mode }
+    { get, write },
+    { selection, mode }
 ) => {
-    if (mode !== 'digit' || !value) {
+    if (mode !== 'digit' || selection.length > 1) {
         return;
     }
 
     // if only 1 candidate of the current value left (box-by-box)
     // promote it to a value
+    range(1, 9).forEach((candidate) => {
+        allBoxIndices().forEach((box) => {
+            const candidateLocations = box.filter((index) =>
+                get(index).cornerMarks.includes(candidate)
+            );
+
+            if (candidateLocations.length === 1) {
+                const index = candidateLocations[0];
+                write(index, candidate);
+            }
+        });
+    });
 };

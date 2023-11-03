@@ -42,6 +42,13 @@ export const boxIndices = (pos: Position, includeSelf = false) => {
     return box;
 };
 
+export const allBoxIndices = () => {
+    return range(0, 9).map((n) => {
+        const i = n * 3 + (n > 5 ? 36 : n > 2 ? 18 : 0);
+        return [i, i + 1, i + 2, i + 9, i + 10, i + 11, i + 18, i + 19, i + 20];
+    });
+};
+
 export const regions = <T>(board: T[], pos: Position, includeSelf = false) => [
     row(board, pos, includeSelf),
     column(board, pos, includeSelf),

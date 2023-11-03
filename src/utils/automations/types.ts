@@ -15,6 +15,12 @@ export type Accessors = {
      */
     set: (index: number, cell: PlayerCell) => void;
     /**
+     * Write a value into a cell, mocking a player placement. Use
+     * only when other automations need to be kicked off again after a
+     * value change.
+     */
+    write: (index: number, value: number) => void;
+    /**
      * Flush changes, creating a new point in history
      */
     flush: () => void;
