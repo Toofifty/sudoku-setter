@@ -28,6 +28,10 @@ code {
     padding-top: $sp-24;
 
     background: linear-gradient($grey-100, $grey-200);
+
+    @include mobile {
+        align-items: flex-start;
+    }
 }
 
 .theme-dark .app {

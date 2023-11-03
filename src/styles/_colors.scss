@@ -110,8 +110,34 @@ $digit-color: $purple-600;
 $digit-color-dark: $purple-300;
 $digit-given-color: $grey-900;
 $digit-given-color-dark: $purple-100;
-$digit-mark-color: $purple-600;
+$digit-mark-color: $purple-300;
 $digit-mark-color-dark: $grey-500;
 
 $digit-incorrect-color: $red-600;
 $digit-incorrect-color-dark: $red-600;
+
+$outline-width: 2px;
+
+// slight white outline to help
+// increase contrast
+@mixin text-white-outline {
+    text-shadow: #{$outline-width} #{$outline-width} $cell-bg,
+        0 #{$outline-width} $cell-bg,
+        -#{$outline-width} #{$outline-width} $cell-bg,
+        -#{$outline-width} 0 $cell-bg,
+        -#{$outline-width} -#{$outline-width} $cell-bg,
+        0 -#{$outline-width} $cell-bg,
+        #{$outline-width} -#{$outline-width} $cell-bg,
+        #{$outline-width} 0px $cell-bg;
+}
+
+@mixin text-dark-outline {
+    text-shadow: #{$outline-width} #{$outline-width} $cell-bg-dark,
+        0 #{$outline-width} $cell-bg-dark,
+        -#{$outline-width} #{$outline-width} $cell-bg-dark,
+        -#{$outline-width} 0 $cell-bg-dark,
+        -#{$outline-width} -#{$outline-width} $cell-bg-dark,
+        0 -#{$outline-width} $cell-bg-dark,
+        #{$outline-width} -#{$outline-width} $cell-bg-dark,
+        #{$outline-width} 0px $cell-bg-dark;
+}

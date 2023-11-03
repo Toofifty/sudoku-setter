@@ -3,7 +3,9 @@ import Background from 'components/background';
 import Board from 'components/board';
 import './board-container.scss';
 
-const MOBILE_PADDING = 48;
+const MIN_SCALE = 80;
+
+const MOBILE_PADDING = 12;
 const DESKTOP_EXTRA_ROOM = 400;
 
 const BoardContainer = () => {
@@ -13,10 +15,13 @@ const BoardContainer = () => {
     useEffect(() => {
         const listener = () => {
             setScale(
-                Math.min((window.outerWidth - DESKTOP_EXTRA_ROOM) / 10, 100)
+                Math.min(
+                    (window.outerWidth - DESKTOP_EXTRA_ROOM) / 10,
+                    MIN_SCALE
+                )
             );
             setMobileScale(
-                Math.min((window.outerWidth - MOBILE_PADDING) / 10, 100)
+                Math.min((window.outerWidth - MOBILE_PADDING) / 10, MIN_SCALE)
             );
         };
 
@@ -27,6 +32,8 @@ const BoardContainer = () => {
             window.removeEventListener('resize', listener);
         };
     }, []);
+
+    console.log(scale);
 
     return (
         <div

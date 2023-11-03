@@ -7,6 +7,8 @@ $free-space-required: 300px;
 
 $a: 200px;
 
+$max-size: 800px;
+
 .board-container {
     position: relative;
     background: $cell-outline;
@@ -15,12 +17,12 @@ $a: 200px;
     --mobile-scale: 100;
     padding: $padding;
 
-    width: calc(var(--scale) * 10px + #{$padding});
-    height: calc(var(--scale) * 10px + #{$padding});
+    width: calc(1000px * var(--scale) / 100 + #{$padding});
+    height: calc(1000px * var(--scale) / 100 + #{$padding});
 
     @include mobile {
-        width: calc(var(--mobile-scale) * 10px + #{$padding});
-        height: calc(var(--mobile-scale) * 10px + #{$padding});
+        width: calc(1000px * var(--mobile-scale) / 100 + #{$padding});
+        height: calc(1000px * var(--mobile-scale) / 100 + #{$padding});
     }
 
     .board-sizer {
