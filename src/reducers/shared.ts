@@ -80,6 +80,19 @@ const setSelectionValue = action(
     }
 );
 
+const swapPencilMarks = action(
+    _ as RootState,
+    _ as unknown,
+    'shared/swap-pencil-marks',
+    (state, _, dispatch) => {
+        const selection = state.ui.selection;
+        if (selection.length > 0) {
+            dispatch({ type: 'player/swap-pencil-marks', payload: selection });
+        }
+        return state;
+    }
+);
+
 const setRestrictions = action(
     _ as RootState,
     _ as Partial<RootState['puzzle']['restrictions']>,
@@ -256,6 +269,7 @@ const redo = action(
 export type SharedAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setSelectionValue>
+    | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setRestrictions>
     | GetAction<typeof setAlgorithms>
     | GetAction<typeof createThermo>
@@ -272,6 +286,7 @@ export default merge<RootState>(
     undefined,
     setCellValue,
     setSelectionValue,
+    swapPencilMarks,
     setRestrictions,
     setAlgorithms,
     createThermo,

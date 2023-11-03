@@ -14,6 +14,7 @@ const KeyListener = ({ children }: KeyListenerProps) => {
     const setSelectionValue = useAction('shared/set-selection-value');
     const setFocus = useAction('ui/set-focus');
     const cycleInputMode = useAction('player/cycle-input-mode');
+    const swapPencilMarks = useAction('shared/swap-pencil-marks');
     const focused = useSelector((state) => state.ui.focused);
 
     useEffect(() => {
@@ -66,6 +67,9 @@ const KeyListener = ({ children }: KeyListenerProps) => {
                 (key === 'Tab' && settings.tabSwitchesInputMode)
             ) {
                 cycleInputMode(shiftKey);
+                e.preventDefault();
+            } else if (key === 'q' && settings.qSwapsPencilMarks) {
+                swapPencilMarks();
                 e.preventDefault();
             }
         };

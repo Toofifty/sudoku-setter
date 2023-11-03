@@ -57,6 +57,16 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
                     >
                         Tab switches input mode
                     </Toggle>
+                    <Toggle
+                        checked={!!settings.qSwapsPencilMarks}
+                        onChange={() =>
+                            setSettings({
+                                qSwapsPencilMarks: !settings.qSwapsPencilMarks,
+                            })
+                        }
+                    >
+                        Q swaps corner & centre marks
+                    </Toggle>
                 </Menu.Item>
                 <Menu.Divider label="Highlighting" />
                 <Menu.Item>

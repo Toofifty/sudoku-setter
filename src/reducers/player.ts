@@ -18,6 +18,11 @@ type PlayerSettings = {
      * The space bar can always be used.
      */
     tabSwitchesInputMode: boolean;
+    /**
+     * Whether Q can be used to swap corner -> centre marks (and vice versa)
+     * of the current selection
+     */
+    qSwapsPencilMarks: boolean;
     highlightSelection: boolean;
     outlineSelection: boolean;
     /**
@@ -89,6 +94,7 @@ const defaultState = (): PlayerState => ({
         settings: {
             multiInputMode: 'corner',
             tabSwitchesInputMode: false,
+            qSwapsPencilMarks: false,
             highlightSelection: false,
             outlineSelection: true,
             highlightSudokuRestrictions: true,
@@ -112,7 +118,7 @@ const setCellValue = action(
         if (selection.length === 0) {
             return state;
         }
-        let board = [...state.board];
+        const board = [...state.board];
         let mode = state.inputMode;
         if (selection.length > 1 && mode === 'digit') {
             mode = state.settings.multiInputMode;
@@ -174,6 +180,23 @@ const setCellValue = action(
     saveHistory<PlayerState>(...trackHistoryOf)
 );
 
+const swapPencilMarks = action(
+    _ as PlayerState,
+    _ as number[],
+    'player/swap-pencil-marks',
+    (state, selection) => {
+        const board = [...state.board];
+        selection.forEach((index) => {
+            board[index] = {
+                ...board[index],
+                centreMarks: [...board[index].cornerMarks],
+                cornerMarks: [...board[index].centreMarks],
+            };
+        });
+        return { ...state, board };
+    }
+);
+
 const setInputMode = action(
     _ as PlayerState,
     _ as InputMode,
@@ -223,6 +246,7 @@ const redo = action(
 
 export type PlayerAction =
     | GetAction<typeof setCellValue>
+    | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setInputMode>
     | GetAction<typeof cycleInputMode>
     | GetAction<typeof setSettings>
@@ -232,6 +256,7 @@ export type PlayerAction =
 export default merge<PlayerState>(
     defaultState(),
     setCellValue,
+    swapPencilMarks,
     setInputMode,
     cycleInputMode,
     setSettings,
