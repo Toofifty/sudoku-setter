@@ -110,11 +110,25 @@ const defaultState = (): PlayerState => ({
     }),
 });
 
+// action intended to allow automations
+// to commit changes to the board that are
+// separately tracked in history to the move
+// that triggered them
+const commitBoard = action(
+    _ as PlayerState,
+    _ as PlayerCell[],
+    'player/commit-board',
+    (state, board) => {
+        return { ...state, board: [...board] };
+    },
+    saveHistory<PlayerState>(...trackHistoryOf)
+);
+
 const setCellValue = action(
     _ as PlayerState,
     _ as { selection: number[]; value?: number },
     'player/set-cell-value',
-    (state, { selection, value }) => {
+    (state, { selection, value }, dispatch) => {
         if (selection.length === 0) {
             return state;
         }
@@ -167,11 +181,18 @@ const setCellValue = action(
             }
         });
 
+        const mutableBoard = [...board];
         runAutomations(
             state.settings,
             {
-                get: (index) => board[index],
-                set: (index, cell) => (board[index] = cell),
+                get: (index) => mutableBoard[index],
+                set: (index, cell) => (mutableBoard[index] = cell),
+                commit: (index, cell) => (board[index] = cell),
+                flush: () =>
+                    dispatch({
+                        type: 'player/commit-board',
+                        payload: mutableBoard,
+                    }),
             },
             { selection, value, mode }
         );
@@ -245,6 +266,7 @@ const redo = action(
 );
 
 export type PlayerAction =
+    | GetAction<typeof commitBoard>
     | GetAction<typeof setCellValue>
     | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setInputMode>
@@ -255,6 +277,7 @@ export type PlayerAction =
 
 export default merge<PlayerState>(
     defaultState(),
+    commitBoard,
     setCellValue,
     swapPencilMarks,
     setInputMode,

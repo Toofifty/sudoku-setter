@@ -1,6 +1,6 @@
 import { InputMode } from 'reducers/player';
 import * as automations from './automations';
-import { Getter, Setter } from './types';
+import { Accessors } from './types';
 
 type Settings = {
     [K in keyof typeof automations]: boolean;
@@ -8,7 +8,7 @@ type Settings = {
 
 export const runAutomations = (
     settings: Settings,
-    accessors: { get: Getter; set: Setter },
+    accessors: Accessors,
     event: {
         selection: number[];
         value?: number;

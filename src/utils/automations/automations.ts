@@ -4,7 +4,7 @@ import { intersection } from 'utils/intersection';
 import { Automation } from './types';
 
 export const autoFixPencilMarks: Automation = (
-    { get, set },
+    { get, commit, flush },
     { selection, value, mode }
 ) => {
     if (mode !== 'digit') return;
@@ -13,7 +13,7 @@ export const autoFixPencilMarks: Automation = (
         .flat()
         .forEach((affectedIndex) => {
             const cell = get(affectedIndex);
-            set(affectedIndex, {
+            commit(affectedIndex, {
                 ...cell,
                 centreMarks: cell.centreMarks.filter((m) => m !== value),
                 cornerMarks: cell.cornerMarks.filter((m) => m !== value),
@@ -22,7 +22,7 @@ export const autoFixPencilMarks: Automation = (
 };
 
 export const autoPairs: Automation = (
-    { get, set },
+    { get, set, flush },
     { selection, value, mode }
 ) => {
     // skip over any selected cells with values
@@ -46,6 +46,7 @@ export const autoPairs: Automation = (
         return;
     }
 
+    let paired = false;
     regionIndices(getCellAt(selection[0]), true).forEach((region) => {
         // if both selections aren't in this region, skip it
         if (selection.some((index) => !region.includes(index))) {
@@ -65,6 +66,7 @@ export const autoPairs: Automation = (
         });
 
         if (isPair) {
+            paired = true;
             selection.forEach((index) => {
                 const cell = get(index);
                 set(index, {
@@ -76,5 +78,21 @@ export const autoPairs: Automation = (
         }
     });
 
+    if (paired) {
+        flush();
+    }
+
     // TODO: make this work with N tuples
+};
+
+export const autoWriteSnyder: Automation = (
+    { get, set },
+    { selection, value, mode }
+) => {
+    if (mode !== 'digit' || !value) {
+        return;
+    }
+
+    // if only 1 candidate of the current value left (box-by-box)
+    // promote it to a value
 };
