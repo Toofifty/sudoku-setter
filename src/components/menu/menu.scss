@@ -1,6 +1,7 @@
 @import 'styles';
 
-.menu {
+// 2x root required to override spectre styles
+:root:root .menu {
     padding: $sp-16;
     box-shadow: none;
     border: 1px solid $grey-300;

@@ -1,9 +1,10 @@
 @import 'styles';
 
-:root .context-menu {
+// 2x root required to override menu styles
+:root:root .context-menu {
     width: min-content;
     min-width: 280px;
-    border-radius: 8px;
+    border-radius: 4px;
 
     position: fixed;
     left: var(--x, -10000px);
@@ -11,6 +12,7 @@
 
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.1s, box-shadow 0.1s;
     box-shadow: 0 0 0 2px $purple-200-2;
 
     &:hover {
@@ -19,7 +21,6 @@
 
     &--visible {
         opacity: 1;
-        transition: opacity 0.1s, box-shadow 0.1s;
         pointer-events: initial;
     }
 
