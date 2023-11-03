@@ -22,6 +22,18 @@ const ControlBox = () => {
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('player'));
 
+    const givenBoard = useSelector((state) => state.puzzle.board);
+    const playerBoard = useSelector((state) => state.player.board);
+
+    const isDigitComplete = (digit: number) => {
+        const isDigit = (cell: { value?: number }) => cell.value === digit;
+        return (
+            givenBoard.filter(isDigit).length +
+                playerBoard.filter(isDigit).length >=
+            9
+        );
+    };
+
     const setSelectionValue = useAction('shared/set-selection-value');
 
     const openSettingsModal = useModal(
@@ -72,6 +84,7 @@ const ControlBox = () => {
                             key={n}
                             onClick={() => setSelectionValue(n)}
                             onMouseDown={preventFocus}
+                            disabled={isDigitComplete(n)}
                         >
                             {n}
                         </button>

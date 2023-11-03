@@ -224,7 +224,8 @@ const swapPencilMarks = action(
             };
         });
         return { ...state, board };
-    }
+    },
+    saveHistory<PlayerState>(...trackHistoryOf)
 );
 
 const setInputMode = action(
