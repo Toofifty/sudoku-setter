@@ -1,4 +1,3 @@
-import { getCoord } from 'utils/sudoku';
 import { InterCell, SolvePayload } from './types';
 import {
     solveNakedSingles,
@@ -8,6 +7,7 @@ import {
     solveNakedTuples,
     solveLockedCandidates,
     solveThermos,
+    solveArrows,
     solveKillerCages,
     solveAntiKing,
     solveAntiKnight,
@@ -18,6 +18,7 @@ import {
 import { isFilled, hasEmptyCell } from './helper';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
 import { SolveHistory, print } from './solvers/history';
+import { permutationsWithSum } from 'utils/permutations';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };
 
@@ -52,6 +53,7 @@ const noop = (a: any) => a;
 const solveStep = ({
     board,
     thermos,
+    arrows,
     killerCages,
     algorithms,
 }: SolvePayload) => {
@@ -59,6 +61,8 @@ const solveStep = ({
     // console.time('solve step');
 
     const history: SolveHistory = [];
+
+    console.log(permutationsWithSum(36, 8, true));
 
     // prepare cells
     let intermediate: InterCell[] = board.map((cell, i) => ({
@@ -82,6 +86,10 @@ const solveStep = ({
     // solve particular sudokus
     if (thermos && algorithms.thermos) {
         intermediate = intermediate.map(solveThermos(thermos));
+    }
+
+    if (arrows && algorithms.arrows) {
+        intermediate = intermediate.map(solveArrows(history, arrows));
     }
 
     if (killerCages && algorithms.killerCages) {

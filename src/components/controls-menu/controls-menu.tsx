@@ -221,6 +221,18 @@ const ControlsMenu = () => {
                 </MenuItem>
                 <MenuItem>
                     <Toggle
+                        checked={algorithms.arrows}
+                        onChange={() =>
+                            setAlgorithms({
+                                arrows: !algorithms.arrows,
+                            })
+                        }
+                    >
+                        Arrow sudoku
+                    </Toggle>
+                </MenuItem>
+                <MenuItem>
+                    <Toggle
                         checked={algorithms.killerCages}
                         onChange={() =>
                             setAlgorithms({

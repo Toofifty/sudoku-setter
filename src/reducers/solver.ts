@@ -11,6 +11,7 @@ export interface SolverState {
         xWing: boolean;
         yWing: boolean;
         thermos: boolean;
+        arrows: boolean;
         killerCages: boolean;
         antiKing: boolean;
         antiKnight: boolean;
@@ -38,6 +39,7 @@ const defaultState = (): SolverState => ({
         xWing: true,
         yWing: true,
         thermos: true,
+        arrows: true,
         killerCages: true,
         antiKing: false,
         antiKnight: false,

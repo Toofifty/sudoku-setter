@@ -1,6 +1,6 @@
 import { allBoxIndices, regionIndices } from 'utils/solve/helper';
 import { getCellAt } from 'utils/sudoku';
-import { intersection } from 'utils/intersection';
+import { intersection } from 'utils';
 import { Automation } from './types';
 import { range } from 'utils/misc';
 

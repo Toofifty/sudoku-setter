@@ -15,6 +15,10 @@ export const rowIndices = (pos: Position, includeSelf = false) => {
     return row;
 };
 
+export const allRowIndices = () => {
+    return range(0, 9).map((r) => range(0, 9).map((c) => r * 9 + c));
+};
+
 export const column = <T>(board: T[], pos: Position, includeSelf = false) => {
     const column = board.filter((_, i) => i % 9 === pos.x);
     if (!includeSelf) return column.filter((_, i) => i !== pos.y);
@@ -25,6 +29,10 @@ export const columnIndices = (pos: Position, includeSelf = false) => {
     const column = range(0, 9).map((n) => n * 9 + pos.x);
     if (!includeSelf) return column.filter((n) => n !== getCellIndex(pos));
     return column;
+};
+
+export const allColumnIndices = () => {
+    return range(0, 9).map((c) => range(0, 9).map((r) => r * 9 + c));
 };
 
 export const box = <T>(board: T[], pos: Position, includeSelf = false) => {

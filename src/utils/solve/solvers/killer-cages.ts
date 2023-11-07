@@ -1,8 +1,8 @@
 import { CellSolver } from './types';
 import { isFilled } from '../helper';
-import { range, sum } from 'utils/misc';
 import { InterCell } from '../types';
 import { KillerCage } from 'utils/sudoku-types';
+import { range, sum, except } from 'utils';
 
 const validOptions = (total: number, cells: number, perm: number[] = []) => {
     let valid: number[][] = [];
@@ -18,8 +18,6 @@ const validOptions = (total: number, cells: number, perm: number[] = []) => {
     }
     return valid;
 };
-
-const except = <T>(arr: T[], item: T) => arr.filter((v) => v !== item);
 
 const canFillCage = (options: number[], cage: InterCell[]) => {
     if (cage.length === 1)

@@ -1,4 +1,4 @@
-import { intersection } from './intersection';
+import { intersection } from './array';
 import {
     boxIndices,
     columnIndices,

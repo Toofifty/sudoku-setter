@@ -33,8 +33,6 @@ const BoardContainer = () => {
         };
     }, []);
 
-    console.log(scale);
-
     return (
         <div
             className="board-container"

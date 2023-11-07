@@ -88,6 +88,7 @@ export const useSudokuSolver = () => {
             payload: {
                 board,
                 thermos: sudoku.thermos,
+                arrows: sudoku.arrows,
                 killerCages: sudoku.killerCages,
                 stepSolve: solver.stepSolve,
                 algorithms: solver.algorithms,
@@ -120,6 +121,7 @@ export const useSudokuSolver = () => {
             payload: {
                 board,
                 thermos: sudoku.thermos,
+                arrows: sudoku.arrows,
                 killerCages: sudoku.killerCages,
                 stepSolve: solver.stepSolve,
                 algorithms: solver.algorithms,

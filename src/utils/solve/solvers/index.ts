@@ -1,5 +1,6 @@
 export { solveAntiKing } from './anti-king';
 export { solveAntiKnight } from './anti-knight';
+export { solveArrows } from './arrows';
 export { solveHiddenPairs } from './hidden-pairs';
 export { solveHiddenSingles } from './hidden-singles';
 export { solveKillerCages } from './killer-cages';
