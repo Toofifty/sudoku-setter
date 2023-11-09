@@ -3,7 +3,7 @@
 :root:root {
     .button {
         border: none;
-        border-radius: 2px;
+        border-radius: 4px;
         padding: $sp-4 $sp-12;
         background: transparent;
         margin: 0;
@@ -14,7 +14,7 @@
         text-decoration: none;
 
         color: $grey-800;
-        border: 1px solid transparent;
+        border: 2px solid transparent;
         text-align: left;
 
         transition: 0.1s;
@@ -24,7 +24,7 @@
             border-color: $grey-300;
         }
 
-        &:focus {
+        &:focus-visible {
             @include focus-outline;
         }
 

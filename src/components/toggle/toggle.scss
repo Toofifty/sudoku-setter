@@ -6,7 +6,8 @@
         padding-left: $sp-48;
         color: $grey-800;
         margin: 0;
-        border: 1px solid transparent;
+        border: 2px solid transparent;
+        border-radius: 4px;
 
         @media (pointer: coarse) {
             padding: $sp-12 $sp-16;

@@ -2,18 +2,11 @@ import React from 'react';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Button from 'components/button';
-import Menu, { MenuCollapse, MenuDivider, MenuItem } from 'components/menu';
+import Menu, { MenuCollapse, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
-import PlayerSettingsModal from 'components/player-settings-modal';
-import useModal from 'hooks/use-modal';
 import './setter-controls-menu.scss';
 
 const SetterSolveMenu = () => {
-    const debugMode = useSelector((state) => state.ui.debugMode);
-    const toggleDebugMode = useAction('ui/toggle-debug-mode');
-    const hideSolution = useSelector((state) => state.ui.hideSolution);
-    const toggleHideSolution = useAction('ui/toggle-hide-solution');
-
     const stepSolve = useSelector((state) => state.solver.stepSolve);
     const setStepSolve = useAction('solver/toggle-step-solve');
     const lookahead = useSelector((state) => state.solver.lookahead);
@@ -21,103 +14,48 @@ const SetterSolveMenu = () => {
 
     const algorithms = useSelector((state) => state.solver.algorithms);
     const setAlgorithms = useAction('shared/set-algorithms');
-    const restrictions = useSelector((state) => state.puzzle.restrictions);
-    const setRestrictions = useAction('shared/set-restrictions');
 
     const triggerSolve = useAction('solver/trigger-solve');
-
-    const _reset = useAction('shared/reset');
-
-    const openPlayerSettingsModal = useModal(
-        <PlayerSettingsModal onClose={() => openPlayerSettingsModal(false)} />
-    );
-
-    const reset = () => {
-        _reset();
-        window.location.hash = '';
-    };
 
     return (
         <Menu exclusive className="controls">
             <MenuItem>
-                <Button
-                    primary
-                    wide
-                    href={`/puzzle/${window.location.hash}`}
-                    target="blank"
+                <Toggle
+                    checked={lookahead}
+                    onChange={() => setLookahead(!lookahead)}
                 >
-                    <i className="fad fa-play m-r-12" />
-                    Test puzzle
+                    Solve on change
+                </Toggle>
+            </MenuItem>
+            <MenuItem>
+                <Toggle
+                    checked={lookahead}
+                    onChange={() => setLookahead(!lookahead)}
+                >
+                    Enable look-ahead solve
+                </Toggle>
+            </MenuItem>
+            <MenuItem>
+                <Toggle
+                    checked={stepSolve}
+                    onChange={() => setStepSolve(!stepSolve)}
+                >
+                    Step-by-step solve
+                </Toggle>
+            </MenuItem>
+            <MenuItem>
+                <Button wide onClick={() => triggerSolve()}>
+                    <i className="fad fa-stopwatch m-r-12" />
+                    Run solve step
                 </Button>
             </MenuItem>
-            <MenuCollapse label="View">
-                <MenuItem>
-                    <Toggle
-                        sw
-                        checked={debugMode}
-                        onChange={() => toggleDebugMode()}
-                    >
-                        Debug mode
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Toggle
-                        sw
-                        checked={hideSolution}
-                        onChange={() => toggleHideSolution()}
-                    >
-                        Hide solution
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Button wide onClick={() => openPlayerSettingsModal(true)}>
-                        <i className="fad fa-wrench m-r-12" />
-                        Player settings
-                    </Button>
-                </MenuItem>
-            </MenuCollapse>
-            <MenuCollapse label="Restrictions">
-                <MenuItem>
-                    <Toggle disabled>Enable perimeter cells</Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Toggle
-                        checked={restrictions.antiKnight}
-                        onChange={() =>
-                            setRestrictions({
-                                antiKnight: !restrictions.antiKnight,
-                            })
-                        }
-                    >
-                        Anti-knight
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Toggle
-                        checked={restrictions.antiKing}
-                        onChange={() =>
-                            setRestrictions({
-                                antiKing: !restrictions.antiKing,
-                            })
-                        }
-                    >
-                        Anti-king
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Toggle
-                        checked={restrictions.uniqueDiagonals}
-                        onChange={() =>
-                            setRestrictions({
-                                uniqueDiagonals: !restrictions.uniqueDiagonals,
-                            })
-                        }
-                    >
-                        Unique diagonals
-                    </Toggle>
-                </MenuItem>
-            </MenuCollapse>
-            <MenuCollapse label="Solve algorithms" expandedByDefault>
+            <MenuItem>
+                <Button wide onClick={() => triggerSolve(true)}>
+                    <i className="fad fa-redo m-r-12" />
+                    Solve from scratch
+                </Button>
+            </MenuItem>
+            <MenuCollapse label="Sudoku solvers" expandedByDefault>
                 <MenuItem>
                     <Toggle checked disabled>
                         Naked singles
@@ -207,6 +145,8 @@ const SetterSolveMenu = () => {
                         Y-wings
                     </Toggle>
                 </MenuItem>
+            </MenuCollapse>
+            <MenuCollapse label="Variant solvers">
                 <MenuItem>
                     <Toggle
                         checked={algorithms.thermos}
@@ -295,55 +235,6 @@ const SetterSolveMenu = () => {
                     </Toggle>
                 </MenuItem>
             </MenuCollapse>
-            <MenuCollapse label="Solve configuration">
-                <MenuItem>
-                    <Toggle
-                        checked={lookahead}
-                        onChange={() => setLookahead(!lookahead)}
-                    >
-                        Enable look-ahead solve
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Toggle
-                        checked={stepSolve}
-                        onChange={() => setStepSolve(!stepSolve)}
-                    >
-                        Step-by-step solve
-                    </Toggle>
-                </MenuItem>
-                <MenuItem>
-                    <Button wide onClick={() => triggerSolve()}>
-                        <i className="fad fa-stopwatch m-r-12" />
-                        Run solve step
-                    </Button>
-                </MenuItem>
-                <MenuItem>
-                    <Button wide onClick={() => triggerSolve(true)}>
-                        <i className="fad fa-redo m-r-12" />
-                        Solve from scratch
-                    </Button>
-                </MenuItem>
-            </MenuCollapse>
-            <MenuDivider label="Puzzle" />
-            <MenuItem>
-                <Button wide onClick={() => reset()}>
-                    <i className="fad fa-times m-r-12" />
-                    Reset grid
-                </Button>
-            </MenuItem>
-            <MenuItem>
-                <Button wide disabled onClick={() => {}}>
-                    <i className="fad fa-save m-r-12" />
-                    Save draft
-                </Button>
-            </MenuItem>
-            <MenuItem>
-                <Button wide primary disabled onClick={() => {}}>
-                    <i className="fad fa-check m-r-12" />
-                    Publish
-                </Button>
-            </MenuItem>
         </Menu>
     );
 };

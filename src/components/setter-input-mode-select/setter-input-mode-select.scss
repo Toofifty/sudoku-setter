@@ -1,0 +1,22 @@
+@import 'styles';
+
+$button-size: 42px;
+
+:root:root .input-mode-select {
+    width: 100%;
+    display: flex;
+    gap: $sp-16;
+    justify-content: space-between;
+
+    &__mode-button {
+        height: $button-size;
+        width: $button-size;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.button--primary {
+            border-color: $purple-500;
+        }
+    }
+}

@@ -6,30 +6,30 @@ import { PuzzleState } from 'reducers/puzzle';
 import { UIState } from 'reducers/ui';
 import { SolverState } from 'reducers/solver';
 import { PlayerState } from 'reducers/player';
+import { SetterState } from 'reducers/setter';
 
 export const history = createBrowserHistory();
 
-export const queueDispatchMiddleware = (store: any) => (next: any) => (
-    action: RootActionType
-) => {
-    const queue: (RootActionType | (() => void))[] = [];
+export const queueDispatchMiddleware =
+    (store: any) => (next: any) => (action: RootActionType) => {
+        const queue: (RootActionType | (() => void))[] = [];
 
-    const flush = () => {
-        queue.forEach((action) => {
-            if (typeof action === 'function') return action();
-            return store.dispatch(action);
-        });
+        const flush = () => {
+            queue.forEach((action) => {
+                if (typeof action === 'function') return action();
+                return store.dispatch(action);
+            });
+        };
+
+        const dispatch = (action: RootActionType | (() => void)) => {
+            queue.push(action);
+        };
+
+        const res = next({ ...action, dispatch });
+        flush();
+
+        return res;
     };
-
-    const dispatch = (action: RootActionType | (() => void)) => {
-        queue.push(action);
-    };
-
-    const res = next({ ...action, dispatch });
-    flush();
-
-    return res;
-};
 
 export type DispatchFn = (action: RootActionType | (() => void)) => void;
 export type WithDispatch = { dispatch: DispatchFn };
@@ -46,6 +46,7 @@ export type RootState = {
     router: RouterState<any>;
     puzzle: PuzzleState;
     player: PlayerState;
+    setter: SetterState;
     solver: SolverState;
     ui: UIState;
 };
