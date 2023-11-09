@@ -5,13 +5,13 @@ import Modal from 'components/modal';
 import Menu, { MenuDivider, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
 import Button from 'components/button';
-import './settings-modal.scss';
+import './player-settings-modal.scss';
 
-interface SettingsModalProps {
+interface PlayerSettingsModalProps {
     onClose: () => void;
 }
 
-const SettingsModal = ({ onClose }: SettingsModalProps) => {
+const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
     const settings = useSelector((state) => state.player.settings);
     const setSettings = useAction('player/set-settings');
 
@@ -224,4 +224,4 @@ const SettingsModal = ({ onClose }: SettingsModalProps) => {
     );
 };
 
-export default SettingsModal;
+export default PlayerSettingsModal;

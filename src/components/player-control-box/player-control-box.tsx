@@ -1,19 +1,19 @@
 import React from 'react';
 import cx from 'classnames';
 import { range } from 'utils';
-import SettingsModal from 'components/settings-modal';
+import PlayerSettingsModal from 'components/player-settings-modal';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import useModal from 'hooks/use-modal';
 import { canUndoSelector, canRedoSelector } from 'utils/selectors';
 
-import './control-box.scss';
+import './player-control-box.scss';
 
 const preventFocus = (e: React.MouseEvent) => {
     e.preventDefault();
 };
 
-const ControlBox = () => {
+const PlayerControlBox = () => {
     const inputMode = useSelector((state) => state.player.inputMode);
     const setInputMode = useAction('player/set-input-mode');
 
@@ -36,8 +36,8 @@ const ControlBox = () => {
 
     const setSelectionValue = useAction('shared/set-selection-value');
 
-    const openSettingsModal = useModal(
-        <SettingsModal onClose={() => openSettingsModal(false)} />
+    const openPlayerSettingsModal = useModal(
+        <PlayerSettingsModal onClose={() => openPlayerSettingsModal(false)} />
     );
 
     return (
@@ -119,7 +119,7 @@ const ControlBox = () => {
             <div className="control-box__section">
                 <button
                     className="btn btn-light alone"
-                    onClick={() => openSettingsModal(true)}
+                    onClick={() => openPlayerSettingsModal(true)}
                 >
                     <i className="icon icon-more-horiz" />
                 </button>
@@ -132,4 +132,4 @@ const ControlBox = () => {
     );
 };
 
-export default ControlBox;
+export default PlayerControlBox;

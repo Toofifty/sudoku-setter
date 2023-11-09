@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
-import ControlBox from 'components/control-box';
+import PlayerControlBox from 'components/player-control-box';
 import PageLayout from 'components/page-layout';
 import ModalHost from 'components/modal-host';
 
@@ -25,7 +25,10 @@ const PlayerPage = () => {
 
     return (
         <>
-            <PageLayout board={<BoardContainer />} controls={<ControlBox />} />
+            <PageLayout
+                board={<BoardContainer />}
+                controls={<PlayerControlBox />}
+            />
             <ModalHost />
         </>
     );

@@ -3,12 +3,12 @@ import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Button from 'components/button';
 import Menu, { MenuCollapse, MenuDivider, MenuItem } from 'components/menu';
-import './controls-menu.scss';
 import Toggle from 'components/toggle';
-import SettingsModal from 'components/settings-modal';
+import PlayerSettingsModal from 'components/player-settings-modal';
 import useModal from 'hooks/use-modal';
+import './setter-controls-menu.scss';
 
-const ControlsMenu = () => {
+const SetterSolveMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
     const toggleDebugMode = useAction('ui/toggle-debug-mode');
     const hideSolution = useSelector((state) => state.ui.hideSolution);
@@ -28,8 +28,8 @@ const ControlsMenu = () => {
 
     const _reset = useAction('shared/reset');
 
-    const openSettingsModal = useModal(
-        <SettingsModal onClose={() => openSettingsModal(false)} />
+    const openPlayerSettingsModal = useModal(
+        <PlayerSettingsModal onClose={() => openPlayerSettingsModal(false)} />
     );
 
     const reset = () => {
@@ -70,7 +70,7 @@ const ControlsMenu = () => {
                     </Toggle>
                 </MenuItem>
                 <MenuItem>
-                    <Button wide onClick={() => openSettingsModal(true)}>
+                    <Button wide onClick={() => openPlayerSettingsModal(true)}>
                         <i className="fad fa-wrench m-r-12" />
                         Player settings
                     </Button>
@@ -348,4 +348,4 @@ const ControlsMenu = () => {
     );
 };
 
-export default ControlsMenu;
+export default SetterSolveMenu;
