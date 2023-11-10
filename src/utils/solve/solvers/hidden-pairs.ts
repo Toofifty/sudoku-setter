@@ -1,14 +1,13 @@
 import { CellSolver } from './types';
 import { getCellAt } from '../../sudoku';
 import { isFilled, row, column, box, getMarks } from '../helper';
-import { MarkedCell } from '../../../types';
 
 export const solveHiddenPairs: CellSolver = (cell, i, board) => {
     const pos = getCellAt(i);
 
     if (isFilled(cell)) return cell;
 
-    // n boxes have only the same n digits markled in -
+    // n boxes have only the same n digits marked in -
     // in this case, remove them from the other cells
     // (rows/columns/boxes)
     [

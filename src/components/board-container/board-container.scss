@@ -11,18 +11,16 @@ $max-size: 800px;
 
 .board-container {
     position: relative;
-    background: $cell-outline;
     border-radius: 4px;
     --scale: 100;
     --mobile-scale: 100;
-    padding: $padding;
 
-    width: calc(1000px * var(--scale) / 100 + #{$padding});
-    height: calc(1000px * var(--scale) / 100 + #{$padding});
+    width: calc(1000px * var(--scale) / 100 + #{$padding / 2});
+    height: calc(1000px * var(--scale) / 100 + #{$padding / 2});
 
     @include mobile {
-        width: calc(1000px * var(--mobile-scale) / 100 + #{$padding});
-        height: calc(1000px * var(--mobile-scale) / 100 + #{$padding});
+        width: calc(1000px * var(--mobile-scale) / 100 + #{$padding / 2});
+        height: calc(1000px * var(--mobile-scale) / 100 + #{$padding / 2});
     }
 
     .board-sizer {

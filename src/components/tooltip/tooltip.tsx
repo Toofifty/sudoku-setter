@@ -9,8 +9,23 @@ import cx from 'classnames';
 import { useDebouncedCallback } from 'utils/use-debounced-callback';
 
 import './tooltip.scss';
+import { Portal } from 'react-portal';
 
-const INTERACTION_DELAY = 500;
+const getRect = (element: HTMLElement) => {
+    const { width, height } = element.getBoundingClientRect();
+
+    let left = 0;
+    let top = 0;
+    while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
+        left += element.offsetLeft - element.scrollLeft;
+        top += element.offsetTop - element.scrollTop;
+        element = element.offsetParent as HTMLElement;
+    }
+
+    return { top, left, width, height };
+};
+
+const INTERACTION_DELAY = 400;
 
 interface TooltipProps {
     children: React.ReactNode;
@@ -25,15 +40,28 @@ const Tooltip = ({
     className,
     anchor = 'top',
 }: TooltipProps) => {
+    const [initialRender, setInitialRender] = useState(true);
     const [hovered, setHovered] = useState(false);
-    const [childRect, setChildRect] = useState<DOMRect>();
+    const [childRect, setChildRect] = useState<{
+        top: number;
+        left: number;
+        width: number;
+        height: number;
+    }>();
     const childRef = useRef<HTMLDivElement>();
 
     useEffect(() => {
         if (childRef.current) {
-            setChildRect(childRef.current.getBoundingClientRect());
+            setChildRect(getRect(childRef.current));
         }
-    }, []);
+        if (initialRender) {
+            // position can be incorrect on initial render
+            // so we trigger this again later
+            setTimeout(() => {
+                setInitialRender(false);
+            }, 100);
+        }
+    }, [children, initialRender]);
 
     const [onHover, clearHover] = useDebouncedCallback(() => {
         setHovered(true);
@@ -42,8 +70,8 @@ const Tooltip = ({
     const style = (
         childRect
             ? {
-                  '--x': childRect.x + 'px',
-                  '--y': childRect.y + 'px',
+                  '--x': childRect.left + 'px',
+                  '--y': childRect.top + 'px',
                   '--width': childRect.width + 'px',
                   '--height': childRect.height + 'px',
               }
@@ -56,16 +84,19 @@ const Tooltip = ({
 
     return (
         <>
-            <div
-                className={cx(
-                    'x-tooltip',
-                    `x-tooltip--${anchor}`,
-                    hovered && 'x-tooltip--hovered'
-                )}
-                style={style}
-            >
-                {content}
-            </div>
+            <Portal>
+                <div
+                    className={cx(
+                        'x-tooltip',
+                        `x-tooltip--${anchor}`,
+                        childRect && 'x-tooltip--animatable',
+                        hovered && 'x-tooltip--hovered'
+                    )}
+                    style={style}
+                >
+                    {content}
+                </div>
+            </Portal>
             {cloneElement(children, {
                 onMouseEnter: (e: React.MouseEvent) => {
                     onHover();

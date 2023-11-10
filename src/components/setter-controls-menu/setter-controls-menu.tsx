@@ -5,6 +5,7 @@ import Button from 'components/button';
 import Menu, { MenuCollapse, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
 import './setter-controls-menu.scss';
+import Tooltip from 'components/tooltip';
 
 const SetterSolveMenu = () => {
     const stepSolve = useSelector((state) => state.solver.stepSolve);
@@ -57,93 +58,187 @@ const SetterSolveMenu = () => {
             </MenuItem>
             <MenuCollapse label="Sudoku solvers" expandedByDefault>
                 <MenuItem>
-                    <Toggle checked disabled>
-                        Naked singles
-                    </Toggle>
+                    <Tooltip
+                        content={
+                            <>
+                                If a cell only has one candidate, then it must
+                                be that value.
+                            </>
+                        }
+                        anchor="left"
+                    >
+                        <Toggle checked disabled>
+                            Naked singles
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.hiddenSingles}
-                        onChange={() =>
-                            setAlgorithms({
-                                hiddenSingles: !algorithms.hiddenSingles,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If a cell is the only position for a candidate
+                                in the row, column, or box, then it must be that
+                                value.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Hidden singles
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.hiddenSingles}
+                            onChange={() =>
+                                setAlgorithms({
+                                    hiddenSingles: !algorithms.hiddenSingles,
+                                })
+                            }
+                        >
+                            Hidden singles
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.nakedPairs}
-                        onChange={() =>
-                            setAlgorithms({
-                                nakedPairs: !algorithms.nakedPairs,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If two cells in a row, column or box share
+                                exactly two identical candidates, then those
+                                digits cannot appear in any other cell that sees
+                                both.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Naked pairs
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.nakedPairs}
+                            onChange={() =>
+                                setAlgorithms({
+                                    nakedPairs: !algorithms.nakedPairs,
+                                })
+                            }
+                        >
+                            Naked pairs
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.hiddenPairs}
-                        onChange={() =>
-                            setAlgorithms({
-                                hiddenPairs: !algorithms.hiddenPairs,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If two cells in a row, column or box are the
+                                only two that can contain two identical
+                                candidates, then those cells cannot contain any
+                                other digits.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Hidden pairs
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.hiddenPairs}
+                            onChange={() =>
+                                setAlgorithms({
+                                    hiddenPairs: !algorithms.hiddenPairs,
+                                })
+                            }
+                        >
+                            Hidden pairs
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.nakedTuples}
-                        onChange={() =>
-                            setAlgorithms({
-                                nakedTuples: !algorithms.nakedTuples,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If <strong>N</strong> cells in a row, column or
+                                box share exactly <strong>N</strong> identical
+                                candidates, then those digits cannot appear in
+                                any other cell that sees both.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Naked tuples (3+)
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.nakedTuples}
+                            onChange={() =>
+                                setAlgorithms({
+                                    nakedTuples: !algorithms.nakedTuples,
+                                })
+                            }
+                        >
+                            Naked tuples (3+)
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.lockedCandidates}
-                        onChange={() =>
-                            setAlgorithms({
-                                lockedCandidates: !algorithms.lockedCandidates,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If a candidate is locked into a row or column
+                                within a box, then it cannot appear in another
+                                box in that row or column.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Locked candidates
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.lockedCandidates}
+                            onChange={() =>
+                                setAlgorithms({
+                                    lockedCandidates:
+                                        !algorithms.lockedCandidates,
+                                })
+                            }
+                        >
+                            Locked candidates
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.xWing}
-                        onChange={() =>
-                            setAlgorithms({
-                                xWing: !algorithms.xWing,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If a candidate is locked into exactly two places
+                                in two columns (i.e. forms an <strong>X</strong>
+                                ), then it cannot appear elsewhere on the two
+                                rows.
+                            </>
                         }
+                        anchor="left"
                     >
-                        X-wings
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.xWing}
+                            onChange={() =>
+                                setAlgorithms({
+                                    xWing: !algorithms.xWing,
+                                })
+                            }
+                        >
+                            X-wings
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
                 <MenuItem>
-                    <Toggle
-                        checked={algorithms.yWing}
-                        onChange={() =>
-                            setAlgorithms({
-                                yWing: !algorithms.yWing,
-                            })
+                    <Tooltip
+                        content={
+                            <>
+                                If each of three cells in a L-shape contain
+                                exactly two of a set of three candidates, then
+                                the candidate that is shared between both ends
+                                of the L can be removed from any other cell that
+                                sees both.
+                            </>
                         }
+                        anchor="left"
                     >
-                        Y-wings
-                    </Toggle>
+                        <Toggle
+                            checked={algorithms.yWing}
+                            onChange={() =>
+                                setAlgorithms({
+                                    yWing: !algorithms.yWing,
+                                })
+                            }
+                        >
+                            Y-wings
+                        </Toggle>
+                    </Tooltip>
                 </MenuItem>
             </MenuCollapse>
             <MenuCollapse label="Variant solvers">
