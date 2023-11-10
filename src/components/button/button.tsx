@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import './button.scss';
@@ -37,54 +37,65 @@ type ButtonProps = BaseButtonProps &
         | ExternalLinkButtonProps
     );
 
-const Button = ({
-    children,
-    className,
-    primary,
-    danger,
-    wide,
-    disabled,
-    ...rest
-}: ButtonProps) => {
-    const classNames = cx('button', className, {
-        'button--primary': primary,
-        'button--danger': danger,
-        'button--wide': wide,
-        'button--disabled': disabled,
-    });
+const Button = forwardRef<HTMLElement, ButtonProps>(
+    (
+        { children, className, primary, danger, wide, disabled, ...rest },
+        ref
+    ) => {
+        const classNames = cx('button', className, {
+            'button--primary': primary,
+            'button--danger': danger,
+            'button--wide': wide,
+            'button--disabled': disabled,
+        });
 
-    if ('onClick' in rest) {
-        return (
-            <button className={classNames} type="button" {...rest}>
-                {children}
-            </button>
-        );
-    }
+        if ('onClick' in rest) {
+            return (
+                <button
+                    ref={ref as React.Ref<HTMLButtonElement>}
+                    className={classNames}
+                    type="button"
+                    {...rest}
+                >
+                    {children}
+                </button>
+            );
+        }
 
-    if ('submit' in rest) {
+        if ('submit' in rest) {
+            return (
+                <button
+                    ref={ref as React.Ref<HTMLButtonElement>}
+                    className={classNames}
+                    type={rest.submit ? 'submit' : 'button'}
+                >
+                    {children}
+                </button>
+            );
+        }
+
+        if ('href' in rest) {
+            return (
+                <a
+                    ref={ref as React.Ref<HTMLAnchorElement>}
+                    className={classNames}
+                    {...rest}
+                >
+                    {children}
+                </a>
+            );
+        }
+
         return (
-            <button
+            <Link
+                ref={ref as React.Ref<HTMLAnchorElement>}
                 className={classNames}
-                type={rest.submit ? 'submit' : 'button'}
+                {...rest}
             >
                 {children}
-            </button>
+            </Link>
         );
     }
-
-    if ('href' in rest) {
-        return (
-            <a className={classNames} {...rest}>
-                {children}
-            </a>
-        );
-    }
-
-    return (
-        <Link className={classNames} {...rest}>
-            {children}
-        </Link>
-    );
-};
+);
 
 export default Button;

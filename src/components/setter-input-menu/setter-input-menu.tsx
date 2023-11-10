@@ -7,6 +7,7 @@ import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import PlayerSettingsModal from 'components/player-settings-modal';
 import SetterInputModeSelect from 'components/setter-input-mode-select';
+import Tooltip from 'components/tooltip/tooltip';
 
 const SetterInputMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);

@@ -1,0 +1,69 @@
+@import 'styles';
+
+$dist: $sp-8;
+
+.x-tooltip {
+    $b: &;
+    position: absolute;
+    pointer-events: none;
+
+    opacity: 0;
+
+    background: $grey-900;
+    box-shadow: 0 0 0 2px $purple-200-2;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.6rem;
+    padding: $sp-4 $sp-8;
+
+    max-width: 200px;
+
+    transition: 0.2s;
+    z-index: 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+
+    > * {
+        margin: 0;
+    }
+
+    &--hovered {
+        opacity: 1;
+    }
+
+    &--top {
+        translate: calc(var(--width) / 2 - 50%) -100%;
+
+        &#{$b}--hovered {
+            translate: calc(var(--width) / 2 - 50%) calc(-100% - $dist);
+        }
+    }
+
+    &--bottom {
+        translate: calc(var(--width) / 2 - 50%) var(--height);
+
+        &#{$b}--hovered {
+            translate: calc(var(--width) / 2 - 50%) calc(var(--height) + $dist);
+        }
+    }
+
+    &--left {
+        translate: -100% calc(var(--height) / 2 - 50%);
+
+        &#{$b}--hovered {
+            translate: calc(-100% - $dist) calc(var(--height) / 2 - 50%);
+        }
+    }
+
+    &--right {
+        translate: var(--width) calc(var(--height) / 2 - 50%);
+
+        &#{$b}--hovered {
+            translate: calc(var(--width) + $dist) calc(var(--height) / 2 - 50%);
+        }
+    }
+}
+
+.theme-dark .x-tooltip {
+    color: $grey-900;
+    background: $grey-200;
+    box-shadow: 0 0 0 2px $purple-400;
+}
