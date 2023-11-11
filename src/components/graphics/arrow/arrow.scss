@@ -27,6 +27,8 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
     @include fill;
     overflow: visible;
 
+    opacity: 0;
+
     &__single {
         @include fill;
         z-index: 1;

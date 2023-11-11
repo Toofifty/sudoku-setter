@@ -21,12 +21,12 @@
     height: 100%;
 
     g {
-        filter: radial-outline(2px, white);
+        filter: radial-outline(1px, white);
     }
 }
 
 .theme-dark .background-svg g {
-    filter: radial-outline(2px, black);
+    filter: radial-outline(1px, $black);
 }
 
 .svg-thermo {
@@ -34,7 +34,25 @@
     stroke: $grey-400;
 
     &--ghost {
-        fill: $grey-200;
-        stroke: $grey-200;
+        fill: $grey-300;
+        stroke: $grey-300;
     }
+}
+.theme-dark .svg-thermo {
+    fill: $grey-600;
+    stroke: $grey-600;
+
+    &--ghost {
+        fill: $grey-500;
+        stroke: $grey-500;
+    }
+}
+
+.svg-arrow {
+    fill: white;
+    stroke: $grey-300;
+}
+.theme-dark .svg-arrow {
+    fill: $black;
+    stroke: $grey-400;
 }

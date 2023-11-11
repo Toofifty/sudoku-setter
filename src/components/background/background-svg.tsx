@@ -1,8 +1,9 @@
 import React from 'react';
 import { SCALE } from './consts';
+import ThermoGraphics from './thermo-graphics';
+import ArrowGraphics from './arrow-graphics';
 
 import './background-svg.scss';
-import ThermoGraphics from './thermo-graphics';
 
 const BackgroundSVG = () => {
     return (
@@ -13,6 +14,7 @@ const BackgroundSVG = () => {
             className="background-svg"
         >
             <ThermoGraphics />
+            <ArrowGraphics />
         </svg>
     );
 };

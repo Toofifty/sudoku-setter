@@ -2,11 +2,15 @@ import { getPosition } from 'utils/sudoku';
 
 export const SCALE = 900;
 
-export const THERMO_BULB_SIZE = 0.625;
-export const THERMO_LINE_WIDTH = 0.125;
+export const THERMO_BULB_SIZE = 0.75;
+export const THERMO_LINE_WIDTH = 0.2;
 
-export const GHOST_THERMO_BULB_SIZE = 0.5;
-export const GHOST_THERMO_LINE_WIDTH = 0.0625;
+export const GHOST_THERMO_BULB_SIZE = 0.625;
+export const GHOST_THERMO_LINE_WIDTH = 0.1;
+
+export const ARROW_PILL_SIZE = 0.625;
+export const ARROW_LINE_WIDTH = 0.0625;
+export const ARROW_HEAD_SIZE = 0.15;
 
 export const getSVGPosition = (index: number) => {
     const position = getPosition(index);
