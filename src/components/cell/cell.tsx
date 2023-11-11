@@ -1,11 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import cx from 'classnames';
-import useContextMenu from 'hooks/use-context-menu';
 import useSelector from 'hooks/use-selector';
-import CellContextMenu from './cell-context-menu';
-import './cell.scss';
 import { isSetModeSelector } from 'utils/selectors';
 import Marks from './marks';
+import './cell.scss';
 
 interface CellProps {
     index: number;
@@ -20,9 +18,6 @@ interface CellProps {
     highlighted?: boolean;
     focused?: boolean;
     targetValue: number;
-    onFocus?: () => void;
-    onMouseEnter?: (e: React.MouseEvent) => void;
-    onMouseDown: (e: React.MouseEvent) => void;
 }
 
 const Cell = ({
@@ -33,13 +28,10 @@ const Cell = ({
     centreMarks = [],
     given,
     selection,
-    onMouseDown,
     index,
     focused,
     highlighted,
     targetValue,
-    onFocus,
-    onMouseEnter,
 }: CellProps) => {
     const isSetMode = useSelector(isSetModeSelector);
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -52,11 +44,6 @@ const Cell = ({
             btn.current.focus();
         }
     }, [focused]);
-
-    const onContextMenu = useContextMenu(
-        !!focused,
-        <CellContextMenu index={index} />
-    );
 
     const selected = selection.includes(index);
     const matches =
@@ -82,13 +69,6 @@ const Cell = ({
                 incorrect && 'cell--incorrect',
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
-            onContextMenu={onContextMenu}
-            onFocus={onFocus}
-            onPointerDown={onMouseDown}
-            onPointerMove={(e) => {
-                onMouseEnter?.(e);
-                (e.target as any).releasePointerCapture(e.pointerId);
-            }}
         >
             {(!hideSolution || given) &&
                 (value ? (

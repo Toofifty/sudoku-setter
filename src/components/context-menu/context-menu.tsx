@@ -3,12 +3,12 @@ import cx from 'classnames';
 import { Portal } from 'react-portal';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
-import './context-menu.scss';
 import { isEventOver } from 'utils';
 import Menu from 'components/menu';
+import './context-menu.scss';
 
-const X_OFFSET = 16;
-const Y_OFFSET = -16;
+const X_OFFSET = 8;
+const Y_OFFSET = 0;
 const SAFE_AREA_PADDING = 16;
 
 interface ContextMenuProps {

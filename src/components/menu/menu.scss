@@ -6,6 +6,7 @@
     box-shadow: none;
     border: 1px solid $grey-300;
     border-radius: 2px;
+    user-select: none;
 
     &--no-padding {
         padding: 0;

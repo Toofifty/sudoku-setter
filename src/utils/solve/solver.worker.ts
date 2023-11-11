@@ -62,8 +62,6 @@ const solveStep = ({
 
     const history: SolveHistory = [];
 
-    console.log(permutationsWithSum(36, 8, true));
-
     // prepare cells
     let intermediate: InterCell[] = board.map((cell, i) => ({
         ...defaultInterCell,

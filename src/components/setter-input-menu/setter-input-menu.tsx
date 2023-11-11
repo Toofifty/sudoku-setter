@@ -7,7 +7,6 @@ import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import PlayerSettingsModal from 'components/player-settings-modal';
 import SetterInputModeSelect from 'components/setter-input-mode-select';
-import Tooltip from 'components/tooltip/tooltip';
 
 const SetterInputMenu = () => {
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -16,7 +15,7 @@ const SetterInputMenu = () => {
     const toggleHideSolution = useAction('ui/toggle-hide-solution');
 
     const inputMode = useSelector((state) => state.setter.inputMode);
-    const setInputMode = useAction('setter/set-input-mode');
+    const setInputMode = useAction('shared/set-setter-input-mode');
 
     const restrictions = useSelector((state) => state.puzzle.restrictions);
     const setRestrictions = useAction('shared/set-restrictions');

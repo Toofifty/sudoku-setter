@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Background from 'components/background';
 import Board from 'components/board';
 import './board-container.scss';
+import InteractionLayer from 'components/interaction-layer';
 
 const MIN_SCALE = 80;
 
@@ -41,6 +42,7 @@ const BoardContainer = () => {
             <div className="board-sizer">
                 <Background />
                 <Board />
+                <InteractionLayer />
             </div>
         </div>
     );

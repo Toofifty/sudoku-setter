@@ -2,6 +2,8 @@ import { RootState, DispatchFn } from 'store';
 import { _, action, merge, GetAction } from './merge';
 import { isPlayModeSelector } from 'utils/selectors';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
+import { SetterInputMode } from './setter';
+import { InteractionData } from './interaction-handlers/types';
 
 // put reducers here if:
 // - they require reading root state (or state from another slice)
@@ -142,6 +144,20 @@ const setAlgorithms = action(
     }
 );
 
+const setSetterInputMode = action(
+    _ as RootState,
+    _ as SetterInputMode,
+    'shared/set-setter-input-mode',
+    (state, inputMode, dispatch: DispatchFn) => {
+        if (inputMode !== 'digit') {
+            dispatch({ type: 'ui/clear-focus', payload: undefined });
+        }
+
+        dispatch({ type: 'setter/set-input-mode', payload: inputMode });
+        return state;
+    }
+);
+
 const createThermo = action(
     _ as RootState,
     _ as Thermo,
@@ -266,12 +282,52 @@ const redo = action(
     }
 );
 
+const interactStart = action(
+    _ as RootState,
+    _ as InteractionData,
+    'shared/interact-start',
+    (state, interaction, dispatch: DispatchFn) => {
+        state.ui.interactionHandler.onInteractStart?.(
+            { state, dispatch },
+            interaction
+        );
+        return state;
+    }
+);
+
+const interactMove = action(
+    _ as RootState,
+    _ as InteractionData,
+    'shared/interact-move',
+    (state, interaction, dispatch: DispatchFn) => {
+        state.ui.interactionHandler.onInteractMove?.(
+            { state, dispatch },
+            interaction
+        );
+        return state;
+    }
+);
+
+const interactEnd = action(
+    _ as RootState,
+    _ as InteractionData,
+    'shared/interact-end',
+    (state, interaction, dispatch: DispatchFn) => {
+        state.ui.interactionHandler.onInteractEnd?.(
+            { state, dispatch },
+            interaction
+        );
+        return state;
+    }
+);
+
 export type SharedAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setSelectionValue>
     | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setRestrictions>
     | GetAction<typeof setAlgorithms>
+    | GetAction<typeof setSetterInputMode>
     | GetAction<typeof createThermo>
     | GetAction<typeof deleteThermo>
     | GetAction<typeof createArrow>
@@ -280,7 +336,10 @@ export type SharedAction =
     | GetAction<typeof deleteKillerCage>
     | GetAction<typeof reset>
     | GetAction<typeof undo>
-    | GetAction<typeof redo>;
+    | GetAction<typeof redo>
+    | GetAction<typeof interactStart>
+    | GetAction<typeof interactMove>
+    | GetAction<typeof interactEnd>;
 
 export default merge<RootState>(
     undefined,
@@ -289,6 +348,7 @@ export default merge<RootState>(
     swapPencilMarks,
     setRestrictions,
     setAlgorithms,
+    setSetterInputMode,
     createThermo,
     deleteThermo,
     createArrow,
@@ -297,5 +357,8 @@ export default merge<RootState>(
     deleteKillerCage,
     reset,
     undo,
-    redo
+    redo,
+    interactStart,
+    interactMove,
+    interactEnd
 );

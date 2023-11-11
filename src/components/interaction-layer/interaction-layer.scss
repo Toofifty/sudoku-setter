@@ -1,0 +1,49 @@
+@import 'styles';
+
+$opacity: 0.1;
+$centre-width: 5fr;
+
+.interaction-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: repeat(9, auto);
+    opacity: 0;
+
+    touch-action: none;
+
+    &--visible {
+        opacity: 1;
+    }
+}
+
+.interaction-cell {
+    display: grid;
+    grid-template-columns: [left-start] 1fr [left-end centre-start] $centre-width [centre-end right-start] 1fr [right-end];
+    grid-template-rows: [top-start] 1fr [top-end centre-start] $centre-width [centre-end bottom-start] 1fr [bottom-end];
+
+    &__left,
+    &__right,
+    &__top,
+    &__bottom {
+        background: rgba(255, 0, 0, $opacity);
+    }
+
+    &__top-left,
+    &__top-right,
+    &__bottom-left,
+    &__bottom-right {
+        background: rgba(0, 255, 0, $opacity);
+    }
+
+    &__centre {
+        background: rgba(0, 0, 255, $opacity);
+    }
+
+    > *:hover {
+        box-shadow: 0 0 0 4px rgba(255, 0, 255);
+    }
+}

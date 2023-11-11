@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { isSetModeSelector } from 'utils/selectors';
 import useSelector from '../../hooks/use-selector';
 import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
@@ -20,7 +20,6 @@ const Board = () => {
     const setSolved = useAction('solver/set-solved');
     const solve = useSudokuSolver();
 
-    const setFocus = useAction('ui/set-focus');
     const clearFocus = useAction('ui/clear-focus');
 
     useEffect(() => {
@@ -33,7 +32,16 @@ const Board = () => {
     // remove selection on click-away
     useEffect(() => {
         const onClick = (e: MouseEvent) => {
-            if (!isEventOver(e, 'board', 'menu', 'modal', 'button')) {
+            if (
+                !isEventOver(
+                    e,
+                    'board',
+                    'menu',
+                    'modal',
+                    'button',
+                    'interaction-layer'
+                )
+            ) {
                 clearFocus();
             }
         };
@@ -45,31 +53,33 @@ const Board = () => {
         };
     }, [clearFocus]);
 
-    const boxes = board.reduce(
-        (boxes, cell, i) => {
-            const pos = getPosition(i);
-            const index = getBoxIndex(pos);
-            if (!boxes[index]) {
-                boxes[index] = [];
-            }
-            boxes[index].push({
-                cell,
-                solutionCell: {
-                    ...solution[i],
-                    ...(isSetMode ? {} : { value: undefined }),
-                },
-                playerCell: playerBoard[i],
-                index: i,
-            });
-            return boxes;
-        },
-        [[], [], [], [], [], [], [], [], []] as {
-            cell: PuzzleCell;
-            solutionCell: SolutionCell;
-            playerCell?: PlayerCell;
-            index: number;
-        }[][]
-    );
+    const boxes = useMemo(() => {
+        return board.reduce(
+            (boxes, cell, i) => {
+                const pos = getPosition(i);
+                const index = getBoxIndex(pos);
+                if (!boxes[index]) {
+                    boxes[index] = [];
+                }
+                boxes[index].push({
+                    cell,
+                    solutionCell: {
+                        ...solution[i],
+                        ...(isSetMode ? {} : { value: undefined }),
+                    },
+                    playerCell: playerBoard[i],
+                    index: i,
+                });
+                return boxes;
+            },
+            [[], [], [], [], [], [], [], [], []] as {
+                cell: PuzzleCell;
+                solutionCell: SolutionCell;
+                playerCell?: PlayerCell;
+                index: number;
+            }[][]
+        );
+    }, [board, isSetMode, playerBoard, solution]);
 
     return (
         <div className="board" id="board">
@@ -93,31 +103,6 @@ const Board = () => {
                             selection={selection}
                             targetValue={targetValue}
                             highlighted={highlighted.includes(index)}
-                            onMouseDown={(e) => {
-                                if (e.button === 0) {
-                                    setFocus({
-                                        index,
-                                        addToSelection: e.shiftKey,
-                                    });
-                                }
-                                if (
-                                    e.button === 2 &&
-                                    !selection.includes(index)
-                                ) {
-                                    setFocus({ index });
-                                }
-                            }}
-                            onMouseEnter={({ buttons }) => {
-                                if (
-                                    buttons === 1 &&
-                                    !selection.includes(index)
-                                ) {
-                                    setFocus({
-                                        index,
-                                        addToSelection: true,
-                                    });
-                                }
-                            }}
                         />
                     ))}
                 </Box>

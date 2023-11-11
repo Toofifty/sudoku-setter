@@ -4,8 +4,8 @@ import { range } from 'utils';
 import { getBoxIndex } from 'utils/sudoku';
 import Box from 'components/box';
 import BackgroundCell from './background-cell';
-import './background.scss';
 import useSelector from 'hooks/use-selector';
+import './background.scss';
 
 const boxes = range(0, 81).reduce(
     (boxes, i) => {

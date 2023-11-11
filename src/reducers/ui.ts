@@ -1,4 +1,7 @@
+import selectionInteractionHandler from './interaction-handlers/selection';
+import { InteractionHandler } from './interaction-handlers/types';
 import { _, action, merge, GetAction } from './merge';
+import { load, persist } from './persist';
 
 export interface UIState {
     contextMenu?: () => React.ReactNode;
@@ -9,15 +12,19 @@ export interface UIState {
     hideSolution: boolean;
     focused?: number;
     selection: number[];
+    interactionHandler: InteractionHandler;
 }
 
 const defaultState = (): UIState => ({
-    debugMode: false,
     contextVisible: false,
     modalVisible: false,
-    hideSolution: false,
     selection: [],
     focused: undefined,
+    interactionHandler: selectionInteractionHandler,
+    ...load('ui', {
+        hideSolution: false,
+        debugMode: false,
+    }),
 });
 
 const setContextMenu = action(
@@ -61,7 +68,8 @@ const toggleDebugMode = action(
     (state, debugMode) => ({
         ...state,
         debugMode: debugMode ?? !state.debugMode,
-    })
+    }),
+    persist('ui', 'hideSolution', 'debugMode')
 );
 
 const toggleHideSolution = action(
@@ -71,7 +79,8 @@ const toggleHideSolution = action(
     (state, hideSolution) => ({
         ...state,
         hideSolution: hideSolution ?? !state.hideSolution,
-    })
+    }),
+    persist('ui', 'hideSolution', 'debugMode')
 );
 
 const setFocus = action(
@@ -88,6 +97,10 @@ const setFocus = action(
         } else if (!selection.includes(index)) {
             if (isKeyPress) focused = index;
             selection = [...selection, index];
+        } else if (isKeyPress) {
+            focused = index;
+        } else {
+            // deselect TODO
         }
 
         return {
