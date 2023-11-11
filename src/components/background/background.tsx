@@ -6,6 +6,7 @@ import Box from 'components/box';
 import BackgroundCell from './background-cell';
 import useSelector from 'hooks/use-selector';
 import './background.scss';
+import BackgroundSVG from './background-svg';
 
 const boxes = range(0, 81).reduce(
     (boxes, i) => {
@@ -33,6 +34,7 @@ const Background = () => {
                 restrictions.uniqueDiagonals && 'background--diagonals'
             )}
         >
+            <BackgroundSVG />
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map((n) => (
