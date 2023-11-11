@@ -4,11 +4,13 @@ import GraphicsArrow from 'components/graphics/arrow';
 import GraphicsKillerCage from 'components/graphics/killer-cage';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 import GraphicsBorderSelection from 'components/graphics/border-selection/border-selection';
+import { PartialVariants } from 'reducers/setter';
 
 interface BackgroundCellProps {
     index: number;
     color: string;
     selection: number[];
+    partialVariants: PartialVariants;
     thermos?: Thermo[];
     arrows?: Arrow[];
     killerCages?: KillerCage[];
@@ -18,14 +20,17 @@ const BackgroundCell = ({
     index,
     color,
     selection,
+    partialVariants,
     thermos,
     arrows,
     killerCages,
 }: BackgroundCellProps) => (
     <div className={`background-cell background-cell--${color}`}>
-        {thermos && thermos.length > 0 && (
-            <GraphicsThermo index={index} thermos={thermos} />
-        )}
+        <GraphicsThermo
+            index={index}
+            thermos={thermos}
+            partialThermo={partialVariants.thermo}
+        />
         {arrows && arrows.length > 0 && (
             <GraphicsArrow index={index} arrows={arrows} />
         )}

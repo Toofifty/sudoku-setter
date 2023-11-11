@@ -43,4 +43,5 @@ export interface InteractionHandler {
         context: InteractionContext,
         interaction: InteractionData
     ) => void;
+    onInteractLeave?: (context: InteractionContext) => void;
 }

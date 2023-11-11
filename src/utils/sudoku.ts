@@ -34,4 +34,26 @@ export const getCoord = (index: number | Position): string => {
     return `r${index.y + 1}c${index.x + 1}`;
 };
 
+export const isAdjacent = (
+    aIndex: number,
+    bIndex: number,
+    allowDiagonal?: boolean
+) => {
+    const aPosition = getPosition(aIndex);
+    const bPosition = getPosition(bIndex);
+
+    if (allowDiagonal) {
+        return (
+            Math.abs(aPosition.x - bPosition.x) <= 1 &&
+            Math.abs(aPosition.y - bPosition.y) <= 1
+        );
+    }
+
+    return (
+        Math.abs(aPosition.x - bPosition.x) +
+            Math.abs(aPosition.y - bPosition.y) ===
+        1
+    );
+};
+
 export const getCellIndex = (pos: Position): number => pos.x + pos.y * 9;

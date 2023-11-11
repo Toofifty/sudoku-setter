@@ -141,3 +141,14 @@ $outline-width: 2px;
         #{$outline-width} -#{$outline-width} $cell-bg-dark,
         #{$outline-width} 0px $cell-bg-dark;
 }
+
+@mixin white-outline {
+    box-shadow: #{$outline-width} #{$outline-width} $cell-bg,
+        0 #{$outline-width} $cell-bg,
+        -#{$outline-width} #{$outline-width} $cell-bg,
+        -#{$outline-width} 0 $cell-bg,
+        -#{$outline-width} -#{$outline-width} $cell-bg,
+        0 -#{$outline-width} $cell-bg,
+        #{$outline-width} -#{$outline-width} $cell-bg,
+        #{$outline-width} 0px $cell-bg;
+}

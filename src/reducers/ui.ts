@@ -1,7 +1,8 @@
-import selectionInteractionHandler from './interaction-handlers/selection';
+import { interactionHandlers } from './interaction-handlers';
 import { InteractionHandler } from './interaction-handlers/types';
 import { _, action, merge, GetAction } from './merge';
 import { load, persist } from './persist';
+import { SetterInputMode } from './setter';
 
 export interface UIState {
     contextMenu?: () => React.ReactNode;
@@ -20,7 +21,10 @@ const defaultState = (): UIState => ({
     modalVisible: false,
     selection: [],
     focused: undefined,
-    interactionHandler: selectionInteractionHandler,
+    interactionHandler:
+        interactionHandlers[
+            load('setter', { inputMode: 'digit' as SetterInputMode }).inputMode
+        ],
     ...load('ui', {
         hideSolution: false,
         debugMode: false,
@@ -122,6 +126,16 @@ const clearFocus = action(
     })
 );
 
+const setInteractionHandler = action(
+    _ as UIState,
+    _ as InteractionHandler,
+    'ui/set-interaction-handler',
+    (state, interactionHandler) => ({
+        ...state,
+        interactionHandler,
+    })
+);
+
 export type UIAction =
     | GetAction<typeof setContextMenu>
     | GetAction<typeof toggleContextMenu>
@@ -130,7 +144,8 @@ export type UIAction =
     | GetAction<typeof toggleDebugMode>
     | GetAction<typeof toggleHideSolution>
     | GetAction<typeof setFocus>
-    | GetAction<typeof clearFocus>;
+    | GetAction<typeof clearFocus>
+    | GetAction<typeof setInteractionHandler>;
 
 export default merge(
     defaultState(),
@@ -141,5 +156,6 @@ export default merge(
     toggleDebugMode,
     toggleHideSolution,
     setFocus,
-    clearFocus
+    clearFocus,
+    setInteractionHandler
 );

@@ -1,8 +1,9 @@
 import React from 'react';
 import CellContextMenu from 'components/cell/cell-context-menu';
 import { InteractionHandler } from './types';
+import { isCorner } from './util';
 
-const selectionInteractionHandler: InteractionHandler = {
+export const selectionInteractionHandler: InteractionHandler = {
     onInteractStart({ dispatch }, { index, buttons, shiftKey }) {
         if (buttons !== 1) {
             return;
@@ -14,7 +15,7 @@ const selectionInteractionHandler: InteractionHandler = {
         });
     },
     onInteractMove({ state, dispatch }, { index, buttons, subcell }) {
-        if (buttons !== 1 || subcell !== 'centre') {
+        if (buttons !== 1 || isCorner(subcell)) {
             return;
         }
 
@@ -41,5 +42,3 @@ const selectionInteractionHandler: InteractionHandler = {
         });
     },
 };
-
-export default selectionInteractionHandler;

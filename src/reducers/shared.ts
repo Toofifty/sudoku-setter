@@ -4,6 +4,7 @@ import { isPlayModeSelector } from 'utils/selectors';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 import { SetterInputMode } from './setter';
 import { InteractionData } from './interaction-handlers/types';
+import { interactionHandlers } from './interaction-handlers';
 
 // put reducers here if:
 // - they require reading root state (or state from another slice)
@@ -154,6 +155,10 @@ const setSetterInputMode = action(
         }
 
         dispatch({ type: 'setter/set-input-mode', payload: inputMode });
+        dispatch({
+            type: 'ui/set-interaction-handler',
+            payload: interactionHandlers[inputMode],
+        });
         return state;
     }
 );
@@ -321,6 +326,16 @@ const interactEnd = action(
     }
 );
 
+const interactLeave = action(
+    _ as RootState,
+    _ as undefined,
+    'shared/interact-leave',
+    (state, _, dispatch: DispatchFn) => {
+        state.ui.interactionHandler.onInteractLeave?.({ state, dispatch });
+        return state;
+    }
+);
+
 export type SharedAction =
     | GetAction<typeof setCellValue>
     | GetAction<typeof setSelectionValue>
@@ -339,7 +354,8 @@ export type SharedAction =
     | GetAction<typeof redo>
     | GetAction<typeof interactStart>
     | GetAction<typeof interactMove>
-    | GetAction<typeof interactEnd>;
+    | GetAction<typeof interactEnd>
+    | GetAction<typeof interactLeave>;
 
 export default merge<RootState>(
     undefined,
@@ -360,5 +376,6 @@ export default merge<RootState>(
     redo,
     interactStart,
     interactMove,
-    interactEnd
+    interactEnd,
+    interactLeave
 );

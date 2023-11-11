@@ -16,18 +16,40 @@ $dark-color: $grey-600;
     box-sizing: content-box;
     position: absolute;
     content: '';
-    border: $thickness solid $color;
-    border-radius: calc(#{$thickness} * 2);
-    background: $color;
+    border-style: solid;
+    border-width: var(--thickness);
+    border-color: var(--color);
+    border-radius: 200px;
+    background: var(--color);
 }
 
 $straight-len: calc(100% + 2px);
-$straight-offset: calc(-50% - #{$thickness} - 2px);
+// 0: calc(-50% - var(--thickness) - 2px);
 
 .thermo {
+    $b: &;
     @include fill;
     overflow: visible;
     z-index: -1;
+
+    --color: #{$grey-400};
+    --thickness: 8px;
+    --bulb: 75%;
+
+    &--ghost {
+        --color: #{$grey-300};
+        --thickness: 4px;
+        --bulb: 60%;
+        z-index: 1;
+
+        #{$b}__bulb::before {
+            @include white-outline;
+        }
+
+        #{$b}__line::before {
+            @include white-outline;
+        }
+    }
 
     &__bulb::before {
         @include fill;
@@ -37,12 +59,12 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
         top: 50%;
         transform: translate(-50%, -50%);
 
-        width: 75%;
-        height: 75%;
+        width: var(--bulb);
+        height: var(--bulb);
 
         border-radius: 100%;
 
-        background: $color;
+        background: var(--color);
     }
 
     &__line {
@@ -50,74 +72,74 @@ $straight-offset: calc(-50% - #{$thickness} - 2px);
 
         &--b::before {
             @include thermo-part;
-            height: $straight-len;
+            height: 100%;
             width: 0;
-            transform: translateX(-50%);
+            transform: translate(-50%, var(--thickness));
             left: 50%;
-            bottom: $straight-offset;
+            bottom: -50%;
         }
 
         &--t::before {
             @include thermo-part;
-            height: $straight-len;
+            height: 100%;
             width: 0;
-            transform: translateX(-50%);
+            transform: translate(-50%, calc(var(--thickness) * -1));
             left: 50%;
-            top: $straight-offset;
+            top: -50%;
         }
 
         &--l::before {
             @include thermo-part;
-            width: $straight-len;
+            width: 100%;
             height: 0;
-            transform: translateY(-50%);
+            transform: translate(calc(var(--thickness) * -1), -50%);
             top: 50%;
-            left: $straight-offset;
+            left: -50%;
         }
 
         &--r::before {
             @include thermo-part;
-            width: $straight-len;
+            width: 100%;
             height: 0;
-            transform: translateY(-50%);
+            transform: translate(var(--thickness), -50%);
             top: 50%;
-            right: $straight-offset;
+            right: -50%;
         }
 
         &--br::before {
             @include thermo-part;
             width: 100% * sqrt(2);
-            transform-origin: $thickness 50%;
+            transform-origin: var(--thickness) 50%;
             transform: rotate(45deg);
-            top: calc(50% - #{$thickness});
-            left: calc(50% - #{$thickness});
+            top: calc(50% - var(--thickness));
+            left: calc(50% - var(--thickness));
         }
 
         &--bl::before {
             @include thermo-part;
             width: 100% * sqrt(2);
-            transform-origin: $thickness 50%;
+            transform-origin: var(--thickness) 50%;
             transform: rotate(135deg);
-            top: calc(50% - #{$thickness});
-            left: calc(50% - #{$thickness});
+            top: calc(50% - var(--thickness));
+            left: calc(50% - var(--thickness));
         }
 
         &--tl::before {
             @include thermo-part;
             width: 100% * sqrt(2);
-            transform-origin: $thickness 50%;
+            transform-origin: var(--thickness) 50%;
             transform: rotate(-135deg);
-            top: calc(50% - #{$thickness});
-            left: calc(50% - #{$thickness});
+            top: calc(50% - var(--thickness));
+            left: calc(50% - var(--thickness));
         }
 
         &--tr::before {
             @include thermo-part;
             width: 100% * sqrt(2);
-            transform-origin: $thickness 50%;
+            transform-origin: var(--thickness) 50%;
             transform: rotate(-45deg);
-            top: calc(50% - #{$thickness});
-            left: calc(50% - #{$thickness});
+            top: calc(50% - var(--thickness));
+            left: calc(50% - var(--thickness));
         }
     }
 }

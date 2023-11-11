@@ -85,6 +85,7 @@ const InteractionLayer = () => {
     const interactStart = useAction('shared/interact-start');
     const interactMove = useAction('shared/interact-move');
     const interactEnd = useAction('shared/interact-end');
+    const interactLeave = useAction('shared/interact-leave');
 
     const onInteractStart = (interaction: InteractionData) => {
         interactStart(interaction);
@@ -96,7 +97,8 @@ const InteractionLayer = () => {
             if (
                 p.index === interaction.index &&
                 p.subcell === interaction.subcell &&
-                p.buttons === interaction.buttons
+                p.buttons === interaction.buttons &&
+                p.shiftKey === interaction.shiftKey
             ) {
                 return;
             }
@@ -116,6 +118,7 @@ const InteractionLayer = () => {
                 'interaction-layer',
                 debugMode && 'interaction-layer--visible'
             )}
+            onPointerLeave={() => interactLeave()}
         >
             {range(0, 81).map((index) => (
                 <InteractionCell

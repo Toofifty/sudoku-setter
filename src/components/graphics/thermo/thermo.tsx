@@ -20,13 +20,14 @@ const getDirectionTo = (index: number, target: number) =>
 
 interface GraphicsThermo {
     index: number;
-    thermos: number[][];
+    thermos?: number[][];
+    partialThermo?: number[];
 }
 
-const GraphicsThermo = ({ index, thermos }: GraphicsThermo) => (
+const GraphicsThermo = ({ index, thermos, partialThermo }: GraphicsThermo) => (
     <>
         {thermos
-            .filter((thermo) => thermo.includes(index))
+            ?.filter((thermo) => thermo.includes(index))
             .map((thermo, i) => {
                 const indexInThermo = thermo.indexOf(index);
                 const first = indexInThermo === 0;
@@ -45,6 +46,26 @@ const GraphicsThermo = ({ index, thermos }: GraphicsThermo) => (
                     </div>
                 );
             })}
+        {partialThermo &&
+            partialThermo.includes(index) &&
+            (() => {
+                const indexInThermo = partialThermo.indexOf(index);
+                const first = indexInThermo === 0;
+                const last = indexInThermo === partialThermo.length - 1;
+                return (
+                    <div className="thermo thermo--ghost">
+                        {first && <div className="thermo__bulb" />}
+                        {!last && (
+                            <div
+                                className={`thermo__line thermo__line--${getDirectionTo(
+                                    index,
+                                    partialThermo[indexInThermo + 1]
+                                )}`}
+                            />
+                        )}
+                    </div>
+                );
+            })()}
     </>
 );
 
