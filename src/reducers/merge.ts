@@ -15,16 +15,12 @@ export const action = <TState, TType extends string, TPayload>(
     payloadType: TPayload,
     type: TType,
     action: (state: TState, payload: TPayload, dispatch: any) => TState,
-    decorator?: any
+    ...decorators: any[]
 ) => ({
     type,
-    action: decorator
-        ? (decorator(action) as (
-              state: TState,
-              payload: TPayload,
-              dispatch: any
-          ) => TState)
-        : action,
+    action: decorators.reduce((value, decorator) => {
+        return decorator(value);
+    }, action) as (state: TState, payload: TPayload, dispatch: any) => TState,
 });
 
 export type GetAction<TFrom extends ActionObject<any, any, any>> = Action<
@@ -32,12 +28,14 @@ export type GetAction<TFrom extends ActionObject<any, any, any>> = Action<
     Parameters<TFrom['action']>[1]
 >;
 
-export const merge = <TState>(
-    defaultState?: TState,
-    ...actions: ActionObject<TState, string, any>[]
-) => (state = defaultState, action: any) => {
-    const target = actions.find(({ type }) => type === action.type);
-    if (target)
-        return target.action(state as any, action.payload, action.dispatch);
-    return state!;
-};
+export const merge =
+    <TState>(
+        defaultState?: TState,
+        ...actions: ActionObject<TState, string, any>[]
+    ) =>
+    (state = defaultState, action: any) => {
+        const target = actions.find(({ type }) => type === action.type);
+        if (target)
+            return target.action(state as any, action.payload, action.dispatch);
+        return state!;
+    };

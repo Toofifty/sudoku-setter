@@ -1,7 +1,7 @@
 import { PuzzleCell } from 'types';
+import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 import { _, action, merge, GetAction } from './merge';
 import { undoHistory, redoHistory, saveHistory } from './history';
-import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 
 export type GameMode = 'set' | 'play';
 

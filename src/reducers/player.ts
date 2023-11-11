@@ -87,7 +87,6 @@ const emptyCell = (): PlayerCell => ({
 });
 
 const defaultState = (): PlayerState => ({
-    board: Array(81).fill(null).map(emptyCell),
     history: { items: [], current: 0 },
     inputMode: 'digit',
     ...load('player.settings', {
@@ -108,6 +107,9 @@ const defaultState = (): PlayerState => ({
             darkMode: false,
         },
     }),
+    ...load(`player.${window.location.hash}`, {
+        board: Array(81).fill(null).map(emptyCell),
+    }),
 });
 
 // action intended to allow automations
@@ -121,7 +123,8 @@ const commitBoard = action(
     (state, board) => {
         return { ...state, board: [...board] };
     },
-    saveHistory<PlayerState>(...trackHistoryOf)
+    saveHistory<PlayerState>(...trackHistoryOf),
+    persist(`player.${window.location.hash}`, 'board')
 );
 
 const setCellValue = action(
@@ -207,7 +210,8 @@ const setCellValue = action(
         );
         return { ...state, board };
     },
-    saveHistory<PlayerState>(...trackHistoryOf)
+    saveHistory<PlayerState>(...trackHistoryOf),
+    persist(`player.${window.location.hash}`, 'board')
 );
 
 const swapPencilMarks = action(
