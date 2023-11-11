@@ -8,6 +8,8 @@ import './setter-controls-menu.scss';
 import Tooltip from 'components/tooltip';
 
 const SetterSolveMenu = () => {
+    const solveOnChange = useSelector((state) => state.solver.solveOnChange);
+    const setSolveOnChange = useAction('solver/toggle-solve-on-change');
     const stepSolve = useSelector((state) => state.solver.stepSolve);
     const setStepSolve = useAction('solver/toggle-step-solve');
     const lookahead = useSelector((state) => state.solver.lookahead);
@@ -16,14 +18,14 @@ const SetterSolveMenu = () => {
     const algorithms = useSelector((state) => state.solver.algorithms);
     const setAlgorithms = useAction('shared/set-algorithms');
 
-    const triggerSolve = useAction('solver/trigger-solve');
+    const triggerSolve = useAction('solver/trigger-solve-from-scratch');
 
     return (
         <Menu exclusive className="controls">
             <MenuItem>
                 <Toggle
-                    checked={lookahead}
-                    onChange={() => setLookahead(!lookahead)}
+                    checked={solveOnChange}
+                    onChange={() => setSolveOnChange(!solveOnChange)}
                 >
                     Solve on change
                 </Toggle>
@@ -51,9 +53,9 @@ const SetterSolveMenu = () => {
                 </Button>
             </MenuItem>
             <MenuItem>
-                <Button wide onClick={() => triggerSolve(true)}>
-                    <i className="fad fa-redo m-r-12" />
-                    Solve from scratch
+                <Button primary wide onClick={() => triggerSolve(true)}>
+                    <i className="fad fa-badge-check m-r-12" />
+                    Solve
                 </Button>
             </MenuItem>
             <MenuCollapse label="Sudoku solvers" expandedByDefault>

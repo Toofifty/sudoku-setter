@@ -48,10 +48,8 @@ const Cell = ({
     const selected = selection.includes(index);
     const matches =
         value === targetValue ||
-        (isSetMode && candidates.includes(targetValue)) ||
-        (!isSetMode &&
-            (cornerMarks.includes(targetValue) ||
-                centreMarks.includes(targetValue)));
+        cornerMarks.includes(targetValue) ||
+        centreMarks.includes(targetValue);
 
     const incorrect = value && !candidates.includes(value);
 

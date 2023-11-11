@@ -1,4 +1,7 @@
 import { SolutionCell } from 'types';
+import { load, persist } from './persist';
+import { GetAction, _, action, merge } from './merge';
+import { DispatchFn } from 'store';
 
 export interface SolverState {
     solution: SolutionCell[];
@@ -19,6 +22,7 @@ export interface SolverState {
         nonSeqNeighbors: boolean;
     };
     dirty: boolean;
+    solveOnChange: boolean;
     lookahead: boolean;
     stepSolve: boolean;
 }
@@ -48,15 +52,11 @@ const defaultState = (): SolverState => ({
     },
     dirty: false,
     lookahead: false,
-    stepSolve: false,
+    ...load('solver', {
+        stepSolve: false,
+        solveOnChange: true,
+    }),
 });
-
-//
-
-type Reducer<T extends { payload?: any }> = (
-    state: SolverState,
-    payload: T['payload']
-) => SolverState;
 
 const clear = () => ({
     solution: Array(81)
@@ -67,122 +67,141 @@ const clear = () => ({
         })),
 });
 
-//
+const setSolution = action(
+    _ as SolverState,
+    _ as SolutionCell[],
+    'solver/set-solution',
+    (state, solution) => ({ ...state, solution, dirty: false })
+);
 
-type SetSolution = { type: 'solver/set-solution'; payload: SolutionCell[] };
+const resetSolution = action(
+    _ as SolverState,
+    _ as undefined,
+    'solver/reset-solution',
+    (state) => ({ ...state, ...clear() })
+);
 
-const setSolution: Reducer<SetSolution> = (state, solution) => ({
-    ...state,
-    solution,
-    dirty: false,
-});
+const setAlgorithms = action(
+    _ as SolverState,
+    _ as Partial<SolverState['algorithms']>,
+    'solver/set-algorithms',
+    (state, algorithms) => ({
+        ...state,
+        algorithms: { ...state.algorithms, ...algorithms },
+    })
+);
 
-type ResetSolution = { type: 'solver/reset-solution'; payload: undefined };
+const triggerSolve = action(
+    _ as SolverState,
+    _ as boolean | undefined,
+    'solver/trigger-solve',
+    (state, force) => ({
+        ...state,
+        dirty: force || state.solveOnChange,
+    })
+);
 
-const resetSolution: Reducer<ResetSolution> = (state) => ({
-    ...state,
-    ...clear(),
-});
+const triggerSolveFromScratch = action(
+    _ as SolverState,
+    _ as boolean | undefined,
+    'solver/trigger-solve-from-scratch',
+    (state) => ({
+        ...state,
+        ...clear(),
+        dirty: true,
+    })
+);
 
-type SetAlgorithms = {
-    type: 'solver/set-algorithms';
-    payload: Partial<SolverState['algorithms']>;
-};
+const toggleLookahead = action(
+    _ as SolverState,
+    _ as boolean,
+    'solver/toggle-lookahead',
+    (state, lookahead) => ({
+        ...state,
+        lookahead,
+    })
+);
 
-const setAlgorithms: Reducer<SetAlgorithms> = (state, algorithms) => ({
-    ...state,
-    algorithms: { ...state.algorithms, ...algorithms },
-});
+const setSolved = action(
+    _ as SolverState,
+    _ as undefined,
+    'solver/set-solved',
+    (state) => ({ ...state, dirty: false })
+);
 
-type TriggerSolve = {
-    type: 'solver/trigger-solve';
-    payload?: boolean;
-};
+const toggleStepSolve = action(
+    _ as SolverState,
+    _ as boolean,
+    'solver/toggle-step-solve',
+    (state, stepSolve) => ({
+        ...state,
+        ...clear(),
+        stepSolve,
+    }),
+    persist('solver', 'solveOnChange', 'stepSolve')
+);
 
-const triggerSolve: Reducer<TriggerSolve> = (state, fromScratch) => ({
-    ...state,
-    ...(fromScratch ? clear() : {}),
-    dirty: true,
-});
+const toggleSolveOnChange = action(
+    _ as SolverState,
+    _ as boolean,
+    'solver/toggle-solve-on-change',
+    (state, solveOnChange, dispatch: DispatchFn) => {
+        if (solveOnChange) {
+            dispatch({
+                type: 'solver/trigger-solve',
+                payload: true,
+            });
+        }
 
-type ToggleLookahead = {
-    type: 'solver/toggle-lookahead';
-    payload: boolean;
-};
+        return {
+            ...state,
+            ...clear(),
+            solveOnChange,
+        };
+    },
+    persist('solver', 'solveOnChange', 'stepSolve')
+);
 
-const toggleLookahead: Reducer<ToggleLookahead> = (state, lookahead) => ({
-    ...state,
-    lookahead,
-});
+const invalidateCandidates = action(
+    _ as SolverState,
+    _ as { index: number; candidates: number[] }[],
+    'solver/invalidate-candidates',
+    (state, candidateLists) => {
+        const newSolution = [...state.solution];
+        candidateLists.forEach(({ index, candidates }) => {
+            newSolution[index].invalidCandidates.push(
+                ...candidates.filter(
+                    (n) => !newSolution[index].invalidCandidates.includes(n)
+                )
+            );
+        });
 
-type SetSolved = {
-    type: 'solver/set-solved';
-    payload: undefined;
-};
-
-const setSolved: Reducer<SetSolved> = (state) => ({ ...state, dirty: false });
-
-type ToggleStepSolve = {
-    type: 'solver/toggle-step-solve';
-    payload: boolean;
-};
-
-const toggleStepSolve: Reducer<ToggleStepSolve> = (state, stepSolve) => ({
-    ...state,
-    ...clear(),
-    stepSolve,
-});
-
-type InvalidateCandidates = {
-    type: 'solver/invalidate-candidates';
-    payload: { index: number; candidates: number[] }[];
-};
-
-const invalidateCandidates: Reducer<InvalidateCandidates> = (
-    state,
-    candidateLists
-) => {
-    const newSolution = [...state.solution];
-    candidateLists.forEach(({ index, candidates }) => {
-        newSolution[index].invalidCandidates.push(
-            ...candidates.filter(
-                (n) => !newSolution[index].invalidCandidates.includes(n)
-            )
-        );
-    });
-
-    return { ...state, solution: newSolution };
-};
+        return { ...state, solution: newSolution };
+    }
+);
 
 export type SolverAction =
-    | SetSolution
-    | ResetSolution
-    | SetAlgorithms
-    | TriggerSolve
-    | SetSolved
-    | ToggleLookahead
-    | ToggleStepSolve
-    | InvalidateCandidates;
+    | GetAction<typeof setSolution>
+    | GetAction<typeof resetSolution>
+    | GetAction<typeof setAlgorithms>
+    | GetAction<typeof triggerSolve>
+    | GetAction<typeof triggerSolveFromScratch>
+    | GetAction<typeof toggleLookahead>
+    | GetAction<typeof setSolved>
+    | GetAction<typeof toggleStepSolve>
+    | GetAction<typeof toggleSolveOnChange>
+    | GetAction<typeof invalidateCandidates>;
 
-export default (state = defaultState(), action: SolverAction) => {
-    switch (action.type) {
-        case 'solver/set-solution':
-            return setSolution(state, action.payload);
-        case 'solver/reset-solution':
-            return resetSolution(state, action.payload);
-        case 'solver/set-algorithms':
-            return setAlgorithms(state, action.payload);
-        case 'solver/trigger-solve':
-            return triggerSolve(state, action.payload);
-        case 'solver/set-solved':
-            return setSolved(state, action.payload);
-        case 'solver/toggle-lookahead':
-            return toggleLookahead(state, action.payload);
-        case 'solver/toggle-step-solve':
-            return toggleStepSolve(state, action.payload);
-        case 'solver/invalidate-candidates':
-            return invalidateCandidates(state, action.payload);
-        default:
-            return state;
-    }
-};
+export default merge<SolverState>(
+    defaultState(),
+    setSolution,
+    resetSolution,
+    setAlgorithms,
+    triggerSolve,
+    triggerSolveFromScratch,
+    toggleLookahead,
+    setSolved,
+    toggleStepSolve,
+    toggleSolveOnChange,
+    invalidateCandidates
+);
