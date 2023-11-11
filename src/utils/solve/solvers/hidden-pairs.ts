@@ -1,9 +1,9 @@
 import { CellSolver } from './types';
-import { getCellAt } from '../../sudoku';
+import { getPosition } from '../../sudoku';
 import { isFilled, row, column, box, getMarks } from '../helper';
 
 export const solveHiddenPairs: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
 
     if (isFilled(cell)) return cell;
 

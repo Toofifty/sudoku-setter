@@ -2,34 +2,39 @@ import React from 'react';
 import cx from 'classnames';
 
 import './border-selection.scss';
+import { addPosition, getPosition, getIndex } from 'utils/sudoku';
 
-const directions: Record<string, number> = {
-    br: 10,
-    b: 9,
-    bl: 8,
-    r: 1,
-    l: -1,
-    tr: -8,
-    t: -9,
-    tl: -10,
+const edges = {
+    b: { x: 0, y: 1 },
+    r: { x: 1, y: 0 },
+    l: { x: -1, y: 0 },
+    t: { x: 0, y: -1 },
+};
+
+const corners = {
+    br: { x: 1, y: 1 },
+    bl: { x: -1, y: 1 },
+    tr: { x: 1, y: -1 },
+    tl: { x: -1, y: -1 },
 };
 
 const getEdges = (index: number, selection: number[]) => {
-    return Object.entries(directions)
+    const position = getPosition(index);
+    return Object.entries(edges)
         .filter(
-            ([dir, dist]) =>
-                dir.length === 1 && !selection.includes(index + dist)
+            ([, offset]) =>
+                !selection.includes(getIndex(addPosition(position, offset)))
         )
         .map(([dir]) => dir);
 };
 
 const getCorners = (index: number, selection: number[], edges: string[]) => {
-    return Object.entries(directions)
+    const position = getPosition(index);
+    return Object.entries(corners)
         .filter(
-            ([dir, dist]) =>
-                dir.length === 2 &&
+            ([dir, offset]) =>
                 dir.split('').every((side) => !edges.includes(side)) &&
-                !selection.includes(index + dist)
+                !selection.includes(getIndex(addPosition(position, offset)))
         )
         .map(([dir]) => dir);
 };

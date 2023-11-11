@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { isSetModeSelector } from 'utils/selectors';
 import useSelector from '../../hooks/use-selector';
 import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
-import { getBoxIndex, getCellAt } from '../../utils/sudoku';
+import { getBoxIndex, getPosition } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
@@ -47,7 +47,7 @@ const Board = () => {
 
     const boxes = board.reduce(
         (boxes, cell, i) => {
-            const pos = getCellAt(i);
+            const pos = getPosition(i);
             const index = getBoxIndex(pos);
             if (!boxes[index]) {
                 boxes[index] = [];

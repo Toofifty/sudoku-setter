@@ -1,10 +1,10 @@
 import { CellSolver } from './types';
 import { diagonals, getValue } from '../helper';
-import { getCellAt } from 'utils/sudoku';
+import { getPosition } from 'utils/sudoku';
 import { checkHiddenSingles } from './hidden-singles';
 
 export const solveUniqueDiagonals: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
     const diags = diagonals(board, pos);
     const sees = diags.flat().map(getValue);
 

@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getCellAt } from '../../sudoku';
+import { getPosition } from '../../sudoku';
 import { column, row, box, getValue } from '../helper';
 import { InterCell } from '../types';
 import { Position } from '../../../types';
@@ -10,7 +10,7 @@ import { Position } from '../../../types';
  * repro: #G:10:1,11:2,12:3,13:4,15:6,16:7,17:8,18:9
  */
 export const solveNakedSingles: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
     cell.marks = cell.marks.filter((n) => !breaksSudoku(board, pos, n));
     return cell;
 };

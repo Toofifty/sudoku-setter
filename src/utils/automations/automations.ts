@@ -1,5 +1,5 @@
 import { allBoxIndices, regionIndices } from 'utils/solve/helper';
-import { getCellAt } from 'utils/sudoku';
+import { getPosition } from 'utils/sudoku';
 import { intersection } from 'utils';
 import { Automation } from './types';
 import { range } from 'utils/misc';
@@ -10,7 +10,7 @@ export const autoFixPencilMarks: Automation = (
 ) => {
     if (mode !== 'digit') return;
 
-    regionIndices(getCellAt(selection[0]))
+    regionIndices(getPosition(selection[0]))
         .flat()
         .forEach((affectedIndex) => {
             const cell = get(affectedIndex);
@@ -48,7 +48,7 @@ export const autoPairs: Automation = (
     }
 
     let paired = false;
-    regionIndices(getCellAt(selection[0]), true).forEach((region) => {
+    regionIndices(getPosition(selection[0]), true).forEach((region) => {
         // if both selections aren't in this region, skip it
         if (selection.some((index) => !region.includes(index))) {
             return;

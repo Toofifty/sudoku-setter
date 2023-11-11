@@ -1,5 +1,5 @@
 import { Position, FilledCell } from '../../types';
-import { getBoxIndex, getCellAt, getCellIndex } from '../sudoku';
+import { getBoxIndex, getPosition, getCellIndex } from '../sudoku';
 import { InterCell } from './types';
 import { range } from 'utils/misc';
 
@@ -37,7 +37,9 @@ export const allColumnIndices = () => {
 
 export const box = <T>(board: T[], pos: Position, includeSelf = false) => {
     const boxIndex = getBoxIndex(pos);
-    const box = board.filter((_, i) => boxIndex === getBoxIndex(getCellAt(i)));
+    const box = board.filter(
+        (_, i) => boxIndex === getBoxIndex(getPosition(i))
+    );
     if (!includeSelf)
         return box.filter((_, i) => i !== (pos.x % 3) + (pos.y % 3) * 3);
     return box;
@@ -118,7 +120,7 @@ export const diagonalIndices = (pos: Position) => {
     if (pos.x === pos.y) {
         diagonals.push(
             nums.filter((i) => {
-                const { x, y } = getCellAt(i);
+                const { x, y } = getPosition(i);
                 return x === y;
             })
         );
@@ -126,7 +128,7 @@ export const diagonalIndices = (pos: Position) => {
     if (pos.x + pos.y === 8) {
         diagonals.push(
             nums.filter((i) => {
-                const { x, y } = getCellAt(i);
+                const { x, y } = getPosition(i);
                 return x + y === 8;
             })
         );

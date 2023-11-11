@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getCellAt, getCellIndex } from 'utils/sudoku';
+import { getPosition, getCellIndex } from 'utils/sudoku';
 import { isFilled } from '../helper';
 
 const neighborOffsets = [
@@ -12,7 +12,7 @@ const neighborOffsets = [
 export const solveNonSeqNeighbors: CellSolver = (cell, i, board) => {
     if (isFilled(cell)) return cell;
 
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
     const neighbors = neighborOffsets
         .map(([x, y]) => ({ x: pos.x + x, y: pos.y + y }))
         .filter(({ x, y }) => x >= 0 && x < 9 && y >= 0 && y < 9)

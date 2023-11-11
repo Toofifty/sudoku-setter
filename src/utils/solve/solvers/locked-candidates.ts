@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getCellAt, getBox } from '../../sudoku';
+import { getPosition, getBox } from '../../sudoku';
 import { isFilled, box, row, column } from '../helper';
 import { range } from '../../misc';
 
@@ -11,7 +11,7 @@ import { range } from '../../misc';
  * repro: #G:5:1,13:3,14:4,1c:5,1d:6
  */
 export const solveLockedCandidates: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
     if (isFilled(cell) && cell.given) return cell;
 
     const boxCells = box(board, pos, true);

@@ -1,4 +1,4 @@
-import { getCellAt } from 'utils/sudoku';
+import { getPosition } from 'utils/sudoku';
 import { column, isFilled, row } from '../helper';
 import { SolveHistory } from './history';
 import { CellSolver } from './types';
@@ -16,7 +16,7 @@ export const solveXWing =
         // and there are 2 other columns/rows that have the candidate in the same places
         // then _all_ other cells on those rows and columns can not have the candidate
 
-        const pos = getCellAt(i);
+        const pos = getPosition(i);
 
         // no need to check final column
         if (pos.x === 8) {

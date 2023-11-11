@@ -1,9 +1,9 @@
 import { CellSolver } from './types';
 import { regions, isFilled } from '../helper';
-import { getCellAt } from 'utils/sudoku';
+import { getPosition } from 'utils/sudoku';
 
 export const solveNakedTuples: CellSolver = (cell, i, board) => {
-    const pos = getCellAt(i);
+    const pos = getPosition(i);
 
     if (isFilled(cell)) return cell;
 

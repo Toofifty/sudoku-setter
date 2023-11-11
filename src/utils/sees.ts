@@ -7,7 +7,7 @@ import {
     knightIndices,
     rowIndices,
 } from './solve/helper';
-import { getCellAt } from './sudoku';
+import { getPosition } from './sudoku';
 import { KillerCage, Thermo } from './sudoku-types';
 
 interface SeeConfig {
@@ -35,7 +35,7 @@ export const createSees = ({
     restrictions,
 }: SeeConfig) => {
     const seesSingle = (index: number): number[] => {
-        const pos = getCellAt(index);
+        const pos = getPosition(index);
         const seen = new Set<number>();
         const add = (i: number) => seen.add(i);
         if (settings.matchSudokuRestrictions) {

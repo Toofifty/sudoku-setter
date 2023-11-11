@@ -1,7 +1,7 @@
 import React from 'react';
 import ColorPicker from 'components/color-picker';
 import useSelector from 'hooks/use-selector';
-import { getCellAt } from 'utils/sudoku';
+import { getPosition } from 'utils/sudoku';
 import { isFilled } from 'utils/solve/helper';
 import {
     isContiguous,
@@ -34,7 +34,7 @@ const CellContextMenu = ({ index }: CellContextMenuProps) => {
     const deleteKillerCage = useAction('shared/delete-killer-cage');
     const setValue = useAction('shared/set-cell-value');
 
-    const pos = getCellAt(index);
+    const pos = getPosition(index);
 
     const hasThermo = thermos.some((thermo) => thermo.includes(index));
     const hasArrow = arrows.some(

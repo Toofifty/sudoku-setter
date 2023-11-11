@@ -1,4 +1,4 @@
-import { getCellAt, getCoord } from 'utils/sudoku';
+import { getPosition, getCoord } from 'utils/sudoku';
 import { regionIndices, regions } from '../helper';
 import { InterCell } from '../types';
 import { CellSolver } from './types';
@@ -30,7 +30,7 @@ export const solveYWing =
         // if P=3 then B=4, and if P=8 then A=4
         // so any cell that sees both A & B cannot be 4.
 
-        const pincers = regions(board, getCellAt(i))
+        const pincers = regions(board, getPosition(i))
             .flat()
             .filter(
                 (pincer) =>
@@ -96,7 +96,7 @@ const uniqueCandidates = (a: InterCell, b: InterCell): number[] => {
 };
 
 const commonCellIndices = (a: InterCell, b: InterCell): number[] => {
-    const aRegions = regionIndices(getCellAt(a.index)).flat();
-    const bRegions = regionIndices(getCellAt(b.index)).flat();
+    const aRegions = regionIndices(getPosition(a.index)).flat();
+    const bRegions = regionIndices(getPosition(b.index)).flat();
     return aRegions.filter((index) => bRegions.includes(index));
 };

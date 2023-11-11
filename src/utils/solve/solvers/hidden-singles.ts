@@ -1,5 +1,5 @@
 import { CellSolver } from './types';
-import { getCellAt } from '../../sudoku';
+import { getPosition } from '../../sudoku';
 import { isFilled, getMarks, regions } from '../helper';
 import { InterCell } from '../types';
 import { SolveHistory } from './history';
@@ -13,7 +13,7 @@ import { SolveHistory } from './history';
 export const solveHiddenSingles =
     (history: SolveHistory): CellSolver =>
     (cell, i, board) => {
-        const pos = getCellAt(i);
+        const pos = getPosition(i);
         if (isFilled(cell) && cell.given) return cell;
         if (cell.marks.length === 1) return cell;
 
