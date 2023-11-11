@@ -16,7 +16,7 @@
     &--diagonals {
         &::before {
             content: '';
-            width: 200%;
+            width: 100% * sqrt(2);
             height: 8px;
             background: $blue-100;
             position: absolute;
@@ -29,7 +29,7 @@
 
         &::after {
             content: '';
-            width: 200%;
+            width: 100% * sqrt(2);
             height: 8px;
             background: $blue-100;
             position: absolute;
