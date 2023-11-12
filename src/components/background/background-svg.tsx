@@ -4,6 +4,7 @@ import ThermoGraphics from './thermo-graphics';
 import ArrowGraphics from './arrow-graphics';
 
 import './background-svg.scss';
+import CageGraphics from './cage-graphics';
 
 const BackgroundSVG = () => {
     return (
@@ -15,6 +16,7 @@ const BackgroundSVG = () => {
         >
             <ThermoGraphics />
             <ArrowGraphics />
+            <CageGraphics />
         </svg>
     );
 };

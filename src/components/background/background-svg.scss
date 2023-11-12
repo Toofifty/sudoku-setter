@@ -14,6 +14,7 @@
 }
 
 .background-svg {
+    dominant-baseline: hanging;
     position: absolute;
     left: 0;
     top: 0;
@@ -21,12 +22,12 @@
     height: 100%;
 
     g {
-        filter: radial-outline(1px, white);
+        filter: radial-outline(2px, white);
     }
 }
 
 .theme-dark .background-svg g {
-    filter: radial-outline(1px, $black);
+    filter: radial-outline(2px, $black);
 }
 
 .svg-thermo {
@@ -55,4 +56,29 @@
 .theme-dark .svg-arrow {
     fill: $black;
     stroke: $grey-400;
+}
+
+.svg-cage {
+    path {
+        stroke: $grey-700;
+        stroke-width: 3;
+        stroke-dasharray: 6;
+    }
+
+    text {
+        fill: $grey-700;
+        background: white;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+
+.theme-dark .svg-cage {
+    path {
+        stroke: $grey-500;
+    }
+
+    text {
+        fill: $grey-300;
+    }
 }

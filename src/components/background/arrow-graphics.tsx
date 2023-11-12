@@ -76,8 +76,8 @@ const renderArrowTail = ({ head, tail }: Arrow, width: number) => {
     );
 };
 
-const right = (Math.PI * 3) / 4;
-const left = (Math.PI * 5) / 4;
+const R = (Math.PI * 3) / 4;
+const L = (Math.PI * 5) / 4;
 
 const renderArrowHead = (fullArrow: number[], width: number) => {
     const [secondLast, last] = fullArrow.slice(-2);
@@ -86,10 +86,8 @@ const renderArrowHead = (fullArrow: number[], width: number) => {
     const s = ARROW_HEAD_SIZE * 100;
 
     const path =
-        `M${x} ${y} ` +
-        `l${Math.cos(angle + right) * s} ${Math.sin(angle + right) * s}` +
-        `M${x} ${y} ` +
-        `l${Math.cos(angle + left) * s} ${Math.sin(angle + left) * s}`;
+        `M${x} ${y} l${Math.cos(angle + R) * s} ${Math.sin(angle + R) * s}` +
+        `M${x} ${y} l${Math.cos(angle + L) * s} ${Math.sin(angle + L) * s}`;
 
     return (
         <path
@@ -131,7 +129,7 @@ const renderArrow = (arrow: Arrow, i: number) => {
 const ArrowGraphics = () => {
     const arrows = useSelector((state) => state.puzzle.arrows);
 
-    return <>{arrows.map((arrow, i) => renderArrow(arrow, i))}</>;
+    return <>{arrows.map(renderArrow)}</>;
 };
 
 export default ArrowGraphics;

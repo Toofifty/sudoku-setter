@@ -1,3 +1,4 @@
+import { Position } from 'types';
 import { getPosition } from 'utils/sudoku';
 
 export const SCALE = 900;
@@ -12,8 +13,12 @@ export const ARROW_PILL_SIZE = 0.625;
 export const ARROW_LINE_WIDTH = 0.0625;
 export const ARROW_HEAD_SIZE = 0.15;
 
-export const getSVGPosition = (index: number) => {
-    const position = getPosition(index);
+export const CAGE_OUTER_PADDING = 0.08;
+
+export const getSVGPosition = (position: number | Position): Position => {
+    if (typeof position === 'number') {
+        return getSVGPosition(getPosition(position));
+    }
     return {
         // +0.5 centers the graphic in the cell
         x: ((position.x + 0.5) * SCALE) / 9,

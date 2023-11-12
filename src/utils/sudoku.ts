@@ -20,6 +20,10 @@ export const addPosition = (a: Position, b: Position) => {
     return { x: a.x + b.x, y: a.y + b.y };
 };
 
+export const multiplyPosition = ({ x, y }: Position, n: number) => {
+    return { x: x * n, y: y * n };
+};
+
 export const getIndex = ({ x, y }: Position) => {
     if (x < 0 || x >= 9 || y < 0 || y >= 9) {
         return -1;
