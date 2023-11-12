@@ -11,7 +11,7 @@ import { useSudokuSolver } from '../../utils/solve';
 import './board.scss';
 
 const Board = () => {
-    const { board } = useSelector((state) => state.puzzle);
+    const { board, killerCages } = useSelector((state) => state.puzzle);
     const isSetMode = useSelector(isSetModeSelector);
     const { dirty, solution } = useSelector((state) => state.solver);
     const { board: playerBoard } = useSelector((state) => state.player);
@@ -21,6 +21,11 @@ const Board = () => {
     const solve = useSudokuSolver();
 
     const clearFocus = useAction('ui/clear-focus');
+
+    const killerCageStarts = useMemo(
+        () => killerCages.map(({ cage }) => Math.min(...cage)),
+        [killerCages]
+    );
 
     useEffect(() => {
         if (dirty) {
@@ -99,6 +104,7 @@ const Board = () => {
                             invalidCandidates={solutionCell?.invalidCandidates}
                             cornerMarks={playerCell?.cornerMarks}
                             centreMarks={playerCell?.centreMarks}
+                            topLeftBlocked={killerCageStarts.includes(index)}
                             focused={focused === index}
                             selection={selection}
                             targetValue={targetValue}

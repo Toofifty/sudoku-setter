@@ -8,9 +8,24 @@ interface MarksProps {
     invalidCandidates: number[];
     cornerMarks: number[];
     centreMarks: number[];
+    topLeftBlocked?: boolean;
 }
 
-const sliceCornerMarks = (marks: number[]): number[][] => {
+const sliceCornerMarks = (
+    marks: number[],
+    topLeftBlocked?: boolean
+): number[][] => {
+    if (topLeftBlocked) {
+        if (marks.length === 1) {
+            return [marks, []];
+        }
+
+        return [
+            marks.slice(0, Math.floor(marks.length / 2)),
+            marks.slice(Math.floor(marks.length / 2)),
+        ];
+    }
+
     if (marks.length < 3) {
         return [marks, []];
     }
@@ -25,10 +40,14 @@ const Marks = ({
     invalidCandidates,
     cornerMarks,
     centreMarks,
+    topLeftBlocked,
 }: MarksProps) => {
     const isPlayMode = useSelector(isPlayModeSelector);
 
-    const [cornerMarksTop, cornerMarksBottom] = sliceCornerMarks(cornerMarks);
+    const [cornerMarksTop, cornerMarksBottom] = sliceCornerMarks(
+        cornerMarks,
+        topLeftBlocked
+    );
 
     if (isPlayMode) {
         return (
@@ -36,6 +55,7 @@ const Marks = ({
                 {cornerMarks.length > 0 && (
                     <div className="cell__corner-marks">
                         <div className="cell__corner-marks--top">
+                            {topLeftBlocked && <span style={{ width: 20 }} />}
                             {cornerMarksTop.map((n) => (
                                 <span key={n}>{n}</span>
                             ))}

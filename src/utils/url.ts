@@ -67,7 +67,7 @@ export const encode = ({
             .map(({ total, cage }) => `${total}:${encodeArray(cage)}`)
             .join(';'),
     };
-    let encoded = `G:${data.givens}`;
+    let encoded = data.givens.length > 0 ? `G:${data.givens}` : '';
     if (data.thermos) encoded += `!T:${data.thermos}`;
     if (data.arrows) encoded += `!A:${data.arrows}`;
     if (data.killerCages) encoded += `!K:${data.killerCages}`;

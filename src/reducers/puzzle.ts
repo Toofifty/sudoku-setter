@@ -2,8 +2,21 @@ import { PuzzleCell } from 'types';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
 import { _, action, merge, GetAction } from './merge';
 import { undoHistory, redoHistory, saveHistory } from './history';
+import { encode } from 'utils';
 
 export type GameMode = 'set' | 'play';
+
+const writeToHash =
+    (fn: (state: PuzzleState, ...args: unknown[]) => PuzzleState) =>
+    (state: PuzzleState, ...args: unknown[]) => {
+        const newState = fn(state, ...args);
+
+        setTimeout(() => {
+            window.location.hash = encode(newState);
+        });
+
+        return newState;
+    };
 
 export interface PuzzleState {
     mode: GameMode;
@@ -55,14 +68,16 @@ const setGiven = action(
         };
         return { ...state, board };
     },
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const reset = action(
     _ as PuzzleState,
     _ as undefined,
     'puzzle/reset',
-    (state) => ({ ...defaultState(), mode: state.mode })
+    (state) => ({ ...defaultState(), mode: state.mode }),
+    writeToHash
 );
 
 const createThermo = action(
@@ -73,7 +88,8 @@ const createThermo = action(
         ...state,
         thermos: [...state.thermos, thermo],
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const deleteThermo = action(
@@ -84,7 +100,8 @@ const deleteThermo = action(
         ...state,
         thermos: state.thermos.filter((thermo) => !thermo.includes(cellIndex)),
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const createArrow = action(
@@ -95,7 +112,8 @@ const createArrow = action(
         ...state,
         arrows: [...state.arrows, arrow],
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const deleteArrow = action(
@@ -108,7 +126,8 @@ const deleteArrow = action(
             ({ head, tail }) => ![head, tail].flat().includes(cellIndex)
         ),
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const createKillerCage = action(
@@ -119,7 +138,8 @@ const createKillerCage = action(
         ...state,
         killerCages: [...state.killerCages, killerCage],
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const deleteKillerCage = action(
@@ -132,7 +152,8 @@ const deleteKillerCage = action(
             ({ cage }) => !cage.includes(cellIndex)
         ),
     }),
-    saveHistory<PuzzleState>(...trackHistoryOf)
+    saveHistory<PuzzleState>(...trackHistoryOf),
+    writeToHash
 );
 
 const setSudoku = action(
@@ -142,7 +163,8 @@ const setSudoku = action(
     (state, sudoku) => ({
         ...state,
         ...sudoku,
-    })
+    }),
+    writeToHash
 );
 
 const setColor = action(
@@ -165,21 +187,24 @@ const setRestrictions = action(
     (state, restrictions) => ({
         ...state,
         restrictions: { ...state.restrictions, ...restrictions },
-    })
+    }),
+    writeToHash
 );
 
 const undo = action(
     _ as PuzzleState,
     _ as undefined,
     'puzzle/undo',
-    undoHistory(...trackHistoryOf)
+    undoHistory(...trackHistoryOf),
+    writeToHash
 );
 
 const redo = action(
     _ as PuzzleState,
     _ as undefined,
     'puzzle/redo',
-    redoHistory(...trackHistoryOf)
+    redoHistory(...trackHistoryOf),
+    writeToHash
 );
 
 export type PuzzleAction =

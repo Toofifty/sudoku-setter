@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import SolverWorker from 'worker-loader!./solver.worker';
 import { SolutionCell, PuzzleCell } from 'types';
-import { encode } from 'utils/url';
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
 import { useEffect, useState } from 'react';
@@ -99,9 +98,6 @@ export const useSudokuSolver = () => {
     }, [solver.lookahead, key]);
 
     return () => {
-        // TODO: move to thunk
-        window.location.hash = encode(sudoku);
-
         const localKey = Math.random();
         // update the key so the lookahead
         // listener will ignore old messages

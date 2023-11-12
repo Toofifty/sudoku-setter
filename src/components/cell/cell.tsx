@@ -12,6 +12,7 @@ interface CellProps {
     invalidCandidates?: number[];
     cornerMarks?: number[];
     centreMarks?: number[];
+    topLeftBlocked?: boolean;
     given: boolean;
 
     selection: number[];
@@ -26,6 +27,7 @@ const Cell = ({
     invalidCandidates = [],
     cornerMarks = [],
     centreMarks = [],
+    topLeftBlocked,
     given,
     selection,
     index,
@@ -77,6 +79,7 @@ const Cell = ({
                         invalidCandidates={invalidCandidates}
                         cornerMarks={cornerMarks}
                         centreMarks={centreMarks}
+                        topLeftBlocked={topLeftBlocked}
                     />
                 ))}
             {debugMode && <span className="cell__num">{index}</span>}
