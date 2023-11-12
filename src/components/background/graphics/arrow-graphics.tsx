@@ -6,7 +6,7 @@ import {
     ARROW_LINE_WIDTH,
     ARROW_PILL_SIZE,
     getSVGPosition,
-} from './consts';
+} from '../consts';
 
 const directionMap: Record<
     number,

@@ -7,7 +7,7 @@ import {
     THERMO_BULB_SIZE,
     THERMO_LINE_WIDTH,
     getSVGPosition,
-} from './consts';
+} from '../consts';
 
 const renderLines = (thermo: number[], width: number) => {
     const path = thermo

@@ -1,7 +1,7 @@
 import useSelector from 'hooks/use-selector';
 import React, { useMemo } from 'react';
 import { KillerCage } from 'utils/sudoku-types';
-import { CAGE_OUTER_PADDING, getSVGPosition } from './consts';
+import { CAGE_OUTER_PADDING, getSVGPosition } from '../consts';
 import {
     addPosition,
     getIndex,

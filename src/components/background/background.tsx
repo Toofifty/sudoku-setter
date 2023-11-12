@@ -6,7 +6,10 @@ import Box from 'components/box';
 import BackgroundCell from './background-cell';
 import useSelector from 'hooks/use-selector';
 import './background.scss';
-import BackgroundSVG from './background-svg';
+import { SCALE } from './consts';
+import ThermoGraphics from './graphics/thermo-graphics';
+import ArrowGraphics from './graphics/arrow-graphics';
+import CageGraphics from './graphics/cage-graphics';
 
 const boxes = range(0, 81).reduce(
     (boxes, i) => {
@@ -29,7 +32,6 @@ const Background = () => {
                 restrictions.uniqueDiagonals && 'background--diagonals'
             )}
         >
-            <BackgroundSVG />
             {boxes.map((box, i) => (
                 <Box key={i}>
                     {box.map((n) => (
@@ -46,6 +48,16 @@ const Background = () => {
                     ))}
                 </Box>
             ))}
+            <svg
+                width={SCALE}
+                height={SCALE}
+                viewBox={`0 0 ${SCALE} ${SCALE}`}
+                className="background-svg"
+            >
+                <ThermoGraphics />
+                <ArrowGraphics />
+                <CageGraphics />
+            </svg>
         </div>
     );
 };

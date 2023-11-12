@@ -1,3 +1,4 @@
+@use 'sass:math';
 @import 'styles';
 
 .background {
@@ -84,5 +85,89 @@
         &--blue {
             background: $blue-100-3;
         }
+    }
+}
+
+// svg
+
+@function radial-outline($width, $color, $iters: 4) {
+    $output: unquote('');
+    @for $i from 1 through $iters {
+        $angle: 2 * math.$pi * $i / $iters;
+        @debug $angle;
+        $y: $width * math.sin($angle);
+        $x: $width * math.cos($angle);
+        $output: $output drop-shadow($x $y $color);
+    }
+    @return $output;
+}
+
+.background-svg {
+    dominant-baseline: hanging;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    g {
+        filter: radial-outline(2px, white);
+    }
+}
+
+.theme-dark .background-svg g {
+    filter: radial-outline(2px, $black);
+}
+
+.svg-thermo {
+    fill: $grey-400;
+    stroke: $grey-400;
+
+    &--ghost {
+        fill: $grey-300;
+        stroke: $grey-300;
+    }
+}
+.theme-dark .svg-thermo {
+    fill: $grey-600;
+    stroke: $grey-600;
+
+    &--ghost {
+        fill: $grey-500;
+        stroke: $grey-500;
+    }
+}
+
+.svg-arrow {
+    fill: white;
+    stroke: $grey-300;
+}
+.theme-dark .svg-arrow {
+    fill: $black;
+    stroke: $grey-400;
+}
+
+.svg-cage {
+    path {
+        stroke: $grey-700;
+        stroke-width: 3;
+        stroke-dasharray: 6;
+    }
+
+    text {
+        fill: $grey-700;
+        background: white;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+
+.theme-dark .svg-cage {
+    path {
+        stroke: $grey-500;
+    }
+
+    text {
+        fill: $grey-300;
     }
 }
