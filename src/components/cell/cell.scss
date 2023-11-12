@@ -122,7 +122,13 @@
     }
 
     &__centre-marks {
+        $pad: 12px;
+        top: calc(20% + #{$pad} / 2);
+        height: calc(60% - #{$pad});
         display: flex;
+        flex-wrap: wrap;
+        line-height: 1;
+        gap: 0;
         align-items: center;
         justify-content: center;
     }

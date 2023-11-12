@@ -74,7 +74,9 @@ const Marks = ({
                             `len-${centreMarks.length}`
                         )}
                     >
-                        {centreMarks.join('')}
+                        {centreMarks.map((n) => (
+                            <span key={n}>{n}</span>
+                        ))}
                     </div>
                 )}
             </>
