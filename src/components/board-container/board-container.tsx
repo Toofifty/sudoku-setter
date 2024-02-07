@@ -30,7 +30,7 @@ const BoardContainer = () => {
         const listener = () => {
             const desktopScaleX = (window.innerWidth - DESKTOP_PAD_X) / 10;
             const desktopScaleY = (window.outerHeight - DESKTOP_PAD_Y) / 10;
-            const mobileScaleX = (window.outerWidth - MOBILE_PAD_X) / 10;
+            const mobileScaleX = (window.innerWidth - MOBILE_PAD_X) / 10;
             const mobileScaleY = (window.outerHeight - MOBILE_PAD_Y) / 10;
 
             console.log(mobileScaleX, mobileScaleY);

@@ -15,7 +15,7 @@ const PlayerControls = () => {
                 return;
             }
 
-            const targetWidth = window.outerWidth - PADDING_X;
+            const targetWidth = window.innerWidth - PADDING_X;
             const currentWidth = ref.current.clientWidth;
             setScale((targetWidth / currentWidth) * 100);
         };
