@@ -1,29 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Background from 'components/background';
 import Board from 'components/board';
 import './board-container.scss';
 import InteractionLayer from 'components/interaction-layer';
 
-const MIN_SCALE = 80;
+const MAX_SCALE = 100;
 
-const MOBILE_PADDING = 12;
-const DESKTOP_EXTRA_ROOM = 400;
+// mobile only considers play mode (for now)
+const MOBILE_PAD_X = 24;
+// header = 64
+// top padding = 24
+// keypad = 240
+// extra room (pad-bottom will be half) = 48
+const MOBILE_PAD_Y = 64 + 24 + 240 + 48;
+
+// side controls are ~280px
+// +24 * 2 for side padding
+const DESKTOP_PAD_X = 280 * 2 + 48;
+// header = 64
+// top padding = 24
+// extra room (pad-bottom will be half) = 48
+const DESKTOP_PAD_Y = 64 + 24 + 48;
 
 const BoardContainer = () => {
     const [scale, setScale] = useState(100);
     const [mobileScale, setMobileScale] = useState(100);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const listener = () => {
-            setScale(
-                Math.min(
-                    (window.outerWidth - DESKTOP_EXTRA_ROOM) / 10,
-                    MIN_SCALE
-                )
-            );
-            setMobileScale(
-                Math.min((window.outerWidth - MOBILE_PADDING) / 10, MIN_SCALE)
-            );
+            const desktopScaleX = (window.innerWidth - DESKTOP_PAD_X) / 10;
+            const desktopScaleY = (window.outerHeight - DESKTOP_PAD_Y) / 10;
+            const mobileScaleX = (window.outerWidth - MOBILE_PAD_X) / 10;
+            const mobileScaleY = (window.outerHeight - MOBILE_PAD_Y) / 10;
+
+            console.log(mobileScaleX, mobileScaleY);
+            console.log(Math.min(mobileScaleX, mobileScaleY, MAX_SCALE));
+
+            setScale(Math.min(desktopScaleX, desktopScaleY, MAX_SCALE));
+            setMobileScale(Math.min(mobileScaleX, mobileScaleY, MAX_SCALE));
         };
 
         window.addEventListener('resize', listener);

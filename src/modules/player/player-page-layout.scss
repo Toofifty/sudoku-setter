@@ -1,0 +1,23 @@
+@import 'styles';
+
+.player-page-layout {
+    display: flex;
+
+    &__board {
+        margin-right: $sp-16;
+    }
+
+    &__left-controls {
+        margin-right: $sp-16;
+    }
+
+    @include mobile {
+        flex-direction: column;
+        align-items: center;
+
+        &__board {
+            margin-right: 0;
+            margin-bottom: $sp-16;
+        }
+    }
+}

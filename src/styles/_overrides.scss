@@ -55,14 +55,28 @@
 }
 
 .btn.btn {
+    &-primary {
+        &:hover {
+            background: $purple-500;
+
+            @include mobile {
+                background: $purple-600;
+            }
+        }
+    }
+
     &-light {
         background: $purple-100;
         border: 2px solid transparent;
+        transition: 0.1s;
 
-        &:hover,
-        &:focus {
+        &:hover {
             color: $purple-600;
             background: $purple-200;
+
+            @include mobile {
+                background: $purple-100;
+            }
         }
 
         &:active {
@@ -78,9 +92,12 @@
             background: $red-100;
             color: $red-600 !important;
 
-            &:hover,
-            &:focus {
+            &:hover {
                 background: $red-200;
+
+                @include mobile {
+                    background: $red-100;
+                }
             }
 
             &:active {
@@ -93,9 +110,12 @@
             background: $green-100;
             color: $green-600 !important;
 
-            &:hover,
-            &:focus {
+            &:hover {
                 background: $green-200;
+
+                @include mobile {
+                    background: $green-100;
+                }
             }
 
             &:active {

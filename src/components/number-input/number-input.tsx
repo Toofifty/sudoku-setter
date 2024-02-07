@@ -8,6 +8,9 @@ interface NumberInputProps {
     selected?: number;
 }
 
+/**
+ * Setter number input
+ */
 const NumberInput = ({ onSetNumber, selected }: NumberInputProps) => (
     <div className="number-input">
         {range(1, 11).map((n) => (

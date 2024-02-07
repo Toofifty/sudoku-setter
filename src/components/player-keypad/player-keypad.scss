@@ -1,38 +1,31 @@
 @import 'styles';
 
-.control-box {
+$btn-size: 50px;
+$btn-margin: 2px;
+
+.keypad {
     display: flex;
-    flex-direction: column;
-    box-shadow: none;
-    border: 2px solid $grey-200;
-    border-radius: 16px;
+    align-items: flex-start;
+    padding: $sp-8;
+
+    background: white;
 
     .btn {
-        padding: 10px 16px;
-        height: 50px;
-        max-width: 50px;
-        margin: 4px;
-        font-size: 24px;
+        min-height: $btn-size;
+        min-width: $btn-size;
+        margin: 2px;
+        font-size: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-radius: 4px;
 
         i {
-            font-size: 16px;
+            font-size: 20px;
         }
 
         .flip-horiz {
             transform: scaleX(-1);
-        }
-
-        &.alone {
-            &:first-child {
-                margin-right: 8px;
-            }
-            &:last-child {
-                margin-left: 8px;
-            }
         }
 
         &.centre,
@@ -55,35 +48,15 @@
         }
     }
 
-    &__section {
-        display: flex;
-
-        &:first-child {
-            margin-bottom: 8px;
-        }
-    }
-
     &__input-mode,
     &__actions {
-        flex: 0;
-
         display: flex;
         flex-direction: column;
-
-        > * {
-            flex: 0 1 calc(100% / 3 - 8px);
-        }
     }
 
     &__numbers {
-        display: flex;
-        flex-wrap: wrap;
-        max-width: 174px;
-        margin: 0 8px;
-    }
-
-    &__number-btn {
-        flex: 0 1 calc(100% / 3 - 8px);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
     &__colors {

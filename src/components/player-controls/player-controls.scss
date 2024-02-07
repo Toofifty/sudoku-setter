@@ -1,0 +1,8 @@
+@import 'styles';
+
+.player-controls {
+    display: flex;
+
+    transform-origin: 50% 0;
+    transform: scale(calc(var(--scale, 100) / 100));
+}

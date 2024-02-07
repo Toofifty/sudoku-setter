@@ -38,41 +38,6 @@ $max-size: 800px;
     }
 }
 
-// .board-container {
-//     position: relative;
-//     background: $grey-300;
-//     --size: 1000px;
-//     width: calc(var(--size) + #{$padding});
-//     height: calc(var(--size) + #{$padding});
-//     border-radius: 4px;
-
-//     @for $i from 1 through 50 {
-//         $j: 10 - ($i / 5);
-//         @media (max-width: $j * 120px + $extra) {
-//             --size: #{($j - 1) * 120px};
-//         }
-//     }
-
-//     .board-sizer {
-//         position: absolute;
-//         left: 50%;
-//         top: 50%;
-
-//         transform: translate(-50%, -50%) scale(0.9);
-//         width: 1000px;
-//         height: 1000px;
-//         border: 2px solid $grey-300;
-
-//         @for $i from 1 through 50 {
-//             $j: 10 - ($i / 5);
-//             $scale: ($j - 2) / 10;
-//             @media (max-width: $j * 120px + $extra) {
-//                 transform: translate(-50%, -50%) scale($scale);
-//             }
-//         }
-//     }
-// }
-
 .theme-dark .board-container {
     background: $cell-outline-dark;
 }

@@ -67,6 +67,10 @@ $dist: $sp-8;
             translate: calc(var(--width) + $dist) calc(var(--height) / 2 - 50%);
         }
     }
+
+    @include mobile {
+        display: none;
+    }
 }
 
 .theme-dark .x-tooltip {

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
-import PlayerControlBox from 'components/player-control-box';
-import PageLayout from 'components/page-layout';
 import ModalHost from 'components/modal-host';
+import PlayerPageLayout from './player-page-layout';
+import { PlayerControls } from 'components/player-controls';
 
 const PlayerPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -25,9 +25,9 @@ const PlayerPage = () => {
 
     return (
         <>
-            <PageLayout
+            <PlayerPageLayout
                 board={<BoardContainer />}
-                controls={<PlayerControlBox />}
+                controls={<PlayerControls />}
             />
             <ModalHost />
         </>

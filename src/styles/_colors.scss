@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $grey-100: rgb(247, 248, 249);
 $grey-200: rgb(237, 240, 244);
 $grey-300: rgb(198, 204, 216);
@@ -37,7 +39,7 @@ $blue-200: rgb(174, 221, 255);
 // 255 - (255 - y)/p = x
 
 @function apply-opacity($value, $opacity) {
-    @return 255 - ((255 - $value) / $opacity);
+    @return 255 - math.div(255 - $value, $opacity);
 }
 
 @function at-opacity($color, $opacity) {

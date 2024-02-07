@@ -44,7 +44,8 @@ const Board = () => {
                     'menu',
                     'modal',
                     'button',
-                    'interaction-layer'
+                    'interaction-layer',
+                    'keypad'
                 )
             ) {
                 clearFocus();
