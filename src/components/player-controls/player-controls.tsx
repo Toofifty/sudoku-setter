@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import './player-controls.scss';
 import { PlayerAuxKeypad } from 'components/player-aux-keypad';
 import PlayerKeypad from 'components/player-keypad';
+import { viewport } from 'utils/size';
 
 const PADDING_X = 24;
 
@@ -15,7 +16,7 @@ const PlayerControls = () => {
                 return;
             }
 
-            const targetWidth = window.innerWidth - PADDING_X;
+            const targetWidth = viewport.width - PADDING_X;
             const currentWidth = ref.current.clientWidth;
             setScale((targetWidth / currentWidth) * 100);
         };

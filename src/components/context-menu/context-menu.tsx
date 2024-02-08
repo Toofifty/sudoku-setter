@@ -6,6 +6,7 @@ import useAction from 'hooks/use-action';
 import { isEventOver } from 'utils';
 import Menu from 'components/menu';
 import './context-menu.scss';
+import { viewport } from 'utils/size';
 
 const X_OFFSET = 8;
 const Y_OFFSET = 0;
@@ -55,7 +56,7 @@ const ContextMenu = ({ isStatic, onAction }: ContextMenuProps) => {
             let y = mouse.y + Y_OFFSET;
             if (ref.current) {
                 const rect = ref.current.getBoundingClientRect();
-                const { innerHeight: height, innerWidth: width } = window;
+                const { width, height } = viewport;
 
                 if (x < 0) x = SAFE_AREA_PADDING;
                 if (y < 0) y = SAFE_AREA_PADDING;
