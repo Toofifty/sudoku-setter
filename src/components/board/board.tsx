@@ -1,12 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+
 import { isSetModeSelector } from 'utils/selectors';
+import { isEventOver, useHighlightedCells } from 'utils';
+
 import useSelector from '../../hooks/use-selector';
-import { PuzzleCell, SolutionCell, PlayerCell } from '../../types';
+import { PlayerCell, PuzzleCell, SolutionCell } from '../../types';
 import { getBoxIndex, getPosition } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
 import useAction from '../../hooks/use-action';
-import { isEventOver, useHighlightedCells } from 'utils';
 import { useSudokuSolver } from '../../utils/solve';
 import './board.scss';
 

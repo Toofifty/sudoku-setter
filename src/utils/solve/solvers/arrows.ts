@@ -1,8 +1,10 @@
 import { Arrow } from 'utils/sudoku-types';
+import { getBoxIndex } from 'utils/sudoku';
+
+import { isFilled } from '../helper';
+
 import { SolveHistory } from './history';
 import { CellSolver } from './types';
-import { isFilled } from '../helper';
-import { getBoxIndex } from 'utils/sudoku';
 
 const sameColumn = (aIndex: number, bIndex: number) =>
     aIndex % 9 === bIndex % 9;
@@ -31,7 +33,7 @@ const getAllSums = (inCellIndices: number[], inCandidates: number[][]) => {
     const thisIndex = cellIndices.shift()!;
     const thisCandidates = candidates.shift()!;
 
-    for (let n of thisCandidates) {
+    for (const n of thisCandidates) {
         // filter this value out of other "seen" cell candidates
         const otherCandidates = candidates.map((c, i) =>
             sees(thisIndex, cellIndices[i]) ? c.filter((x) => x !== n) : c
@@ -50,7 +52,7 @@ export const solveArrows =
         if (isFilled(cell)) return cell;
 
         // heads
-        for (let arrow of arrows.filter(({ head }) => head.includes(i))) {
+        for (const arrow of arrows.filter(({ head }) => head.includes(i))) {
             const tail = arrow.tail.map((index) => board[index]);
 
             const sums = getAllSums(
@@ -73,7 +75,7 @@ export const solveArrows =
         }
 
         // tails
-        for (let arrow of arrows.filter(({ tail }) => tail.includes(i))) {
+        for (const arrow of arrows.filter(({ tail }) => tail.includes(i))) {
         }
 
         // arrow:

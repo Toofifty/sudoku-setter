@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
-import Router from 'router';
+import { useEffect } from 'react';
+
 import useSelector from 'hooks/use-selector';
 import Navbar from 'components/navbar/navbar';
 import KeyListener from 'components/key-listener';
+
+import Router from './router';
 
 const AppContainer = () => {
     const darkMode = useSelector((state) => state.player.settings.darkMode);

@@ -1,4 +1,5 @@
-import React, { useState, useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
+
 import Background from 'components/background';
 import Board from 'components/board';
 import './board-container.scss';

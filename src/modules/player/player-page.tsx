@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
 import ModalHost from 'components/modal-host';
-import PlayerPageLayout from './player-page-layout';
 import { PlayerControls } from 'components/player-controls';
+
+import PlayerPageLayout from './player-page-layout';
 
 const PlayerPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);

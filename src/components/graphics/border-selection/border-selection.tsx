@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import './border-selection.scss';
-import { addPosition, getPosition, getIndex } from 'utils/sudoku';
+import { addPosition, getIndex, getPosition } from 'utils/sudoku';
 
 const edges = {
     b: { x: 0, y: 1 },

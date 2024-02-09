@@ -1,9 +1,10 @@
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import SolverWorker from 'worker-loader!./solver.worker';
-import { SolutionCell, PuzzleCell } from 'types';
+import { useEffect, useState } from 'react';
+
+import { PuzzleCell, SolutionCell } from 'types';
+
 import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
-import { useEffect, useState } from 'react';
+
 import { InterCell } from './types';
 
 type SolveBoardResponse = {
@@ -20,7 +21,7 @@ type InvalidateCandidates = {
 
 type WorkerEvent = SolveBoardResponse | InvalidateCandidates;
 
-const worker = new SolverWorker();
+const worker = new Worker(new URL('./solver.worker', import.meta.url));
 
 const defaultInterCell: InterCell = {
     value: undefined,

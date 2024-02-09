@@ -1,14 +1,14 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
+
 import SetterPage from 'modules/setter';
 import PlayerPage from 'modules/player';
 
 const Router = () => (
-    <Switch>
-        <Route path="/setter" component={SetterPage} />
-        <Route path="/puzzle" component={PlayerPage} />
-        <Route path="/" render={() => <Redirect to="/setter" />} />
-    </Switch>
+    <Routes>
+        <Route path="/setter" element={<SetterPage />} />
+        <Route path="/puzzle" element={<PlayerPage />} />
+        <Route path="/" element={<Navigate replace to="/setter" />} />
+    </Routes>
 );
 
 export default Router;

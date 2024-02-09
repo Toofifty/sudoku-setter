@@ -1,14 +1,14 @@
-import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import AppContainer from 'app-container';
-import { store, history } from './store';
+import { HistoryRouter } from 'redux-first-history/rr6';
+
+import AppContainer from './app-container';
+import { history, store } from './store';
 
 const Root = () => (
     <ReduxProvider store={store}>
-        <ConnectedRouter history={history}>
+        <HistoryRouter history={history}>
             <AppContainer />
-        </ConnectedRouter>
+        </HistoryRouter>
     </ReduxProvider>
 );
 

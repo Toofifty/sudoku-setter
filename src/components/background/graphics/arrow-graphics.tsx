@@ -1,6 +1,8 @@
 import React from 'react';
+
 import useSelector from 'hooks/use-selector';
 import { Arrow } from 'utils/sudoku-types';
+
 import {
     ARROW_HEAD_SIZE,
     ARROW_LINE_WIDTH,

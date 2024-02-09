@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
 import { isEventOver } from 'utils';

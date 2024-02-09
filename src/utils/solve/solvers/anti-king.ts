@@ -1,6 +1,8 @@
-import { CellSolver } from './types';
-import { isFilled, king, getValue } from '../helper';
 import { getPosition } from 'utils/sudoku';
+
+import { getValue, isFilled, king } from '../helper';
+
+import { CellSolver } from './types';
 
 export const solveAntiKing: CellSolver = (cell, i, board) => {
     if (isFilled(cell)) return cell;

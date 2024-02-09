@@ -1,4 +1,5 @@
 import { isAdjacent } from 'utils/sudoku';
+
 import { InteractionHandler } from './types';
 import { isCorner } from './util';
 

@@ -17,7 +17,7 @@ export const permutationsWithSum = (
     }
 
     const permutations: number[][] = [];
-    for (let n of range(min, max)) {
+    for (const n of range(min, max)) {
         if (n === sum) {
             permutations.push([n]);
             continue;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { decode } from 'utils';
 import ContextMenu from 'components/context-menu';
 import useAction from 'hooks/use-action';

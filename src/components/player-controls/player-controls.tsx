@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+
 import './player-controls.scss';
 import { PlayerAuxKeypad } from 'components/player-aux-keypad';
 import PlayerKeypad from 'components/player-keypad';

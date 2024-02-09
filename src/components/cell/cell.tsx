@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import cx from 'classnames';
+
 import useSelector from 'hooks/use-selector';
 import { isSetModeSelector } from 'utils/selectors';
+
 import Marks from './marks';
 import './cell.scss';
 

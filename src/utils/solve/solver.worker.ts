@@ -1,24 +1,23 @@
 import { InterCell, SolvePayload } from './types';
 import {
-    solveNakedSingles,
-    solveHiddenSingles,
-    solveNakedPairs,
-    solveHiddenPairs,
-    solveNakedTuples,
-    solveLockedCandidates,
-    solveThermos,
-    solveArrows,
-    solveKillerCages,
     solveAntiKing,
     solveAntiKnight,
+    solveArrows,
+    solveHiddenPairs,
+    solveHiddenSingles,
+    solveKillerCages,
+    solveLockedCandidates,
+    solveNakedPairs,
+    solveNakedSingles,
+    solveNakedTuples,
     solveNonSeqNeighbors,
-    solveYWing,
+    solveThermos,
     solveXWing,
+    solveYWing,
 } from './solvers';
-import { isFilled, hasEmptyCell } from './helper';
+import { hasEmptyCell, isFilled } from './helper';
 import { solveUniqueDiagonals } from './solvers/unique-diagonals';
 import { SolveHistory, print } from './solvers/history';
-import { permutationsWithSum } from 'utils/permutations';
 
 type SolveBoard = { type: 'solve-board'; key: number; payload: SolvePayload };
 
@@ -199,7 +198,7 @@ const runLookaheadSolve = (sudoku: SolvePayload, key: number) => {
             return;
 
         const invalid = [];
-        for (let n of cell.marks.filter(
+        for (const n of cell.marks.filter(
             (n) => !cell.invalidMarks?.includes(n)
         )) {
             if (!lookaheadSolve.enabled || lookaheadSolve.key !== key) continue;

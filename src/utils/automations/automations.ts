@@ -1,8 +1,9 @@
 import { allBoxIndices, regionIndices } from 'utils/solve/helper';
 import { getPosition } from 'utils/sudoku';
 import { intersection } from 'utils';
-import { Automation } from './types';
 import { range } from 'utils/misc';
+
+import { Automation } from './types';
 
 export const autoFixPencilMarks: Automation = (
     { get, commit },

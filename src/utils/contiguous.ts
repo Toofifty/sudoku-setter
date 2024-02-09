@@ -8,7 +8,7 @@ export const isContiguousSequential = (
     if (cells.length === 0) return false;
     let prev = cells.shift()!;
     const check = allowDiagonals ? validDiagonal : valid;
-    for (let cell of cells) {
+    for (const cell of cells) {
         const diff = cell - prev;
 
         if (!check.includes(diff)) return false;
@@ -41,7 +41,7 @@ export const isContiguous = (
     if (cells.length === 0) return false;
     if (cells.length === 1) return true;
     const check = allowDiagonals ? validDiagonal : valid;
-    for (let cell of cells) {
+    for (const cell of cells) {
         if (!cells.some((other) => check.includes(cell - other))) return false;
     }
     return true;

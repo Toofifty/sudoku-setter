@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
 import Button from 'components/button';
 import Modal from 'components/modal';
 import ControlsMenu from 'components/setter-controls-menu';

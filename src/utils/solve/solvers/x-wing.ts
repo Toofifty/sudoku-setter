@@ -1,9 +1,11 @@
 import { getPosition } from 'utils/sudoku';
+import { range } from 'utils/misc';
+
 import { column, isFilled, row } from '../helper';
+import { InterCell } from '../types';
+
 import { SolveHistory } from './history';
 import { CellSolver } from './types';
-import { InterCell } from '../types';
-import { range } from 'utils/misc';
 
 /**
  * repro: #G:0:6,4:9,8:7,a:4,e:7,f:1,k:2,l:8,p:5,r:8,y:9,14:7,1a:3,1h:8,1j:5,1n:2,1o:3,1t:4,1u:5,1y:2,20:9,24:3,28:4

@@ -1,4 +1,5 @@
 import { SetterInputMode } from 'reducers/setter';
+
 import { InteractionHandler } from './types';
 import { selectionInteractionHandler } from './selection';
 import { thermoInteractionHandler } from './thermo';

@@ -1,7 +1,8 @@
-import { CellSolver } from './types';
-import { getPosition, getBox } from '../../sudoku';
-import { isFilled, box, row, column } from '../helper';
+import { getBox, getPosition } from '../../sudoku';
+import { box, column, isFilled, row } from '../helper';
 import { range } from '../../misc';
+
+import { CellSolver } from './types';
 
 /**
  * Solve for "locked-candidates" - when the same digit is locked
@@ -23,7 +24,7 @@ export const solveLockedCandidates: CellSolver = (cell, i, board) => {
     const boxRow = range(currentBox.x * 3, (currentBox.x + 1) * 3 - 1);
     const boxColumn = range(currentBox.y * 3, (currentBox.y + 1) * 3 - 1);
 
-    for (let n of cell.marks) {
+    for (const n of cell.marks) {
         // short circuit if digit already marked
         // previously in box
         const alreadyTested = boxCells

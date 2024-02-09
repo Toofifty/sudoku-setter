@@ -1,5 +1,7 @@
 import { connectRouter } from 'connected-react-router';
+
 import { RootState, WithDispatch } from 'store';
+
 import puzzle, { PuzzleAction } from './puzzle';
 import solver, { SolverAction } from './solver';
 import ui, { UIAction } from './ui';

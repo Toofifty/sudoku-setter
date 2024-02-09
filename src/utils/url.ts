@@ -1,5 +1,7 @@
 import { PuzzleState } from 'reducers/puzzle';
+
 import { PuzzleCell } from '../types';
+
 import { isFilled } from './solve/helper';
 import { Arrow, KillerCage, Thermo } from './sudoku-types';
 

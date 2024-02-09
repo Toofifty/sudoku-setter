@@ -1,7 +1,8 @@
-import { CellSolver } from './types';
 import { getPosition } from '../../sudoku';
-import { isFilled, getMarks, regions } from '../helper';
+import { getMarks, isFilled, regions } from '../helper';
 import { InterCell } from '../types';
+
+import { CellSolver } from './types';
 import { SolveHistory } from './history';
 
 /**
@@ -17,7 +18,7 @@ export const solveHiddenSingles =
         if (isFilled(cell) && cell.given) return cell;
         if (cell.marks.length === 1) return cell;
 
-        for (let cells of regions(board, pos)) {
+        for (const cells of regions(board, pos)) {
             const marks = checkHiddenSingles(cell, cells);
 
             if (marks.length === 1) {
@@ -35,7 +36,7 @@ export const solveHiddenSingles =
 
 export const checkHiddenSingles = (cell: InterCell, cells: InterCell[]) => {
     const cellMarks = cells.map(getMarks);
-    for (let n of cell.marks) {
+    for (const n of cell.marks) {
         if (cellMarks.every((marks) => !marks.includes(n))) {
             return [n];
         }

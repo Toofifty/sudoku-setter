@@ -1,12 +1,14 @@
-import { CellSolver } from './types';
+import { KillerCage } from 'utils/sudoku-types';
+import { except, range, sum } from 'utils';
+
 import { isFilled } from '../helper';
 import { InterCell } from '../types';
-import { KillerCage } from 'utils/sudoku-types';
-import { range, sum, except } from 'utils';
+
+import { CellSolver } from './types';
 
 const validOptions = (total: number, cells: number, perm: number[] = []) => {
-    let valid: number[][] = [];
-    for (let n of range((perm[perm.length - 1] ?? 0) + 1, 10)) {
+    const valid: number[][] = [];
+    for (const n of range((perm[perm.length - 1] ?? 0) + 1, 10)) {
         const newPerm = [...perm, n];
         const permSum = sum(newPerm);
 
@@ -25,7 +27,7 @@ const canFillCage = (options: number[], cage: InterCell[]) => {
             cage[0].value === options[0] || cage[0].marks.includes(options[0])
         );
 
-    for (let option of options) {
+    for (const option of options) {
         // "place" the digit in the first cage possible
         // - then recurse with the new set of options
         // and cells
@@ -50,7 +52,7 @@ export const solveKillerCages =
     (cell, i, board) => {
         if (isFilled(cell)) return cell;
 
-        for (let { total, cage } of killerCages.filter(({ cage }) =>
+        for (const { total, cage } of killerCages.filter(({ cage }) =>
             cage.includes(i)
         )) {
             const options = validOptions(total, cage.length);

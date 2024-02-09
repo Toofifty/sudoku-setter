@@ -1,7 +1,8 @@
-import { RootState, DispatchFn } from 'store';
-import { _, action, merge, GetAction } from './merge';
+import { DispatchFn, RootState } from 'store';
 import { isPlayModeSelector } from 'utils/selectors';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
+
+import { GetAction, _, action, merge } from './merge';
 import { SetterInputMode } from './setter';
 import { InteractionData } from './interaction-handlers/types';
 import { interactionHandlers } from './interaction-handlers';

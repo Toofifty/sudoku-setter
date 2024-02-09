@@ -1,8 +1,9 @@
 import { PuzzleCell } from 'types';
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
-import { _, action, merge, GetAction } from './merge';
-import { undoHistory, redoHistory, saveHistory } from './history';
 import { encode } from 'utils';
+
+import { GetAction, _, action, merge } from './merge';
+import { redoHistory, saveHistory, undoHistory } from './history';
 
 export type GameMode = 'set' | 'play';
 
@@ -60,7 +61,7 @@ const setGiven = action(
     _ as { index: number; value?: number },
     'puzzle/set-given',
     (state, { index, value }) => {
-        let board = [...state.board];
+        const board = [...state.board];
         board[index] = {
             value,
             given: value !== undefined,

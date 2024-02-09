@@ -1,6 +1,6 @@
 import { interactionHandlers } from './interaction-handlers';
 import { InteractionHandler } from './interaction-handlers/types';
-import { _, action, merge, GetAction } from './merge';
+import { GetAction, _, action, merge } from './merge';
 import { load, persist } from './persist';
 import { SetterInputMode } from './setter';
 

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { range } from 'utils';
 import Button from 'components/button';
 import './number-input.scss';

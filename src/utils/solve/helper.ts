@@ -1,7 +1,9 @@
-import { Position, FilledCell } from '../../types';
-import { getBoxIndex, getPosition, getCellIndex } from '../sudoku';
-import { InterCell } from './types';
 import { range } from 'utils/misc';
+
+import { FilledCell, Position } from '../../types';
+import { getBoxIndex, getCellIndex, getPosition } from '../sudoku';
+
+import { InterCell } from './types';
 
 export const row = <T>(board: T[], pos: Position, includeSelf = false) => {
     const row = board.slice(pos.y * 9, (pos.y + 1) * 9);

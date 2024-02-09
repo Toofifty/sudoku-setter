@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
 import Modal from 'components/modal';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
@@ -26,7 +27,7 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
 
     const minimum = (() => {
         const minimums: number[] = [];
-        for (let index of selection.slice(digits)) {
+        for (const index of selection.slice(digits)) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 minimums.push(cell.value);
@@ -43,7 +44,7 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
 
     const maximum = (() => {
         const maximums: number[] = [];
-        for (let index of selection.slice(digits)) {
+        for (const index of selection.slice(digits)) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 maximums.push(cell.value);

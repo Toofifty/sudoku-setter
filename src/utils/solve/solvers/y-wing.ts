@@ -1,6 +1,8 @@
-import { getPosition, getCoord } from 'utils/sudoku';
+import { getCoord, getPosition } from 'utils/sudoku';
+
 import { regionIndices, regions } from '../helper';
 import { InterCell } from '../types';
+
 import { CellSolver } from './types';
 import { SolveHistory } from './history';
 

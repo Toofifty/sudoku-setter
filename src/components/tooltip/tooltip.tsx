@@ -1,4 +1,4 @@
-import React, {
+import {
     cloneElement,
     isValidElement,
     useEffect,
@@ -6,6 +6,7 @@ import React, {
     useState,
 } from 'react';
 import cx from 'classnames';
+
 import { useDebouncedCallback } from 'utils/use-debounced-callback';
 
 import './tooltip.scss';

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
 import cx from 'classnames';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useSelector from 'hooks/use-selector';
-import useAction from 'hooks/use-action';
-import Toggle from 'components/toggle';
+
 import Button from 'components/button';
+import Toggle from 'components/toggle';
+import useAction from 'hooks/use-action';
+import useSelector from 'hooks/use-selector';
 import './navbar.scss';
 
 const Navbar = () => {
@@ -12,6 +13,11 @@ const Navbar = () => {
     const setSettings = useAction('player/set-settings');
 
     const [mobileVisible, setMobileVisible] = useState(false);
+
+    const a = undefined;
+    if (a == null) {
+        console.log(a);
+    }
 
     return (
         <header className="nav-bar">

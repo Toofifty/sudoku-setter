@@ -1,9 +1,10 @@
 import React from 'react';
 import cx from 'classnames';
+
 import { range } from 'utils';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
-import { canUndoSelector, canRedoSelector } from 'utils/selectors';
+import { canRedoSelector, canUndoSelector } from 'utils/selectors';
 import { useIsDigitCompleted } from 'utils/use-is-digit-completed';
 import Tooltip from 'components/tooltip';
 

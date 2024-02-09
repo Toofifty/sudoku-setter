@@ -1,7 +1,10 @@
-import useSelector from 'hooks/use-selector';
 import { useMemo } from 'react';
-import { createSees } from './sees';
+
+import useSelector from 'hooks/use-selector';
 import { PlayerCell, PuzzleCell } from 'types';
+
+import { createSees } from './sees';
+
 
 const createGetImplicitValue =
     (board: PuzzleCell[], playerBoard: PlayerCell[]) => (index: number) => {

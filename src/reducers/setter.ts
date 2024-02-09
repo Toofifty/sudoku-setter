@@ -1,5 +1,6 @@
 import { Arrow, KillerCage, Thermo } from 'utils/sudoku-types';
-import { _, GetAction, action, merge } from './merge';
+
+import { GetAction, _, action, merge } from './merge';
 import { load, persist } from './persist';
 
 export type SetterInputMode = 'digit' | 'arrow' | 'thermo' | 'cage';

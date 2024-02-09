@@ -1,4 +1,5 @@
 import { InputMode } from 'reducers/player';
+
 import * as automations from './automations';
 import { Accessors } from './types';
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import useAction from './use-action';
 
 const useModal = (modalElement: React.ReactNode) => {

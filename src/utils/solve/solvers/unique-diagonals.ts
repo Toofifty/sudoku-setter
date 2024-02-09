@@ -1,6 +1,8 @@
-import { CellSolver } from './types';
-import { diagonals, getValue } from '../helper';
 import { getPosition } from 'utils/sudoku';
+
+import { diagonals, getValue } from '../helper';
+
+import { CellSolver } from './types';
 import { checkHiddenSingles } from './hidden-singles';
 
 export const solveUniqueDiagonals: CellSolver = (cell, i, board) => {
@@ -13,7 +15,7 @@ export const solveUniqueDiagonals: CellSolver = (cell, i, board) => {
     if (cell.marks.length === 1) return cell;
 
     // hidden singles
-    for (let diag of diags) {
+    for (const diag of diags) {
         if (cell.marks.length === 1) break;
 
         const marks = checkHiddenSingles(

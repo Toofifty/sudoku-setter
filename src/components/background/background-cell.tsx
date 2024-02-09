@@ -1,4 +1,5 @@
 import React from 'react';
+
 import GraphicsBorderSelection from 'components/graphics/border-selection/border-selection';
 
 interface BackgroundCellProps {

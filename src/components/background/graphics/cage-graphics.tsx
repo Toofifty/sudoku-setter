@@ -1,7 +1,7 @@
+import { useMemo } from 'react';
+
 import useSelector from 'hooks/use-selector';
-import React, { useMemo } from 'react';
 import { KillerCage } from 'utils/sudoku-types';
-import { CAGE_OUTER_PADDING, getSVGPosition } from '../consts';
 import {
     addPosition,
     getIndex,
@@ -9,6 +9,8 @@ import {
     multiplyPosition,
 } from 'utils/sudoku';
 import { Position } from 'types';
+
+import { CAGE_OUTER_PADDING, getSVGPosition } from '../consts';
 
 type Line = { start: Position; end: Position };
 

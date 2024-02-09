@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import cx from 'classnames';
+
 import useSelector from 'hooks/use-selector';
 import './interaction-layer.scss';
 import { range } from 'utils';

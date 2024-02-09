@@ -1,7 +1,8 @@
 import React from 'react';
+
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
-import { canUndoSelector, canRedoSelector } from 'utils/selectors';
+import { canRedoSelector, canUndoSelector } from 'utils/selectors';
 import Button from 'components/button';
 import './undo-redo.scss';
 

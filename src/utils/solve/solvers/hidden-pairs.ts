@@ -1,6 +1,7 @@
-import { CellSolver } from './types';
 import { getPosition } from '../../sudoku';
-import { isFilled, row, column, box, getMarks } from '../helper';
+import { box, column, getMarks, isFilled, row } from '../helper';
+
+import { CellSolver } from './types';
 
 export const solveHiddenPairs: CellSolver = (cell, i, board) => {
     const pos = getPosition(i);
@@ -19,7 +20,7 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
 
         let matchIndex = 0;
         let matchingDigits: number[] = [];
-        for (let n of cell.marks) {
+        for (const n of cell.marks) {
             // if anything previous has the digit,
             // skip straight away
             const alreadyTested = cells
@@ -41,7 +42,7 @@ export const solveHiddenPairs: CellSolver = (cell, i, board) => {
             if (hasMatch) {
                 // check if a larger mark
                 // is also constrained
-                for (let m of cell.marks.filter((m) => m > n)) {
+                for (const m of cell.marks.filter((m) => m > n)) {
                     // if anything previous has the digit,
                     // skip straight away
                     const alreadyTested = cells

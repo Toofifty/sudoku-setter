@@ -1,11 +1,13 @@
-import { CellSolver } from './types';
-import { isFilled } from '../helper';
 import { Thermo } from 'utils/sudoku-types';
+
+import { isFilled } from '../helper';
+
+import { CellSolver } from './types';
 
 export const solveThermos =
     (thermos: Thermo[]): CellSolver =>
     (cell, i, board) => {
-        for (let thermo of thermos) {
+        for (const thermo of thermos) {
             const thermoIndex = thermo.indexOf(i);
 
             if (thermoIndex === -1) continue;

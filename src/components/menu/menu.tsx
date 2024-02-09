@@ -1,4 +1,4 @@
-import React, {
+import {
     createContext,
     forwardRef,
     useContext,
@@ -6,6 +6,7 @@ import React, {
     useState,
 } from 'react';
 import cx from 'classnames';
+
 import './menu.scss';
 import Button from 'components/button';
 

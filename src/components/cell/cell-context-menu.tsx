@@ -1,4 +1,5 @@
 import React from 'react';
+
 import ColorPicker from 'components/color-picker';
 import useSelector from 'hooks/use-selector';
 import { getPosition } from 'utils/sudoku';

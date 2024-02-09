@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { Portal } from 'react-portal';
+
 import Button from 'components/button';
 import './modal.scss';
 

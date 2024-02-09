@@ -1,8 +1,9 @@
-import { CellSolver } from './types';
 import { getPosition } from '../../sudoku';
-import { column, row, box, getValue } from '../helper';
+import { box, column, getValue, row } from '../helper';
 import { InterCell } from '../types';
 import { Position } from '../../../types';
+
+import { CellSolver } from './types';
 
 /**
  * Solves naked-singles by removing conflicting candidates

@@ -1,6 +1,8 @@
 import React from 'react';
 import cx from 'classnames';
+
 import useSelector from 'hooks/use-selector';
+
 import {
     GHOST_THERMO_BULB_SIZE,
     GHOST_THERMO_LINE_WIDTH,

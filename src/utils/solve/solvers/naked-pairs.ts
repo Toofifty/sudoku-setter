@@ -1,6 +1,7 @@
-import { CellSolver } from './types';
 import { getPosition } from '../../sudoku';
-import { isFilled, getMarks, regions } from '../helper';
+import { getMarks, isFilled, regions } from '../helper';
+
+import { CellSolver } from './types';
 import { SolveHistory } from './history';
 
 /**

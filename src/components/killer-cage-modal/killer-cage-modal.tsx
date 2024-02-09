@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+
 import useSelector from 'hooks/use-selector';
 import { isFilled } from 'utils/solve/helper';
 import useAction from 'hooks/use-action';
@@ -17,7 +18,7 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
 
     const minimum = (() => {
         const minimums: number[] = [];
-        for (let index of selection) {
+        for (const index of selection) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 minimums.push(cell.value);
@@ -34,7 +35,7 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
 
     const maximum = (() => {
         const maximums: number[] = [];
-        for (let index of selection) {
+        for (const index of selection) {
             const cell = solution[index];
             if (isFilled(cell)) {
                 maximums.push(cell.value);

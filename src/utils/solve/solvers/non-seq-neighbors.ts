@@ -1,6 +1,8 @@
-import { CellSolver } from './types';
-import { getPosition, getCellIndex } from 'utils/sudoku';
+import { getCellIndex, getPosition } from 'utils/sudoku';
+
 import { isFilled } from '../helper';
+
+import { CellSolver } from './types';
 
 const neighborOffsets = [
     [0, -1],

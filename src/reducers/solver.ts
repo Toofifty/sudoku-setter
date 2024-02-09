@@ -1,7 +1,8 @@
 import { SolutionCell } from 'types';
+import { DispatchFn } from 'store';
+
 import { load, persist } from './persist';
 import { GetAction, _, action, merge } from './merge';
-import { DispatchFn } from 'store';
 
 export interface SolverState {
     solution: SolutionCell[];

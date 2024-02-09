@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { Portal } from 'react-portal';
+
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { isEventOver } from 'utils';

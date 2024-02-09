@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { RootActionType } from '../reducers';
 
 type FindByType<TType, TValue> = TType extends { type: TValue } ? TType : never;

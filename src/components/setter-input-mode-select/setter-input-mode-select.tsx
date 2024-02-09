@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { SetterInputMode } from 'reducers/setter';
 import Button from 'components/button';
 

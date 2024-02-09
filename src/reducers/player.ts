@@ -1,8 +1,9 @@
 import { PlayerCell } from 'types';
-import { _, action, merge, GetAction } from './merge';
-import { undoHistory, redoHistory, saveHistory } from './history';
-import { load, persist } from './persist';
 import { runAutomations } from 'utils/automations';
+
+import { GetAction, _, action, merge } from './merge';
+import { redoHistory, saveHistory, undoHistory } from './history';
+import { load, persist } from './persist';
 
 export type InputMode = 'digit' | 'corner' | 'centre';
 const inputModes: InputMode[] = ['digit', 'corner', 'centre'];

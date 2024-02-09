@@ -1,5 +1,7 @@
 import React from 'react';
+
 import CellContextMenu from 'components/cell/cell-context-menu';
+
 import { InteractionHandler } from './types';
 import { isCorner } from './util';
 
