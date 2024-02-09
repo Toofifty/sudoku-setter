@@ -75,8 +75,8 @@ export const solveArrows =
         }
 
         // tails
-        for (const arrow of arrows.filter(({ tail }) => tail.includes(i))) {
-        }
+        // for (const arrow of arrows.filter(({ tail }) => tail.includes(i))) {
+        // }
 
         // arrow:
         // get maximum

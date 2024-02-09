@@ -15,7 +15,7 @@ export const save = (storageKey: string, data: unknown): void => {
 };
 
 export const persist =
-    <TState extends {}>(storageKey: string, ...keys: (keyof TState)[]) =>
+    <TState extends object>(storageKey: string, ...keys: (keyof TState)[]) =>
     (fn: (state: TState, ...args: unknown[]) => TState) =>
     (state: TState, ...args: unknown[]) => {
         const newState = fn(state, ...args);

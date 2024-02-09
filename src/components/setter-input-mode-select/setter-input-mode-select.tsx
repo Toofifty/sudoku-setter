@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { SetterInputMode } from 'reducers/setter';
 import Button from 'components/button';
+import Tooltip from 'components/tooltip';
 
 import './setter-input-mode-select.scss';
-import Tooltip from 'components/tooltip';
 
 interface SetterInputModeSelectProps {
     inputMode: SetterInputMode;

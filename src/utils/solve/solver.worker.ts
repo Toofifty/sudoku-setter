@@ -235,7 +235,7 @@ const runLookaheadSolve = (sudoku: SolvePayload, key: number) => {
 /* eslint-disable no-restricted-globals */
 addEventListener('message', ({ data }: { data: WorkerEvent }) => {
     switch (data.type) {
-        case 'solve-board':
+        case 'solve-board': {
             const updatedBoard = solveBoard(data.payload);
             postMessage({
                 type: 'solve-board-response',
@@ -250,6 +250,7 @@ addEventListener('message', ({ data }: { data: WorkerEvent }) => {
                 );
             }
             return;
+        }
         case 'start-lookahead-solve':
             if (!lookaheadSolve.enabled) {
                 lookaheadSolve.enabled = true;

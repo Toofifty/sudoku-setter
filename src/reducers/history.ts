@@ -11,7 +11,7 @@ export const saveHistory =
     (fn: (state: TState, ...args: unknown[]) => TState) =>
     (state: TState, ...args: unknown[]) => {
         // save base state
-        const { history: _history, ...saveableBaseState } = state;
+        const { history: _, ...saveableBaseState } = state;
 
         const newState = fn(state, ...args);
         const { history, ...saveableState } = newState;

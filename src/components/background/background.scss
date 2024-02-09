@@ -93,8 +93,7 @@
 @function radial-outline($width, $color, $iters: 4) {
     $output: unquote('');
     @for $i from 1 through $iters {
-        $angle: 2 * math.$pi * $i / $iters;
-        @debug $angle;
+        $angle: 2 * math.$pi * math.div($i, $iters);
         $y: $width * math.sin($angle);
         $x: $width * math.cos($angle);
         $output: $output drop-shadow($x $y $color);

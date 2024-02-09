@@ -6,11 +6,11 @@ import {
     useState,
 } from 'react';
 import cx from 'classnames';
+import { Portal } from 'react-portal';
 
 import { useDebouncedCallback } from 'utils/use-debounced-callback';
 
 import './tooltip.scss';
-import { Portal } from 'react-portal';
 
 const getRect = (element: HTMLElement) => {
     const { width, height } = element.getBoundingClientRect();
