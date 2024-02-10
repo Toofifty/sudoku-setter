@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 import { Portal } from 'react-portal';
 
-import Button from 'components/button';
-import './modal.scss';
 import { IconButton } from 'components/icon-button';
+
+import './modal.scss';
+import { useOnClickOutside } from 'utils/use-on-click-outside';
 
 interface ModalProps {
     children: React.ReactNode;
@@ -14,6 +15,8 @@ interface ModalProps {
 }
 
 const Modal = ({ children, className, onClose, size = 'md' }: ModalProps) => {
+    const ref = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         const listener = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
@@ -28,6 +31,8 @@ const Modal = ({ children, className, onClose, size = 'md' }: ModalProps) => {
         };
     }, [onClose]);
 
+    useOnClickOutside(ref, onClose);
+
     return (
         <Portal>
             <div
@@ -38,7 +43,9 @@ const Modal = ({ children, className, onClose, size = 'md' }: ModalProps) => {
                 )}
             >
                 <div className="xmodal__overlay" />
-                <div className="xmodal__container">{children}</div>
+                <div className="xmodal__container" ref={ref}>
+                    {children}
+                </div>
             </div>
         </Portal>
     );

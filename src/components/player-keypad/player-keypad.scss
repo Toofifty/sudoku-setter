@@ -7,6 +7,7 @@ $btn-margin: 2px;
     display: flex;
     align-items: flex-start;
     padding: $sp-8;
+    border-radius: 4px;
 
     background: white;
 
@@ -67,4 +68,8 @@ $btn-margin: 2px;
         max-width: 174px;
         margin: 0 8px;
     }
+}
+
+.theme-dark .keypad {
+    background: $grey-900;
 }

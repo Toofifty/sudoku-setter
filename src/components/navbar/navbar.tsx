@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Button from 'components/button';
@@ -7,17 +7,19 @@ import Toggle from 'components/toggle';
 import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
 import './navbar.scss';
+import { IconButton } from 'components/icon-button';
+import { useOnClickOutside } from 'utils/use-on-click-outside';
 
 const Navbar = () => {
+    const ref = useRef<HTMLDivElement>(null);
     const darkMode = useSelector((state) => state.player.settings.darkMode);
     const setSettings = useAction('player/set-settings');
 
     const [mobileVisible, setMobileVisible] = useState(false);
 
-    const a = undefined;
-    if (a == null) {
-        console.log(a);
-    }
+    useOnClickOutside(ref, () => {
+        setMobileVisible(false);
+    });
 
     return (
         <header className="nav-bar">
@@ -25,21 +27,16 @@ const Navbar = () => {
                 <i className="fad fa-game-board-alt m-r-12" />
                 Sudokuu
             </Link>
-            <Button
-                className="nav-bar__menu-btn"
+            <IconButton
                 onClick={() => setMobileVisible(!mobileVisible)}
-            >
-                {mobileVisible ? (
-                    <i className="fa fa-times" />
-                ) : (
-                    <i className="fa fa-bars" />
-                )}
-            </Button>
+                icon={mobileVisible ? 'fal fa-times' : 'fal fa-bars'}
+            />
             <section
                 className={cx(
                     'nav-bar__section',
                     mobileVisible && 'nav-bar__section--visible'
                 )}
+                ref={ref}
             >
                 <Toggle
                     sw
