@@ -4,7 +4,7 @@ import useAction from 'hooks/use-action';
 import { decode } from 'utils';
 import BoardContainer from 'components/board-container';
 import ModalHost from 'components/modal-host';
-import { PlayerControls } from 'components/player-controls';
+import PlayerKeypad from 'components/player-keypad';
 
 import PlayerPageLayout from './player-page-layout';
 
@@ -29,7 +29,7 @@ const PlayerPage = () => {
         <>
             <PlayerPageLayout
                 board={<BoardContainer />}
-                controls={<PlayerControls />}
+                controls={<PlayerKeypad />}
             />
             <ModalHost />
         </>

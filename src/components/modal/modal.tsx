@@ -3,9 +3,9 @@ import cx from 'classnames';
 import { Portal } from 'react-portal';
 
 import { IconButton } from 'components/icon-button';
+import { useOnClickOutside } from 'utils/use-on-click-outside';
 
 import './modal.scss';
-import { useOnClickOutside } from 'utils/use-on-click-outside';
 
 interface ModalProps {
     children: React.ReactNode;

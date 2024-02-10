@@ -1,19 +1,10 @@
-import React from 'react';
-import cx from 'classnames';
-
-import { range } from 'utils';
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import { canRedoSelector, canUndoSelector } from 'utils/selectors';
-import { useIsDigitCompleted } from 'utils/use-is-digit-completed';
-import Tooltip from 'components/tooltip';
-
+import { Keypad } from 'components/keypad';
+import useModal from 'hooks/use-modal';
+import PlayerSettingsModal from 'components/player-settings-modal';
 import './player-keypad.scss';
-
-const preventFocus = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-};
 
 const PlayerKeypad = () => {
     const inputMode = useSelector((state) => state.player.inputMode);
@@ -24,117 +15,94 @@ const PlayerKeypad = () => {
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('player'));
 
-    const isDigitCompleted = useIsDigitCompleted();
-
     const setSelectionValue = useAction('shared/set-selection-value');
 
+    const openPlayerSettingsModal = useModal(
+        <PlayerSettingsModal onClose={() => openPlayerSettingsModal(false)} />
+    );
+
     return (
-        <div className="keypad">
-            <div className="keypad__actions">
-                <Tooltip content="Undo" anchor="bottom">
-                    <button
-                        className="btn btn-light"
-                        disabled={!canUndo}
-                        onClick={() => undo()}
-                        onMouseDown={preventFocus}
-                    >
-                        <i className="fa fa-undo" />
-                    </button>
-                </Tooltip>
-                <Tooltip content="Redo" anchor="bottom">
-                    <button
-                        className="btn btn-light"
-                        disabled={!canRedo}
-                        onClick={() => redo()}
-                        onMouseDown={preventFocus}
-                    >
-                        <i className="fa fa-redo" />
-                    </button>
-                </Tooltip>
-                <Tooltip content="Preserve selection" anchor="bottom">
-                    <button
-                        className="btn btn-light"
-                        onClick={() => {}}
-                        onMouseDown={preventFocus}
-                        disabled
-                    >
-                        <i className="fa fa-game-board-alt" />
-                    </button>
-                </Tooltip>
-                <Tooltip content="Delete" anchor="bottom">
-                    <button
-                        className="btn btn-light btn-error"
-                        onClick={() => setSelectionValue(undefined)}
-                        onMouseDown={preventFocus}
-                    >
-                        <i className="fa fa-backspace" />
-                    </button>
-                </Tooltip>
-            </div>
-            <div className="keypad__numbers">
-                {range(1, 10).map((n) => (
-                    <button
-                        className="btn btn-primary keypad__number-btn"
-                        key={n}
-                        onClick={() => setSelectionValue(n)}
-                        onMouseDown={preventFocus}
-                        disabled={isDigitCompleted(n)}
-                    >
-                        {n}
-                    </button>
-                ))}
-            </div>
-            <div className="keypad__input-mode">
-                <Tooltip content="Place digits" anchor="bottom">
-                    <button
-                        className={cx(
-                            'btn btn-light',
-                            inputMode === 'digit' && 'btn-active'
-                        )}
-                        onClick={() => setInputMode('digit')}
-                        onMouseDown={preventFocus}
-                    >
-                        1
-                    </button>
-                </Tooltip>
-                <Tooltip content="Use corner notation" anchor="bottom">
-                    <button
-                        className={cx(
-                            'btn btn-light corners',
-                            inputMode === 'corner' && 'btn-active'
-                        )}
-                        onClick={() => setInputMode('corner')}
-                        onMouseDown={preventFocus}
-                    >
-                        <span>1</span>
-                        <span>2</span>
-                        <span>3</span>
-                    </button>
-                </Tooltip>
-                <Tooltip content="Use centre notation" anchor="bottom">
-                    <button
-                        className={cx(
-                            'btn btn-light centre',
-                            inputMode === 'centre' && 'btn-active'
-                        )}
-                        onClick={() => setInputMode('centre')}
-                        onMouseDown={preventFocus}
-                    >
-                        123
-                    </button>
-                </Tooltip>
-                <Tooltip content="Use colors" anchor="bottom">
-                    <button
-                        className={cx('btn btn-light centre')}
-                        onClick={() => {}}
-                        onMouseDown={preventFocus}
-                        disabled
-                    >
-                        <i className="fa fa-palette" />
-                    </button>
-                </Tooltip>
-            </div>
-        </div>
+        <Keypad className="player-keypad">
+            <Keypad.Column>
+                <Keypad.Button
+                    tooltip="Settings"
+                    onClick={() => openPlayerSettingsModal(true)}
+                >
+                    <i className="fa fa-wrench" />
+                </Keypad.Button>
+                <Keypad.Button tooltip="Help" onClick={() => {}}>
+                    <i className="fa fa-question" />
+                </Keypad.Button>
+                <Keypad.Button
+                    success
+                    tooltip="Check solution"
+                    onClick={() => {}}
+                >
+                    <i className="fa fa-check" />
+                </Keypad.Button>
+            </Keypad.Column>
+            <Keypad.Column>
+                <Keypad.Button
+                    tooltip="Undo"
+                    disabled={!canUndo}
+                    onClick={undo}
+                >
+                    <i className="fa fa-undo" />
+                </Keypad.Button>
+                <Keypad.Button
+                    tooltip="Redo"
+                    disabled={!canRedo}
+                    onClick={redo}
+                >
+                    <i className="fa fa-redo" />
+                </Keypad.Button>
+                <Keypad.Button
+                    tooltip="Preserve selection"
+                    disabled
+                    onClick={() => {}}
+                >
+                    <i className="fa fa-game-board-alt" />
+                </Keypad.Button>
+                <Keypad.Button
+                    tooltip="Delete"
+                    danger
+                    onClick={() => setSelectionValue(undefined)}
+                >
+                    <i className="fa fa-backspace" />
+                </Keypad.Button>
+            </Keypad.Column>
+            <Keypad.Digits />
+            <Keypad.Column>
+                <Keypad.Button
+                    tooltip="Place digits"
+                    onClick={() => setInputMode('digit')}
+                    selected={inputMode === 'digit'}
+                >
+                    1
+                </Keypad.Button>
+                <Keypad.Button
+                    tooltip="Use corner notation"
+                    onClick={() => setInputMode('corner')}
+                    selected={inputMode === 'corner'}
+                    className="player-keypad__corners"
+                >
+                    <span>1</span>
+                    <span>2</span>
+                    <span>3</span>
+                </Keypad.Button>
+                <Keypad.Button
+                    tooltip="Use centre notation"
+                    onClick={() => setInputMode('centre')}
+                    selected={inputMode === 'centre'}
+                    className="player-keypad__centre"
+                >
+                    123
+                </Keypad.Button>
+                <Keypad.Button tooltip="Use colors" disabled onClick={() => {}}>
+                    <i className="fa fa-palette" />
+                </Keypad.Button>
+            </Keypad.Column>
+        </Keypad>
     );
 };
 

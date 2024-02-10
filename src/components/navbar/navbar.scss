@@ -67,7 +67,7 @@
                 z-index: -1;
                 right: $sp-24;
                 background: $grey-100;
-                padding: $sp-16;
+                padding: $sp-8;
                 border: 1px solid $grey-300;
                 border-radius: 3px;
                 transition: transform 0.1s, opacity 0.1s;
@@ -77,6 +77,8 @@
                 opacity: 0;
                 box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
                 pointer-events: none;
+                white-space: nowrap;
+                z-index: 1;
 
                 > * {
                     transition: opacity 0.1s;
@@ -84,7 +86,7 @@
                 }
 
                 &--visible {
-                    transform: translateY(106px);
+                    transform: translateY(120px);
                     opacity: 1;
                     pointer-events: all;
                 }
@@ -103,7 +105,7 @@
         @media (max-width: 768px) {
             &__section {
                 background: $grey-900;
-                border-color: transparent;
+                border-color: $black;
             }
         }
     }

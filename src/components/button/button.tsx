@@ -22,6 +22,7 @@ interface SubmitButtonProps {
 
 interface LinkButtonProps {
     to: string;
+    onClick?: (event: React.MouseEvent) => void;
 }
 
 interface ExternalLinkButtonProps {
@@ -49,7 +50,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>(
             'button--disabled': disabled,
         });
 
-        if ('onClick' in rest) {
+        if ('onClick' in rest && !('to' in rest)) {
             return (
                 <button
                     ref={ref as React.Ref<HTMLButtonElement>}

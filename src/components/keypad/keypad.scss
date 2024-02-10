@@ -1,0 +1,167 @@
+@import 'styles';
+
+$btn-size: 50px;
+$btn-margin: 2px;
+
+.keypad {
+    display: flex;
+    align-items: flex-start;
+    padding: $sp-8;
+    border-radius: 4px;
+
+    background: white;
+
+    @include mobile {
+        transform-origin: 50% 0;
+        transform: scale(calc(var(--scale, 100) / 100));
+    }
+
+    &__column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__digits {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    &__button {
+        min-height: $btn-size;
+        min-width: $btn-size;
+
+        border: 2px solid transparent;
+        transition: 0.1s;
+
+        margin: 2px;
+        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+
+        cursor: pointer;
+
+        &:disabled:disabled {
+            color: $grey-400;
+            background: $grey-200;
+
+            cursor: initial;
+        }
+
+        i {
+            font-size: 20px;
+            display: flex;
+        }
+
+        &--selected {
+            border-color: $purple-600;
+            background: $purple-200;
+        }
+
+        &--light {
+            background: $purple-100;
+            color: $purple-600;
+
+            &:hover {
+                background: $purple-200;
+
+                @include mobile {
+                    background: $purple-100;
+                }
+            }
+
+            &:active {
+                background: $purple-300;
+            }
+        }
+
+        &--primary {
+            background: $purple-600;
+            color: white;
+
+            &:hover {
+                background: $purple-500;
+
+                @include mobile {
+                    background: $purple-600;
+                }
+            }
+        }
+
+        &--danger {
+            background: $red-100;
+            color: $red-600;
+
+            &:hover {
+                color: $red-600;
+                background: $red-200;
+
+                @include mobile {
+                    background: $red-100;
+                }
+            }
+
+            &:active {
+                background: $red-300;
+            }
+        }
+
+        &--success {
+            background: $green-100;
+            color: $green-600;
+
+            &:hover {
+                background: $green-200;
+
+                @include mobile {
+                    background: $green-100;
+                }
+            }
+
+            &:active {
+                background: $green-300;
+            }
+        }
+    }
+}
+
+.theme-dark .keypad {
+    background: $grey-900;
+
+    &__button {
+        &:disabled:disabled {
+            color: $grey-600;
+            background: $grey-700;
+        }
+
+        &--selected {
+            border-color: $purple-400;
+        }
+
+        &--light {
+            background: $grey-800;
+            color: $purple-100;
+
+            &:hover {
+                background: $grey-700;
+
+                @include mobile {
+                    background: $grey-800;
+                }
+            }
+
+            &:active {
+                background: $grey-600;
+            }
+        }
+
+        &--danger {
+            color: $red-300;
+        }
+
+        &--success {
+            color: $green-300;
+        }
+    }
+}

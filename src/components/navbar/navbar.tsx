@@ -46,11 +46,19 @@ const Navbar = () => {
                 >
                     Dark mode
                 </Toggle>
-                <Button className="text--bold m-x-8" to="/setter">
+                <Button
+                    className="text--bold m-x-8"
+                    to="/setter"
+                    onClick={() => setMobileVisible(false)}
+                >
                     <i className="fad fa-sparkles m-r-12" />
                     Create
                 </Button>
-                <Button className="text--bold m-x-8" to="/puzzle">
+                <Button
+                    className="text--bold m-x-8"
+                    to="/puzzle"
+                    onClick={() => setMobileVisible(false)}
+                >
                     <i className="fad fa-play m-r-12" />
                     Play
                 </Button>

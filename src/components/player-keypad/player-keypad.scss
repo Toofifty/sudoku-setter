@@ -3,73 +3,23 @@
 $btn-size: 50px;
 $btn-margin: 2px;
 
-.keypad {
-    display: flex;
-    align-items: flex-start;
-    padding: $sp-8;
-    border-radius: 4px;
-
-    background: white;
-
-    .btn {
-        min-height: $btn-size;
-        min-width: $btn-size;
-        margin: 2px;
-        font-size: 28px;
+.player-keypad .player-keypad {
+    &__corners {
+        font-size: 12px;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 4px 6px;
+        padding-top: 10px;
 
-        i {
-            font-size: 20px;
-            display: flex;
-        }
-
-        .flip-horiz {
-            transform: scaleX(-1);
-        }
-
-        &.centre,
-        &.corners {
-            font-size: 12px;
-        }
-
-        &.corners {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 4px 6px;
-            padding-top: 10px;
-
-            > span {
-                flex: 0 0 50%;
-                line-height: 9px;
-            }
+        > span {
+            flex: 0 0 50%;
+            line-height: 9px;
         }
     }
 
-    &__input-mode,
-    &__actions {
-        display: flex;
-        flex-direction: column;
+    &__centre {
+        font-size: 12px;
     }
-
-    &__numbers {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    &__colors {
-        flex: 1;
-
-        display: flex;
-        max-width: 174px;
-        margin: 0 8px;
-    }
-}
-
-.theme-dark .keypad {
-    background: $grey-900;
 }
