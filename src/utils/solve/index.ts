@@ -6,6 +6,8 @@ import useAction from '../../hooks/use-action';
 import useSelector from '../../hooks/use-selector';
 
 import { InterCell } from './types';
+// @ts-expect-error import url
+import workerUrl from './solver.worker?worker&url';
 
 type SolveBoardResponse = {
     type: 'solve-board-response';
@@ -21,7 +23,7 @@ type InvalidateCandidates = {
 
 type WorkerEvent = SolveBoardResponse | InvalidateCandidates;
 
-const worker = new Worker(new URL('./solver.worker', import.meta.url));
+const worker = new Worker(workerUrl, { type: 'module' });
 
 const defaultInterCell: InterCell = {
     value: undefined,
