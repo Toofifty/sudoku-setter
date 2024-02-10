@@ -1,0 +1,89 @@
+@import 'styles';
+
+.icon-button {
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+
+    height: 36px;
+    width: 36px;
+
+    color: $grey-800;
+    border: 2px solid transparent;
+
+    transition: 0.1s;
+
+    &:hover {
+        background: $grey-200;
+        border-color: $grey-300;
+    }
+
+    &:focus-visible {
+        @include focus-outline;
+    }
+
+    &--primary {
+        color: $purple-500;
+        background: $grey-200;
+        font-weight: bold;
+
+        &:hover {
+            border-color: $purple-300;
+        }
+    }
+
+    &--danger {
+        color: $red-600;
+
+        &:hover {
+            border-color: $red-600;
+        }
+    }
+
+    &--disabled {
+        pointer-events: none;
+        color: $grey-500;
+    }
+
+    @media (pointer: coarse) {
+        height: 48px;
+        width: 48px;
+        font-size: 24px;
+    }
+}
+
+.theme-dark .icon-button {
+    color: white;
+
+    &:hover {
+        background: $grey-800;
+        border-color: transparent;
+    }
+
+    &--primary {
+        background: $purple-500;
+        color: white;
+        font-weight: bold;
+
+        &:hover {
+            background: $purple-600;
+        }
+    }
+
+    &--danger {
+        color: $red-600;
+
+        &:hover {
+            border-color: $red-600;
+        }
+    }
+
+    &--disabled {
+        color: $grey-600;
+
+        &.button--primary {
+            background: $grey-800;
+        }
+    }
+}

@@ -15,12 +15,12 @@ $max-size: 800px;
     --scale: 100;
     --mobile-scale: 100;
 
-    width: calc(1000px * var(--scale) / 100 + #{$padding / 2});
-    height: calc(1000px * var(--scale) / 100 + #{$padding / 2});
+    width: calc(1000px * var(--scale) / 100 + $padding / 2);
+    height: calc(1000px * var(--scale) / 100 + $padding / 2);
 
     @include mobile {
-        width: calc(1000px * var(--mobile-scale) / 100 + #{$padding / 2});
-        height: calc(1000px * var(--mobile-scale) / 100 + #{$padding / 2});
+        width: calc(1000px * var(--mobile-scale) / 100 + $padding / 2);
+        height: calc(1000px * var(--mobile-scale) / 100 + $padding / 2);
     }
 
     .board-sizer {

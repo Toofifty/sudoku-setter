@@ -53,7 +53,7 @@ const KillerCageModal = ({ selection, onClose }: KillerCageModalProps) => {
     const [total, setTotal] = useState(minimum);
 
     return (
-        <Modal size="sm">
+        <Modal size="sm" onClose={onClose}>
             <Modal.Header onClose={onClose}>
                 <i className="fad fa-border-none m-r-12" />
                 Create killer cage

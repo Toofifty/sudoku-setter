@@ -66,7 +66,7 @@ const ArrowModal = ({ selection, onClose }: ArrowModalProps) => {
     }, [minimum]);
 
     return (
-        <Modal size="sm">
+        <Modal size="sm" onClose={onClose}>
             <Modal.Header onClose={onClose}>
                 <i className="fad fa-bullseye-arrow m-r-12" />
                 Create arrow

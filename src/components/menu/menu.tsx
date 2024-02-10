@@ -48,11 +48,15 @@ const Menu = forwardRef<HTMLUListElement, MenuProps>(
 
 interface MenuItemProps {
     children: React.ReactNode;
+    label?: string;
     className?: string;
 }
 
-export const MenuItem = ({ children, className }: MenuItemProps) => (
-    <li className={cx('menu-item', className)}>{children}</li>
+export const MenuItem = ({ children, label, className }: MenuItemProps) => (
+    <li className={cx('menu-item', className)}>
+        {label && <div className="divider" data-content={label} />}
+        {children}
+    </li>
 );
 
 interface MenuDividerProps {
