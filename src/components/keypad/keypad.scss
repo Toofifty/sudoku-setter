@@ -1,6 +1,8 @@
 @import 'styles';
 
 $btn-size: 50px;
+$mobile-scale: 0.72;
+
 $btn-margin: 2px;
 
 .keypad {
@@ -11,9 +13,13 @@ $btn-margin: 2px;
 
     background: white;
 
+    --btn-scale: 1;
+
     @include mobile {
         transform-origin: 50% 0;
         transform: scale(calc(var(--scale, 100) / 100));
+
+        --btn-scale: #{$mobile-scale};
     }
 
     &__column {
@@ -27,14 +33,14 @@ $btn-margin: 2px;
     }
 
     &__button {
-        min-height: $btn-size;
-        min-width: $btn-size;
+        min-height: calc($btn-size * var(--btn-scale));
+        min-width: calc($btn-size * var(--btn-scale));
 
         border: 2px solid transparent;
         transition: 0.1s;
 
         margin: 2px;
-        font-size: 28px;
+        font-size: calc(28px * var(--btn-scale));
         display: flex;
         align-items: center;
         justify-content: center;
@@ -50,7 +56,7 @@ $btn-margin: 2px;
         }
 
         i {
-            font-size: 20px;
+            font-size: calc(20px * var(--btn-scale));
             display: flex;
         }
 

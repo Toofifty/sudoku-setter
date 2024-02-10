@@ -1,25 +1,22 @@
 @import 'styles';
 
-$btn-size: 50px;
-$btn-margin: 2px;
-
 .player-keypad .player-keypad {
     &__corners {
-        font-size: 12px;
+        font-size: calc(12px * var(--btn-scale));
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: flex-start;
         padding: 4px 6px;
-        padding-top: 10px;
+        padding-top: calc(10px * var(--btn-scale));
 
         > span {
             flex: 0 0 50%;
-            line-height: 9px;
+            line-height: 10px;
         }
     }
 
     &__centre {
-        font-size: 12px;
+        font-size: calc(12px * var(--btn-scale));
     }
 }

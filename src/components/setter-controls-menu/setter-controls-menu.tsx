@@ -1,12 +1,11 @@
-import React from 'react';
-
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Button from 'components/button';
 import Menu, { MenuCollapse, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
-import './setter-controls-menu.scss';
 import Tooltip from 'components/tooltip';
+
+import './setter-controls-menu.scss';
 
 const SetterSolveMenu = () => {
     const solveOnChange = useSelector((state) => state.solver.solveOnChange);

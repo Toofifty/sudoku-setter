@@ -1,0 +1,13 @@
+.icon-stack {
+    position: relative;
+
+    .icon-stack {
+        &__secondary {
+            position: absolute;
+            font-size: 12px;
+            right: 0;
+            bottom: 0;
+            transform: translate(50%, 50%);
+        }
+    }
+}

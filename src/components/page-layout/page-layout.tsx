@@ -17,7 +17,9 @@ const PageLayout = ({
 }: PageLayoutProps) => (
     <div className="page-layout">
         {leftControls && (
-            <div className="page-layout__left-controls">{leftControls}</div>
+            <div className="hide-mobile page-layout__left-controls">
+                {leftControls}
+            </div>
         )}
         <div className="page-layout__board">{board}</div>
         <div

@@ -61,7 +61,7 @@ const SetterMobileControls = () => {
                     Actions
                 </Button>
                 {contextMenuModalOpen && (
-                    <Modal>
+                    <Modal onClose={() => setContextMenuModalOpen(false)}>
                         <Modal.Header
                             onClose={() => setContextMenuModalOpen(false)}
                         >

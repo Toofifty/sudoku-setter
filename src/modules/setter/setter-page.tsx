@@ -6,9 +6,10 @@ import useAction from 'hooks/use-action';
 import BoardContainer from 'components/board-container';
 import ControlsMenu from 'components/setter-controls-menu';
 import PageLayout from 'components/page-layout';
-import SetterMobileControls from 'components/setter-mobile-controls';
 import ModalHost from 'components/modal-host';
 import SetterInputMenu from 'components/setter-input-menu';
+
+import { MobileKeypad } from './components/mobile-keypad';
 
 const SetterPage = () => {
     const [hasLoadedFromHash, setHasLoadedFromHash] = useState(false);
@@ -33,7 +34,7 @@ const SetterPage = () => {
                 board={<BoardContainer />}
                 leftControls={<SetterInputMenu />}
                 controls={<ControlsMenu />}
-                mobileControls={<SetterMobileControls />}
+                mobileControls={<MobileKeypad />}
             />
             <ContextMenu />
             <ModalHost />
