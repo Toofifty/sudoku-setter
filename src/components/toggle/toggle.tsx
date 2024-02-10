@@ -4,6 +4,7 @@ import './toggle.scss';
 
 interface ToggleProps {
     children: React.ReactNode;
+    helpText?: React.ReactNode;
     className?: string;
     sw?: boolean;
     radio?: boolean;
@@ -23,6 +24,7 @@ const Toggle = forwardRef<HTMLLabelElement, ToggleProps>(
             radio,
             onMouseEnter,
             onMouseLeave,
+            helpText,
             ...input
         },
         ref
@@ -41,7 +43,11 @@ const Toggle = forwardRef<HTMLLabelElement, ToggleProps>(
             onMouseLeave={onMouseLeave}
         >
             <input type={radio ? 'radio' : 'checkbox'} {...input} />
-            <i className="form-icon" /> {children}
+            <i className="form-icon" />{' '}
+            <div>
+                {children}
+                {helpText && <p className="toggle__help-text">{helpText}</p>}
+            </div>
         </label>
     )
 );

@@ -45,6 +45,13 @@
         input:focus + .form-icon {
             @include focus-outline;
         }
+
+        &__help-text {
+            color: $grey-600;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.5;
+        }
     }
 
     .theme-dark .toggle {

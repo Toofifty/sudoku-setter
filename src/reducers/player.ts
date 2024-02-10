@@ -55,6 +55,11 @@ type PlayerSettings = {
      */
     autoWriteSnyder: boolean;
     /**
+     * Replace the final centre mark in a cell with
+     * the value
+     */
+    autoWriteSets: boolean;
+    /**
      * Highlight digits that don't match the solution
      */
     showIncorrectMoves: boolean;
@@ -62,6 +67,10 @@ type PlayerSettings = {
      * Highlight all digits that have broken a restriction
      */
     showInvalidMoves: boolean;
+    /**
+     * Highlight all marks that have broken a restriction
+     */
+    showInvalidMarks: boolean;
     /**
      * Interface light/dark mode
      */
@@ -103,8 +112,10 @@ const defaultState = (): PlayerState => ({
             autoFixPencilMarks: false,
             autoPairs: false,
             autoWriteSnyder: false,
+            autoWriteSets: false,
             showIncorrectMoves: false,
             showInvalidMoves: true,
+            showInvalidMarks: true,
             darkMode: false,
         },
     }),
@@ -280,6 +291,18 @@ const redo = action(
     redoHistory(...trackHistoryOf)
 );
 
+const reset = action(
+    _ as PlayerState,
+    _ as undefined,
+    'player/reset',
+    (state) => ({
+        ...state,
+        history: { items: [], current: 0 },
+        board: Array(81).fill(null).map(emptyCell),
+    }),
+    persist(`player.${window.location.hash}`, 'board')
+);
+
 export type PlayerAction =
     | GetAction<typeof commitBoard>
     | GetAction<typeof setCellValue>
@@ -288,7 +311,8 @@ export type PlayerAction =
     | GetAction<typeof cycleInputMode>
     | GetAction<typeof setSettings>
     | GetAction<typeof undo>
-    | GetAction<typeof redo>;
+    | GetAction<typeof redo>
+    | GetAction<typeof reset>;
 
 export default merge<PlayerState>(
     defaultState(),
@@ -299,5 +323,6 @@ export default merge<PlayerState>(
     cycleInputMode,
     setSettings,
     undo,
-    redo
+    redo,
+    reset
 );

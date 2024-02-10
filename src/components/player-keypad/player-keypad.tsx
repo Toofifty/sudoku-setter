@@ -15,6 +15,8 @@ const PlayerKeypad = () => {
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('player'));
 
+    const reset = useAction('player/reset');
+
     const setSelectionValue = useAction('shared/set-selection-value');
 
     const openPlayerSettingsModal = useModal(
@@ -40,6 +42,17 @@ const PlayerKeypad = () => {
                 >
                     <i className="fa fa-check" />
                 </Keypad.Button>
+                <Keypad.Button
+                    danger
+                    tooltip="Reset grid"
+                    onClick={() => {
+                        if (confirm('Are you sure you want to reset?')) {
+                            reset();
+                        }
+                    }}
+                >
+                    <i className="fad fa-bomb" />
+                </Keypad.Button>
             </Keypad.Column>
             <Keypad.Column>
                 <Keypad.Button
@@ -63,6 +76,8 @@ const PlayerKeypad = () => {
                 >
                     <i className="fa fa-game-board-alt" />
                 </Keypad.Button>
+            </Keypad.Column>
+            <Keypad.Digits>
                 <Keypad.Button
                     tooltip="Delete"
                     danger
@@ -70,8 +85,7 @@ const PlayerKeypad = () => {
                 >
                     <i className="fa fa-backspace" />
                 </Keypad.Button>
-            </Keypad.Column>
-            <Keypad.Digits />
+            </Keypad.Digits>
             <Keypad.Column>
                 <Keypad.Button
                     tooltip="Place digits"

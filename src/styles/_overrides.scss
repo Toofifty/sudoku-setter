@@ -155,3 +155,21 @@
     display: inline-flex;
     justify-content: center;
 }
+
+:root {
+    code {
+        border-radius: 4px;
+        font-weight: bold;
+        background: $grey-200;
+        border-bottom: 1px solid $grey-300;
+        color: $grey-800;
+        box-shadow: 0 1px 0 1px $grey-400;
+    }
+
+    .theme-dark code {
+        background: $grey-800;
+        border-bottom: 1px solid $grey-700;
+        color: white;
+        box-shadow: 0 1px 0 1px $black;
+    }
+}

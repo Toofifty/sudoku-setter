@@ -50,11 +50,19 @@ const Marks = ({
         topLeftBlocked
     );
 
+    const hasManyCornerMarks = cornerMarks.length > 4;
+    const hasManyCentreMarks = centreMarks.length > 4;
+
     if (isPlayMode) {
         return (
             <>
                 {cornerMarks.length > 0 && (
-                    <div className="cell__corner-marks">
+                    <div
+                        className={cx(
+                            'cell__corner-marks',
+                            hasManyCornerMarks && 'cell__corner-marks--many'
+                        )}
+                    >
                         <div className="cell__corner-marks--top">
                             {topLeftBlocked && <span style={{ width: 20 }} />}
                             {cornerMarksTop.map((n) => (
@@ -72,7 +80,7 @@ const Marks = ({
                     <div
                         className={cx(
                             'cell__centre-marks',
-                            `len-${centreMarks.length}`
+                            hasManyCentreMarks && 'cell__centre-marks--many'
                         )}
                     >
                         {centreMarks.map((n) => (

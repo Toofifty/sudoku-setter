@@ -29,6 +29,8 @@ export const MobileKeypad = () => {
 
     const setSelectionValue = useAction('shared/set-selection-value');
 
+    const reset = useAction('shared/reset');
+
     const openPlayerSettingsModal = useModal(
         <PlayerSettingsModal onClose={() => openPlayerSettingsModal(false)} />
     );
@@ -87,7 +89,11 @@ export const MobileKeypad = () => {
                         }
                     />
                 </Keypad.Button>
-                <Keypad.Button danger tooltip="Reset grid" onClick={() => {}}>
+                <Keypad.Button
+                    danger
+                    tooltip="Reset grid"
+                    onClick={() => reset()}
+                >
                     <i className="fad fa-bomb" />
                 </Keypad.Button>
             </Keypad.Column>

@@ -136,37 +136,6 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                     </MenuItem>
                     <MenuItem label="Helpers">
                         <Toggle
-                            checked={settings.autoFixPencilMarks}
-                            onChange={() =>
-                                setSettings({
-                                    autoFixPencilMarks:
-                                        !settings.autoFixPencilMarks,
-                                })
-                            }
-                        >
-                            Auto-remove pencil marks
-                        </Toggle>
-                        <Toggle
-                            checked={settings.autoPairs}
-                            onChange={() =>
-                                setSettings({
-                                    autoPairs: !settings.autoPairs,
-                                })
-                            }
-                        >
-                            Auto-centre pairs
-                        </Toggle>
-                        <Toggle
-                            checked={settings.autoWriteSnyder}
-                            onChange={() =>
-                                setSettings({
-                                    autoWriteSnyder: !settings.autoWriteSnyder,
-                                })
-                            }
-                        >
-                            Auto-complete with Snyder notation
-                        </Toggle>
-                        <Toggle
                             radio
                             checked={
                                 !settings.showInvalidMoves &&
@@ -179,7 +148,7 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                                 })
                             }
                         >
-                            Don't highlight any mistakes
+                            Don't highlight any errors
                         </Toggle>
                         <Toggle
                             radio
@@ -193,7 +162,7 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                                 })
                             }
                         >
-                            Highlight moves that break a restriction
+                            Highlight digits that break a restriction
                         </Toggle>
                         <Toggle
                             radio
@@ -207,7 +176,66 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                                 })
                             }
                         >
-                            Highlight moves that don't match the solution
+                            Highlight digits that don't match the solution
+                        </Toggle>
+                        <Toggle
+                            checked={settings.showInvalidMarks}
+                            onChange={() =>
+                                setSettings({
+                                    showInvalidMarks:
+                                        !settings.showInvalidMarks,
+                                })
+                            }
+                            helpText="Show corner and centre marks in red that can see the digit in their region"
+                        >
+                            Highlight candidate conflicts
+                        </Toggle>
+                    </MenuItem>
+                    <MenuItem label="Automation">
+                        <Toggle
+                            checked={settings.autoFixPencilMarks}
+                            onChange={() =>
+                                setSettings({
+                                    autoFixPencilMarks:
+                                        !settings.autoFixPencilMarks,
+                                })
+                            }
+                            helpText="Remove pencil marks when the same digit is placed elsewhere in the region"
+                        >
+                            Auto-remove pencil marks
+                        </Toggle>
+                        <Toggle
+                            checked={settings.autoPairs}
+                            onChange={() =>
+                                setSettings({
+                                    autoPairs: !settings.autoPairs,
+                                })
+                            }
+                            helpText="Turn corner marks of two digits in two cells of a region into centre marks"
+                        >
+                            Auto-centre pairs
+                        </Toggle>
+                        <Toggle
+                            checked={settings.autoWriteSnyder}
+                            onChange={() =>
+                                setSettings({
+                                    autoWriteSnyder: !settings.autoWriteSnyder,
+                                })
+                            }
+                            helpText="Fill in digits when there is only one corner mark left in the cell"
+                        >
+                            Auto-complete with Snyder notation
+                        </Toggle>
+                        <Toggle
+                            checked={settings.autoWriteSets}
+                            onChange={() =>
+                                setSettings({
+                                    autoWriteSets: !settings.autoWriteSets,
+                                })
+                            }
+                            helpText="Fill in digits when there is only one centre mark left in the cell"
+                        >
+                            Auto-complete centre marks
                         </Toggle>
                     </MenuItem>
                 </Menu>

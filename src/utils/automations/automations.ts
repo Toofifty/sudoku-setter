@@ -110,3 +110,27 @@ export const autoWriteSnyder: Automation = (
         });
     });
 };
+
+export const autoWriteSets: Automation = (
+    { get, write },
+    { selection, mode }
+) => {
+    if (mode !== 'digit' || selection.length > 1) {
+        return;
+    }
+
+    // if only 1 candidate of the current value left (box-by-box)
+    // promote it to a value
+    range(1, 9).forEach((candidate) => {
+        allBoxIndices().forEach((box) => {
+            const candidateLocations = box.filter((index) =>
+                get(index).centreMarks.includes(candidate)
+            );
+
+            if (candidateLocations.length === 1) {
+                const index = candidateLocations[0];
+                write(index, candidate);
+            }
+        });
+    });
+};

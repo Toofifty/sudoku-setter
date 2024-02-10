@@ -6,10 +6,10 @@
     color: $digit-color;
     background: transparent;
     outline: none;
-    padding: 10px;
+    padding: 0;
     position: relative;
     z-index: 0;
-    font-size: 64px;
+    font-size: 72px;
     @include text-white-outline;
 
     &--filled {
@@ -90,8 +90,8 @@
 
     &__corner-marks,
     &__centre-marks {
-        $pad: 12px;
-        font-size: 24px;
+        $pad: 10px;
+        font-size: 40px;
         position: absolute;
         left: $pad;
         top: $pad;
@@ -103,10 +103,13 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 0 4px;
 
         span {
-            line-height: 18px;
+            line-height: 24px;
+        }
+
+        &--many {
+            font-size: 30px;
         }
 
         &--top {
@@ -122,15 +125,21 @@
     }
 
     &__centre-marks {
-        $pad: 12px;
+        $pad: 4px;
         top: calc(20% + #{$pad} / 2);
         height: calc(60% - #{$pad});
+        left: $pad;
+        width: calc(100% - #{$pad} * 2);
         display: flex;
         flex-wrap: wrap;
         line-height: 1;
         gap: 0;
         align-items: center;
         justify-content: center;
+
+        &--many {
+            font-size: 30px;
+        }
     }
 
     &__num {
