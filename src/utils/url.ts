@@ -42,7 +42,6 @@ const decodeGivens = (encoded: string) => {
         const [index, value] = part.split(':');
         board[parseInt(index, RADIX)] = {
             value: Number(value),
-            given: true,
             color: 'white',
         };
     });
@@ -56,9 +55,7 @@ export const encode = ({
     killerCages,
 }: PuzzleState) => {
     const data: EncodedData = {
-        givens: encodeGivens(
-            board.map((cell) => (isFilled(cell) && cell.given ? cell.value : 0))
-        ),
+        givens: encodeGivens(board.map((cell) => cell.value ?? 0)),
         thermos: thermos.map(encodeArray).join(';'),
         arrows: arrows
             .map(

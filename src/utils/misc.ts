@@ -24,3 +24,7 @@ export const naturalJoin = (list: string[]): string => {
 
     return list.slice(0, -1).join(', ') + ' and ' + list.slice(-1);
 };
+
+export const deepEq = <T>(a: T, b: T) => {
+    return JSON.stringify(a) === JSON.stringify(b);
+};

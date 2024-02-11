@@ -1,4 +1,5 @@
 import { pick } from 'utils';
+import { deepEq } from 'utils/misc';
 
 export type WithHistory<TState> = {
     history: { items: Omit<TState, 'history'>[]; current: number };
@@ -21,14 +22,22 @@ export const saveHistory =
             items = items.slice(0, (history?.current ?? 0) + 1);
         }
 
+        const trackedBaseState = pick(saveableBaseState, keys);
+        const trackedState = pick(saveableState, keys);
+
+        // if no change to state, do not add a new history item
+        if (deepEq(trackedBaseState, trackedState)) {
+            return newState;
+        }
+
         if (items.length === 0) {
-            items = [pick(saveableBaseState, keys)];
+            items = [trackedBaseState];
         }
 
         return {
             ...newState,
             history: {
-                items: [...items, pick(saveableState, keys)],
+                items: [...items, trackedState],
                 current: (history?.current ?? 0) + 1,
             },
         };

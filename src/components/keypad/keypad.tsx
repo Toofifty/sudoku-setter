@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import Tooltip from 'components/tooltip';
 import useAction from 'hooks/use-action';
 import { range } from 'utils';
-import { useIsDigitCompleted } from 'utils/use-is-digit-completed';
+import { useIsDigitCompleted } from 'hooks/use-is-digit-completed';
 import { viewport } from 'utils/size';
 
 import './keypad.scss';

@@ -8,7 +8,7 @@ import useAction from 'hooks/use-action';
 import useSelector from 'hooks/use-selector';
 import './navbar.scss';
 import { IconButton } from 'components/icon-button';
-import { useOnClickOutside } from 'utils/use-on-click-outside';
+import { useOnClickOutside } from 'hooks/use-on-click-outside';
 
 const Navbar = () => {
     const ref = useRef<HTMLDivElement>(null);

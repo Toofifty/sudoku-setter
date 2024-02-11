@@ -8,7 +8,7 @@ import {
 import cx from 'classnames';
 import { Portal } from 'react-portal';
 
-import { useDebouncedCallback } from 'utils/use-debounced-callback';
+import { useDebouncedCallback } from 'hooks/use-debounced-callback';
 
 import './tooltip.scss';
 

@@ -1,15 +1,17 @@
 import { useEffect, useMemo } from 'react';
 
 import { isSetModeSelector } from 'utils/selectors';
-import { isEventOver, useHighlightedCells } from 'utils';
+import { isEventOver } from 'utils';
+import useHighlightedCells from 'hooks/use-highlighted-cells';
+import useSelector from 'hooks/use-selector';
+import { getBoxIndex, getPosition } from 'utils/sudoku';
+import useAction from 'hooks/use-action';
+import { useSudokuSolver } from 'utils/solve';
+import { PlayerCell, PuzzleCell, SolutionCell } from 'types';
 
-import useSelector from '../../hooks/use-selector';
-import { PlayerCell, PuzzleCell, SolutionCell } from '../../types';
-import { getBoxIndex, getPosition } from '../../utils/sudoku';
 import Box from '../box';
 import Cell from '../cell';
-import useAction from '../../hooks/use-action';
-import { useSudokuSolver } from '../../utils/solve';
+
 import './board.scss';
 
 const Board = () => {
@@ -102,7 +104,7 @@ const Board = () => {
                                 playerCell?.value ??
                                 solutionCell?.value
                             }
-                            given={cell.given}
+                            given={!!cell.value}
                             candidates={solutionCell?.candidates}
                             invalidCandidates={solutionCell?.invalidCandidates}
                             cornerMarks={playerCell?.cornerMarks}

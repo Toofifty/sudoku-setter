@@ -55,7 +55,7 @@ const Cell = ({
         cornerMarks.includes(targetValue) ||
         centreMarks.includes(targetValue);
 
-    const incorrect = value && !candidates.includes(value);
+    const incorrect = false;
 
     return (
         <button

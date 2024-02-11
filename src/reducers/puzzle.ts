@@ -64,7 +64,6 @@ const setGiven = action(
         const board = [...state.board];
         board[index] = {
             value,
-            given: value !== undefined,
             color: board[index].color,
         };
         return { ...state, board };

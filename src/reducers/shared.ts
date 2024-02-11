@@ -52,7 +52,7 @@ const setSelectionValue = action(
 
             // ignore changes to given cells
             const filteredSelection = selection.filter(
-                (index) => !state.puzzle.board[index].given
+                (index) => !state.puzzle.board[index].value
             );
 
             dispatch({

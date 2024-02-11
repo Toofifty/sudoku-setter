@@ -7,7 +7,7 @@ import Menu, { MenuDivider, MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
 import Button from 'components/button';
 import './player-settings-modal.scss';
-import { usePointerCoarse } from 'utils/use-pointer-coarse';
+import { usePointerCoarse } from 'hooks/use-pointer-coarse';
 
 interface PlayerSettingsModalProps {
     onClose: () => void;

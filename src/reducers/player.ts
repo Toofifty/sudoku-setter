@@ -1,4 +1,4 @@
-import { PlayerCell } from 'types';
+import { CellError, PlayerCell } from 'types';
 import { runAutomations } from 'utils/automations';
 
 import { GetAction, _, action, merge } from './merge';
@@ -83,6 +83,7 @@ type PlayerSettings = {
 
 export interface PlayerState {
     board: PlayerCell[];
+    errors: CellError[];
     inputMode: InputMode;
     settings: PlayerSettings;
     history: { items: Omit<PlayerState, 'history'>[]; current: number };
@@ -99,6 +100,7 @@ const emptyCell = (): PlayerCell => ({
 const defaultState = (): PlayerState => ({
     history: { items: [], current: 0 },
     inputMode: 'digit',
+    errors: [],
     ...load('player.settings', {
         settings: {
             multiInputMode: 'corner',
@@ -147,11 +149,13 @@ const setCellValue = action(
         if (selection.length === 0) {
             return state;
         }
+
         const board = [...state.board];
         let mode = state.inputMode;
         if (selection.length > 1 && mode === 'digit') {
             mode = state.settings.multiInputMode;
         }
+
         selection.forEach((index) => {
             const {
                 color,
@@ -220,6 +224,9 @@ const setCellValue = action(
             },
             { selection, value, mode }
         );
+
+        // add error check
+
         return { ...state, board };
     },
     saveHistory<PlayerState>(...trackHistoryOf),

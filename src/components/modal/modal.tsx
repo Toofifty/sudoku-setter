@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { Portal } from 'react-portal';
 
 import { IconButton } from 'components/icon-button';
-import { useOnClickOutside } from 'utils/use-on-click-outside';
+import { useOnClickOutside } from 'hooks/use-on-click-outside';
 
 import './modal.scss';
 
