@@ -6,6 +6,7 @@ import useAction from 'hooks/use-action';
 import { range } from 'utils';
 import { useIsDigitCompleted } from 'hooks/use-is-digit-completed';
 import { viewport } from 'utils/size';
+import useSelector from 'hooks/use-selector';
 
 import './keypad.scss';
 
@@ -69,6 +70,7 @@ interface KeypadDigitsProps {
 
 const KeypadDigits = ({ children }: KeypadDigitsProps) => {
     const setSelectionValue = useAction('shared/set-selection-value');
+    const inputMode = useSelector((state) => state.player.inputMode);
     const isDigitCompleted = useIsDigitCompleted();
 
     return (
@@ -79,8 +81,9 @@ const KeypadDigits = ({ children }: KeypadDigitsProps) => {
                     key={n}
                     onClick={() => setSelectionValue(n)}
                     disabled={isDigitCompleted(n)}
+                    className={`keypad__digit keypad__digit--${inputMode}`}
                 >
-                    {n}
+                    <span>{n}</span>
                 </Keypad.Button>
             ))}
             {children}

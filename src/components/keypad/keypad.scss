@@ -47,6 +47,7 @@ $btn-margin: 2px;
         border-radius: 4px;
 
         cursor: pointer;
+        line-height: 0.8;
 
         &:disabled:disabled {
             color: $grey-400;
@@ -127,6 +128,46 @@ $btn-margin: 2px;
 
             &:active {
                 background: $green-300;
+            }
+        }
+    }
+
+    &__digit {
+        span {
+            transition: 0.1s;
+        }
+
+        &--centre span,
+        &--corner span {
+            font-size: 12px;
+        }
+
+        &--corner {
+            $offset: 10px;
+
+            &:nth-child(1) span {
+                transform: translate(-#{$offset}, -#{$offset});
+            }
+            &:nth-child(2) span {
+                transform: translate(0, -#{$offset});
+            }
+            &:nth-child(3) span {
+                transform: translate($offset, -#{$offset});
+            }
+            &:nth-child(4) span {
+                transform: translate(-#{$offset}, 0);
+            }
+            &:nth-child(6) span {
+                transform: translate($offset, 0);
+            }
+            &:nth-child(7) span {
+                transform: translate(-#{$offset}, $offset);
+            }
+            &:nth-child(8) span {
+                transform: translate(0, $offset);
+            }
+            &:nth-child(9) span {
+                transform: translate($offset, $offset);
             }
         }
     }
