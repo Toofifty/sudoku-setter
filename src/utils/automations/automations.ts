@@ -1,36 +1,47 @@
-import { allBoxIndices, regionIndices } from 'utils/solve/helper';
+import { allBoxIndices, boxIndices, regionIndices } from 'utils/solve/helper';
 import { getPosition } from 'utils/sudoku';
 import { intersection } from 'utils';
 import { range } from 'utils/misc';
+import { permutations } from 'utils/permutations';
+import { includesAny } from 'utils/array';
 
 import { Automation } from './types';
 
 export const autoFixPencilMarks: Automation = (
     { get, commit },
-    { selection, value, mode }
+    { selection, value, mode },
+    context
 ) => {
-    if (mode !== 'digit') return;
+    if (mode !== 'digit' || !value) return;
 
     regionIndices(getPosition(selection[0]))
         .flat()
         .forEach((affectedIndex) => {
             const cell = get(affectedIndex);
-            commit(affectedIndex, {
-                ...cell,
-                centreMarks: cell.centreMarks.filter((m) => m !== value),
-                cornerMarks: cell.cornerMarks.filter((m) => m !== value),
-            });
+
+            if (
+                cell.centreMarks.includes(value) ||
+                cell.cornerMarks.includes(value)
+            ) {
+                context.candidatesRemoved.push(affectedIndex);
+
+                commit(affectedIndex, {
+                    ...cell,
+                    centreMarks: cell.centreMarks.filter((m) => m !== value),
+                    cornerMarks: cell.cornerMarks.filter((m) => m !== value),
+                });
+            }
         });
 };
 
-export const autoPairs: Automation = (
+export const autoTuples: Automation = (
     { get, set, flush },
     { selection, value, mode }
 ) => {
     // skip over any selected cells with values
     selection = selection.filter((index) => !get(index).value);
 
-    if (mode !== 'corner' || selection.length !== 2 || !value) {
+    if (mode !== 'corner' || !value) {
         return;
     }
 
@@ -39,73 +50,133 @@ export const autoPairs: Automation = (
         return;
     }
 
-    // get corner marks of n cells selected
-    // will already include new value
-    const cellSetCornerMarks = selection.map((index) => get(index).cornerMarks);
-    const sharedMarks = intersection(...cellSetCornerMarks);
+    // on placement of a corner mark
+    // start with n = 2, try to find n cells that
+    // contain n candidates corner or centre marked
+    // if found, change all corner marks to centre marks
 
-    if (sharedMarks.length !== 2) {
+    let success = false;
+
+    // only test for boxes - this is the simplest
+    // it works with all regions, but it can find pairs in rows
+    // where there may be other candidates in the box etc.
+    const region = boxIndices(getPosition(selection[0]), true);
+
+    // make sure entire selection is within region
+    if (!selection.slice(1).every((i) => region.includes(i))) {
         return;
     }
 
-    let paired = false;
-    regionIndices(getPosition(selection[0]), true).forEach((region) => {
-        // if both selections aren't in this region, skip it
-        if (selection.some((index) => !region.includes(index))) {
+    const regionCells = region.map(get);
+
+    // find all candidates already marked in this region
+    const candidatesInRegion = [
+        ...new Set(
+            regionCells.reduce(
+                (candidates, cell) => [
+                    ...candidates,
+                    ...cell.centreMarks,
+                    ...cell.cornerMarks,
+                ],
+                [] as number[]
+            )
+        ),
+    ];
+
+    // ignore singles
+    if (candidatesInRegion.length < 2) {
+        return;
+    }
+
+    // get all possible permutations of candidates
+    const possibleSets = permutations(candidatesInRegion).filter(
+        (perm) => perm.length > 1
+    );
+
+    // for each permutation, see if there are n cells in the
+    // region containing the n candidates
+    possibleSets.forEach((candidates) => {
+        // find all cells with any of the candidates
+        const candidateCells = region.filter((index) => {
+            const cell = get(index);
+            return (
+                includesAny(cell.centreMarks, candidates) ||
+                includesAny(cell.cornerMarks, candidates)
+            );
+        });
+
+        // not n candidates over n cells - not a tuple
+        if (candidateCells.length !== candidates.length) {
             return;
         }
 
-        // if shared marks are the only instances of those marks in the region
-        // === profit
-        const isPair = region.every((index) => {
-            if (selection.includes(index)) {
-                return true;
-            }
-
-            const cell = get(index);
-            const marks = [...cell.cornerMarks, ...cell.centreMarks];
-            return marks.every((mark) => !sharedMarks.includes(mark));
-        });
-
-        if (isPair) {
-            paired = true;
-            selection.forEach((index) => {
+        // all cells must have at least 2 of the candidates
+        if (
+            candidateCells.some((index) => {
                 const cell = get(index);
-                set(index, {
-                    ...cell,
-                    cornerMarks: [],
-                    centreMarks: [...sharedMarks],
-                });
-            });
+                const matchingCandidates = [
+                    ...cell.centreMarks,
+                    ...cell.cornerMarks,
+                ].filter((c) => candidates.includes(c));
+                return matchingCandidates.length < 2;
+            })
+        ) {
+            return;
         }
+
+        // there must be at least 2 cells in the tuple with
+        // the current value
+        if (
+            candidateCells.filter((index) => {
+                const cell = get(index);
+                return [...cell.cornerMarks, ...cell.centreMarks].includes(
+                    value
+                );
+            }).length < 2
+        ) {
+            return;
+        }
+
+        success = true;
+        candidateCells.forEach((index) => {
+            const cell = get(index);
+            set(index, {
+                ...cell,
+                cornerMarks: [],
+                centreMarks: [...cell.centreMarks, ...cell.cornerMarks].filter(
+                    (mark) => candidates.includes(mark)
+                ),
+            });
+        });
     });
 
-    if (paired) {
+    if (success) {
         flush();
     }
-
-    // TODO: make this work with N tuples
 };
 
 export const autoWriteSnyder: Automation = (
     { get, write },
-    { selection, mode }
+    { value },
+    context
 ) => {
-    if (mode !== 'digit' || selection.length > 1) {
+    if (!value || context.candidatesRemoved.length === 0) {
         return;
     }
 
-    // if only 1 candidate of the current value left (box-by-box)
-    // promote it to a value
-    range(1, 9).forEach((candidate) => {
-        allBoxIndices().forEach((box) => {
-            const candidateLocations = box.filter((index) =>
-                get(index).cornerMarks.includes(candidate)
+    // check the regions of each cell that has had a candidate
+    // removed from an earlier automation
+    context.candidatesRemoved.forEach((index) => {
+        regionIndices(getPosition(index)).forEach((region) => {
+            // find all cells in the region with this candidate
+            const candidateLocations = region.filter((i) =>
+                get(i).cornerMarks.includes(value)
             );
 
+            // if there is only one cell left with the candidate,
+            // write it
             if (candidateLocations.length === 1) {
-                const index = candidateLocations[0];
-                write(index, candidate);
+                write(candidateLocations[0], value);
             }
         });
     });
@@ -113,24 +184,19 @@ export const autoWriteSnyder: Automation = (
 
 export const autoWriteSets: Automation = (
     { get, write },
-    { selection, mode }
+    { value },
+    context
 ) => {
-    if (mode !== 'digit' || selection.length > 1) {
+    if (!value || context.candidatesRemoved.length === 0) {
         return;
     }
 
-    // if only 1 candidate of the current value left (box-by-box)
-    // promote it to a value
-    range(1, 9).forEach((candidate) => {
-        allBoxIndices().forEach((box) => {
-            const candidateLocations = box.filter((index) =>
-                get(index).centreMarks.includes(candidate)
-            );
-
-            if (candidateLocations.length === 1) {
-                const index = candidateLocations[0];
-                write(index, candidate);
-            }
-        });
+    context.candidatesRemoved.forEach((index) => {
+        // if the cells with candidates removed have only one
+        // candidate left, then write it
+        const cell = get(index);
+        if (cell.centreMarks.length === 1 && cell.cornerMarks.length === 0) {
+            write(index, cell.centreMarks[0]);
+        }
     });
 };

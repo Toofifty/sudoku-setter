@@ -44,11 +44,11 @@ type PlayerSettings = {
      */
     autoFixPencilMarks: boolean;
     /**
-     * Replace pencil mark pairs with centre pairs
-     * when writing the second pencil mark value into
-     * the same two cells
+     * Replace pencil mark pairs with centre pairs/tuples
+     * when writing the nth pencil mark value into
+     * the same n cells
      */
-    autoPairs: boolean;
+    autoTuples: boolean;
     /**
      * Replace the final Snyder pencil mark in a region
      * with the value
@@ -110,7 +110,7 @@ const defaultState = (): PlayerState => ({
             highlightMiscRestrictions: true,
             highlightMatchingNumbers: true,
             autoFixPencilMarks: false,
-            autoPairs: false,
+            autoTuples: false,
             autoWriteSnyder: false,
             autoWriteSets: false,
             showIncorrectMoves: false,

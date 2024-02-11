@@ -2,6 +2,31 @@ import { isSimilarArray } from './array';
 import { range } from './misc';
 
 /**
+ * Get all permutations of the given set
+ */
+export const permutations = <T>(of: T[]) => {
+    const perms: T[][] = [];
+
+    for (const item of of) {
+        perms.push([item]);
+        const others = of.filter((i) => i !== item);
+        permutations(others).forEach((lower) => {
+            const lowerPermutation = [item, ...lower];
+            if (
+                perms.every(
+                    (permutation) =>
+                        !isSimilarArray(permutation, lowerPermutation)
+                )
+            ) {
+                perms.push(lowerPermutation);
+            }
+        });
+    }
+
+    return perms;
+};
+
+/**
  * Get all permutations of `items` numbers, between
  * `min` and `max` that add to the given `sum`
  */
@@ -16,10 +41,10 @@ export const permutationsWithSum = (
         return sum >= min && sum <= max ? [[sum]] : [];
     }
 
-    const permutations: number[][] = [];
+    const perms: number[][] = [];
     for (const n of range(min, max)) {
         if (n === sum) {
-            permutations.push([n]);
+            perms.push([n]);
             continue;
         }
         if (n > sum) {
@@ -29,17 +54,17 @@ export const permutationsWithSum = (
             (lower) => {
                 const lowerPermutation = [n, ...lower];
                 if (
-                    permutations.every(
+                    perms.every(
                         (permutation) =>
                             !isSimilarArray(permutation, lowerPermutation)
                     ) &&
                     (!noRepeats || !lower.includes(n))
                 ) {
-                    permutations.push(lowerPermutation);
+                    perms.push(lowerPermutation);
                 }
             }
         );
     }
 
-    return permutations;
+    return perms;
 };

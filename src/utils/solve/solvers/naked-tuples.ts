@@ -15,7 +15,7 @@ export const solveNakedTuples: CellSolver = (cell, i, board) => {
     // be placed in those cells
 
     // hidden tuple in r4 c7/8/9
-    // http://localhost:3000/setter#G:7:8,11:8,12:9,13:7,19:7,1c:9,1d:8
+    // http://localhost:5173/setter#G:7:8,11:8,12:9,13:7,19:7,1c:9,1d:8
     // 7/8/9 cannot be placed elsewhere in box 6
 
     // naked tuple:
@@ -25,7 +25,7 @@ export const solveNakedTuples: CellSolver = (cell, i, board) => {
     // 2 ≤ n ≤ 5
 
     // naked tuple in r4 c7/8/9
-    // http://localhost:3000/setter#G:7:8,r:1,s:2,t:3,u:4,v:5,w:6
+    // http://localhost:5173/setter#G:7:8,r:1,s:2,t:3,u:4,v:5,w:6
     // 7/8/9 cannot be placed elsewhere in box 6
 
     // Naked pairs already has a solver, and we want this to be

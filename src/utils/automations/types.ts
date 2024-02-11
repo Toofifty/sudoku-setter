@@ -32,5 +32,13 @@ export type Automation = (
         selection: number[];
         value?: number;
         mode: InputMode;
-    }
+    },
+    context: AutomationContext
 ) => void;
+
+export type AutomationContext = {
+    /**
+     * Indices of cells that have had a candidate removed via another automation
+     */
+    candidatesRemoved: number[];
+};

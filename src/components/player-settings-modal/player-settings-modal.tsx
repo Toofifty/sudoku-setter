@@ -205,15 +205,21 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                             Auto-remove pencil marks
                         </Toggle>
                         <Toggle
-                            checked={settings.autoPairs}
+                            checked={settings.autoTuples}
                             onChange={() =>
                                 setSettings({
-                                    autoPairs: !settings.autoPairs,
+                                    autoTuples: !settings.autoTuples,
                                 })
                             }
-                            helpText="Turn corner marks of two digits in two cells of a region into centre marks"
+                            helpText={
+                                <>
+                                    Turn corner marks of <strong>n</strong>{' '}
+                                    digits in <strong>n</strong> cells of a box
+                                    into centre marks
+                                </>
+                            }
                         >
-                            Auto-centre pairs
+                            Auto-centre tuples
                         </Toggle>
                         <Toggle
                             checked={settings.autoWriteSnyder}

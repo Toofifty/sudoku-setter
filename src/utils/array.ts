@@ -19,3 +19,6 @@ export const isSimilarArray = <T>(arr1: T[], arr2: T[]) =>
     arr1.length === arr2.length && arr1.every((n) => arr2.includes(n));
 
 export const except = <T>(arr: T[], item: T) => arr.filter((v) => v !== item);
+
+export const includesAny = <T>(arr1: T[], arr2: T[]) =>
+    arr1.some((v) => arr2.includes(v));
