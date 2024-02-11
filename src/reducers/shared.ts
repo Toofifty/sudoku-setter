@@ -63,13 +63,6 @@ const setSelectionValue = action(
                 },
             });
 
-            dispatch({
-                type: 'player/calculate-errors',
-                payload: {
-                    givens: state.puzzle.board,
-                },
-            });
-
             fromScratchSolve = selection.some((index) => {
                 const prevValue = state.puzzle.board[index].value;
                 return !!prevValue && value !== prevValue;
@@ -270,13 +263,6 @@ const undo = action(
         const isPlayMode = isPlayModeSelector(state);
         if (isPlayMode) {
             dispatch({ type: 'player/undo', payload: undefined });
-
-            dispatch({
-                type: 'player/calculate-errors',
-                payload: {
-                    givens: state.puzzle.board,
-                },
-            });
         } else {
             dispatch({ type: 'puzzle/undo', payload: undefined });
         }

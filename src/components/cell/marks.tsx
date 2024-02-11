@@ -6,7 +6,7 @@ import { CandidateError } from 'types';
 
 interface MarksProps {
     candidates: number[];
-    candidateErrors: CandidateError[];
+    candidateErrors?: CandidateError[];
     invalidCandidates: number[];
     cornerMarks: number[];
     centreMarks: number[];
@@ -56,7 +56,7 @@ const Marks = ({
     const hasManyCentreMarks = centreMarks.length > 4;
 
     if (isPlayMode) {
-        const erroredCandidates = candidateErrors.map(
+        const erroredCandidates = (candidateErrors ?? []).map(
             (error) => error.candidate
         );
         const getErrorClass = (n: number) =>

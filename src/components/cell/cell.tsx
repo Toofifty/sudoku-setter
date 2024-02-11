@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import useSelector from 'hooks/use-selector';
 import { isSetModeSelector } from 'utils/selectors';
-import { useCellErrors } from 'hooks/use-cell-errors';
+import { CandidateError, DigitError } from 'types';
 
 import Marks from './marks';
 
@@ -23,6 +23,9 @@ interface CellProps {
     highlighted?: boolean;
     focused?: boolean;
     targetValue: number;
+
+    digitErrors?: DigitError[];
+    candidateErrors?: CandidateError[];
 }
 
 const Cell = ({
@@ -38,6 +41,8 @@ const Cell = ({
     focused,
     highlighted,
     targetValue,
+    digitErrors,
+    candidateErrors,
 }: CellProps) => {
     const isSetMode = useSelector(isSetModeSelector);
     const debugMode = useSelector((state) => state.ui.debugMode);
@@ -57,9 +62,6 @@ const Cell = ({
         cornerMarks.includes(targetValue) ||
         centreMarks.includes(targetValue);
 
-    const { digit: digitErrors, candidate: candidateErrors } =
-        useCellErrors(index);
-
     return (
         <button
             ref={btn}
@@ -71,7 +73,7 @@ const Cell = ({
                 isSetMode && focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
                 matches && 'cell--matches',
-                digitErrors.length > 0 && 'cell--incorrect',
+                digitErrors && digitErrors.length > 0 && 'cell--incorrect',
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
         >

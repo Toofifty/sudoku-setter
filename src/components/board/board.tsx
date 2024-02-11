@@ -8,6 +8,7 @@ import { getBoxIndex, getPosition } from 'utils/sudoku';
 import useAction from 'hooks/use-action';
 import { useSudokuSolver } from 'utils/solve';
 import { PlayerCell, PuzzleCell, SolutionCell } from 'types';
+import { useCellErrors } from 'hooks/use-cell-errors';
 
 import Box from '../box';
 import Cell from '../cell';
@@ -91,6 +92,8 @@ const Board = () => {
         );
     }, [board, isSetMode, playerBoard, solution]);
 
+    const { digitErrors, candidateErrors } = useCellErrors();
+
     return (
         <div className="board" id="board">
             {boxes.map((box, i) => (
@@ -114,6 +117,8 @@ const Board = () => {
                             selection={selection}
                             targetValue={targetValue}
                             highlighted={highlighted.includes(index)}
+                            digitErrors={digitErrors[index]}
+                            candidateErrors={candidateErrors[index]}
                         />
                     ))}
                 </Box>

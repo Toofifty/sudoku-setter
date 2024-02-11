@@ -87,10 +87,6 @@ type PlayerSettings = {
 
 export interface PlayerState {
     board: PlayerCell[];
-    errors: {
-        digit: DigitError[];
-        candidate: CandidateError[];
-    };
     inputMode: InputMode;
     settings: PlayerSettings;
     history: { items: Omit<PlayerState, 'history'>[]; current: number };
@@ -107,7 +103,6 @@ const emptyCell = (): PlayerCell => ({
 const defaultState = (): PlayerState => ({
     history: { items: [], current: 0 },
     inputMode: 'digit',
-    errors: { digit: [], candidate: [] },
     ...load('player.settings', {
         settings: {
             multiInputMode: 'corner',
@@ -238,32 +233,6 @@ const setCellValue = action(
     persist(`player.${window.location.hash}`, 'board')
 );
 
-const calculateErrors = action(
-    _ as PlayerState,
-    _ as { givens: PuzzleCell[] },
-    'player/calculate-errors',
-    (state, { givens }) => {
-        const { showIncorrectMoves, showInvalidMarks, showInvalidMoves } =
-            state.settings;
-
-        const calcDigits = showIncorrectMoves || showInvalidMoves;
-        const calcCandidates =
-            showInvalidMarks && (showIncorrectMoves || showInvalidMoves);
-
-        return {
-            ...state,
-            errors: {
-                candidate: calcCandidates
-                    ? findSudokuCandidateErrors(givens, state.board)
-                    : [],
-                digit: calcDigits
-                    ? findSudokuDigitErrors(givens, state.board)
-                    : [],
-            },
-        };
-    }
-);
-
 const swapPencilMarks = action(
     _ as PlayerState,
     _ as number[],
@@ -344,7 +313,6 @@ const reset = action(
 export type PlayerAction =
     | GetAction<typeof commitBoard>
     | GetAction<typeof setCellValue>
-    | GetAction<typeof calculateErrors>
     | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setInputMode>
     | GetAction<typeof cycleInputMode>
@@ -357,7 +325,6 @@ export default merge<PlayerState>(
     defaultState(),
     commitBoard,
     setCellValue,
-    calculateErrors,
     swapPencilMarks,
     setInputMode,
     cycleInputMode,
