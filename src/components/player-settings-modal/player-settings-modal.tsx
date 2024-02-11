@@ -186,9 +186,9 @@ const PlayerSettingsModal = ({ onClose }: PlayerSettingsModalProps) => {
                                         !settings.showInvalidMarks,
                                 })
                             }
-                            helpText="Show corner and centre marks in red that can see the digit in their region"
+                            helpText="Highlight invalid candidates based on the setting above"
                         >
-                            Highlight candidate conflicts
+                            Also highlight candidate conflicts
                         </Toggle>
                     </MenuItem>
                     <MenuItem label="Automation">

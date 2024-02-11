@@ -242,13 +242,26 @@ const calculateErrors = action(
     _ as PlayerState,
     _ as { givens: PuzzleCell[] },
     'player/calculate-errors',
-    (state, { givens }) => ({
-        ...state,
-        errors: {
-            candidate: findSudokuCandidateErrors(givens, state.board),
-            digit: findSudokuDigitErrors(givens, state.board),
-        },
-    })
+    (state, { givens }) => {
+        const { showIncorrectMoves, showInvalidMarks, showInvalidMoves } =
+            state.settings;
+
+        const calcDigits = showIncorrectMoves || showInvalidMoves;
+        const calcCandidates =
+            showInvalidMarks && (showIncorrectMoves || showInvalidMoves);
+
+        return {
+            ...state,
+            errors: {
+                candidate: calcCandidates
+                    ? findSudokuCandidateErrors(givens, state.board)
+                    : [],
+                digit: calcDigits
+                    ? findSudokuDigitErrors(givens, state.board)
+                    : [],
+            },
+        };
+    }
 );
 
 const swapPencilMarks = action(
