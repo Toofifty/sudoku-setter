@@ -3,8 +3,10 @@ import cx from 'classnames';
 
 import useSelector from 'hooks/use-selector';
 import { isSetModeSelector } from 'utils/selectors';
+import { useCellErrors } from 'hooks/use-cell-errors';
 
 import Marks from './marks';
+
 import './cell.scss';
 
 interface CellProps {
@@ -55,7 +57,8 @@ const Cell = ({
         cornerMarks.includes(targetValue) ||
         centreMarks.includes(targetValue);
 
-    const incorrect = false;
+    const { digit: digitErrors, candidate: candidateErrors } =
+        useCellErrors(index);
 
     return (
         <button
@@ -68,7 +71,7 @@ const Cell = ({
                 isSetMode && focused && 'cell--focused',
                 highlighted && 'cell--highlighted',
                 matches && 'cell--matches',
-                incorrect && 'cell--incorrect',
+                digitErrors.length > 0 && 'cell--incorrect',
                 isSetMode && !value && candidates.length === 0 && 'cell--empty'
             )}
         >
@@ -78,6 +81,7 @@ const Cell = ({
                 ) : (
                     <Marks
                         candidates={candidates}
+                        candidateErrors={candidateErrors}
                         invalidCandidates={invalidCandidates}
                         cornerMarks={cornerMarks}
                         centreMarks={centreMarks}

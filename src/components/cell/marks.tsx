@@ -1,11 +1,12 @@
-import React from 'react';
 import cx from 'classnames';
 
 import useSelector from 'hooks/use-selector';
 import { isPlayModeSelector } from 'utils/selectors';
+import { CandidateError } from 'types';
 
 interface MarksProps {
     candidates: number[];
+    candidateErrors: CandidateError[];
     invalidCandidates: number[];
     cornerMarks: number[];
     centreMarks: number[];
@@ -38,6 +39,7 @@ const sliceCornerMarks = (
 
 const Marks = ({
     candidates,
+    candidateErrors,
     invalidCandidates,
     cornerMarks,
     centreMarks,
@@ -54,6 +56,12 @@ const Marks = ({
     const hasManyCentreMarks = centreMarks.length > 4;
 
     if (isPlayMode) {
+        const erroredCandidates = candidateErrors.map(
+            (error) => error.candidate
+        );
+        const getErrorClass = (n: number) =>
+            erroredCandidates.includes(n) ? 'cell__mark--invalid' : undefined;
+
         return (
             <>
                 {cornerMarks.length > 0 && (
@@ -66,12 +74,16 @@ const Marks = ({
                         <div className="cell__corner-marks--top">
                             {topLeftBlocked && <span style={{ width: 20 }} />}
                             {cornerMarksTop.map((n) => (
-                                <span key={n}>{n}</span>
+                                <span key={n} className={getErrorClass(n)}>
+                                    {n}
+                                </span>
                             ))}
                         </div>
                         <div className="cell__corner-marks--bottom">
                             {cornerMarksBottom.map((n) => (
-                                <span key={n}>{n}</span>
+                                <span key={n} className={getErrorClass(n)}>
+                                    {n}
+                                </span>
                             ))}
                         </div>
                     </div>
@@ -84,7 +96,9 @@ const Marks = ({
                         )}
                     >
                         {centreMarks.map((n) => (
-                            <span key={n}>{n}</span>
+                            <span key={n} className={getErrorClass(n)}>
+                                {n}
+                            </span>
                         ))}
                     </div>
                 )}

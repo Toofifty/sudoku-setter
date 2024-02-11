@@ -1,4 +1,10 @@
-import { CellError, PlayerCell, PuzzleCell } from 'types';
+import {
+    CandidateError,
+    CellError,
+    DigitError,
+    PlayerCell,
+    PuzzleCell,
+} from 'types';
 import { range } from 'utils';
 import { allRegionIndices } from 'utils/solve/helper';
 
@@ -6,7 +12,7 @@ export const findSudokuDigitErrors = (
     givens: PuzzleCell[],
     board: PlayerCell[]
 ) => {
-    const errors: CellError[] = [];
+    const errors: DigitError[] = [];
 
     const digits = givens.map((given, i) => given.value ?? board[i].value);
 
@@ -22,23 +28,30 @@ export const findSudokuDigitErrors = (
         range(1, 9).forEach((value) => {
             if (digitsInRegion.filter((digit) => digit === value).length > 1) {
                 const duplicateIndices = findDigit(value);
-                duplicateIndices.forEach((cellIndex) => {
-                    errors.push({
-                        type: 'digit',
-                        index: cellIndex,
-                        sees: duplicateIndices.filter((i) => i !== cellIndex),
+                duplicateIndices
+                    // do not add errors to givens
+                    .filter((index) => !givens[index].value)
+                    .forEach((cellIndex) => {
+                        errors.push({
+                            type: 'digit',
+                            index: cellIndex,
+                            sees: duplicateIndices.filter(
+                                (i) => i !== cellIndex
+                            ),
+                        });
                     });
-                });
             }
         });
     });
+
+    return errors;
 };
 
 export const findSudokuCandidateErrors = (
     givens: PuzzleCell[],
     board: PlayerCell[]
 ) => {
-    const errors: CellError[] = [];
+    const errors: CandidateError[] = [];
 
     const digits = givens.map((given, i) => given.value ?? board[i].value);
 

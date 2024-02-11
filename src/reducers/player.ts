@@ -1,5 +1,9 @@
-import { CellError, PlayerCell } from 'types';
+import { CandidateError, DigitError, PlayerCell, PuzzleCell } from 'types';
 import { runAutomations } from 'utils/automations';
+import {
+    findSudokuCandidateErrors,
+    findSudokuDigitErrors,
+} from 'utils/error-checker';
 
 import { GetAction, _, action, merge } from './merge';
 import { redoHistory, saveHistory, undoHistory } from './history';
@@ -83,7 +87,10 @@ type PlayerSettings = {
 
 export interface PlayerState {
     board: PlayerCell[];
-    errors: CellError[];
+    errors: {
+        digit: DigitError[];
+        candidate: CandidateError[];
+    };
     inputMode: InputMode;
     settings: PlayerSettings;
     history: { items: Omit<PlayerState, 'history'>[]; current: number };
@@ -100,7 +107,7 @@ const emptyCell = (): PlayerCell => ({
 const defaultState = (): PlayerState => ({
     history: { items: [], current: 0 },
     inputMode: 'digit',
-    errors: [],
+    errors: { digit: [], candidate: [] },
     ...load('player.settings', {
         settings: {
             multiInputMode: 'corner',
@@ -225,12 +232,23 @@ const setCellValue = action(
             { selection, value, mode }
         );
 
-        // add error check
-
         return { ...state, board };
     },
     saveHistory<PlayerState>(...trackHistoryOf),
     persist(`player.${window.location.hash}`, 'board')
+);
+
+const calculateErrors = action(
+    _ as PlayerState,
+    _ as { givens: PuzzleCell[] },
+    'player/calculate-errors',
+    (state, { givens }) => ({
+        ...state,
+        errors: {
+            candidate: findSudokuCandidateErrors(givens, state.board),
+            digit: findSudokuDigitErrors(givens, state.board),
+        },
+    })
 );
 
 const swapPencilMarks = action(
@@ -313,6 +331,7 @@ const reset = action(
 export type PlayerAction =
     | GetAction<typeof commitBoard>
     | GetAction<typeof setCellValue>
+    | GetAction<typeof calculateErrors>
     | GetAction<typeof swapPencilMarks>
     | GetAction<typeof setInputMode>
     | GetAction<typeof cycleInputMode>
@@ -325,6 +344,7 @@ export default merge<PlayerState>(
     defaultState(),
     commitBoard,
     setCellValue,
+    calculateErrors,
     swapPencilMarks,
     setInputMode,
     cycleInputMode,

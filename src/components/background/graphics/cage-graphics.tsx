@@ -170,8 +170,6 @@ const renderCage = ({ total, cage }: KillerCage, cageIndex: number) => {
                     .map((edge) => `L${edge.x} ${edge.y}`)
                     .join(' ');
 
-                console.log(move + path);
-
                 return (
                     <path
                         key={i}
