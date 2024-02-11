@@ -13,6 +13,7 @@ export interface UIState {
     hideSolution: boolean;
     focused?: number;
     selection: number[];
+    preserveSelection: boolean;
     interactionHandler: InteractionHandler;
 }
 
@@ -20,6 +21,7 @@ const defaultState = (): UIState => ({
     contextVisible: false,
     modalVisible: false,
     selection: [],
+    preserveSelection: false,
     focused: undefined,
     interactionHandler:
         interactionHandlers[
@@ -87,6 +89,16 @@ const toggleHideSolution = action(
     persist('ui', 'hideSolution', 'debugMode')
 );
 
+const togglePreserveSelection = action(
+    _ as UIState,
+    _ as boolean | undefined,
+    'ui/toggle-preserve-selection',
+    (state, preserveSelection) => ({
+        ...state,
+        preserveSelection: preserveSelection ?? !state.preserveSelection,
+    })
+);
+
 const setFocus = action(
     _ as UIState,
     _ as { index: number; isKeyPress?: boolean; addToSelection?: boolean },
@@ -143,6 +155,7 @@ export type UIAction =
     | GetAction<typeof toggleModal>
     | GetAction<typeof toggleDebugMode>
     | GetAction<typeof toggleHideSolution>
+    | GetAction<typeof togglePreserveSelection>
     | GetAction<typeof setFocus>
     | GetAction<typeof clearFocus>
     | GetAction<typeof setInteractionHandler>;
@@ -155,6 +168,7 @@ export default merge(
     toggleModal,
     toggleDebugMode,
     toggleHideSolution,
+    togglePreserveSelection,
     setFocus,
     clearFocus,
     setInteractionHandler

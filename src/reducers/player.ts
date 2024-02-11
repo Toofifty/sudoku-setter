@@ -1,9 +1,5 @@
-import { CandidateError, DigitError, PlayerCell, PuzzleCell } from 'types';
+import { PlayerCell } from 'types';
 import { runAutomations } from 'utils/automations';
-import {
-    findSudokuCandidateErrors,
-    findSudokuDigitErrors,
-} from 'utils/error-checker';
 
 import { GetAction, _, action, merge } from './merge';
 import { redoHistory, saveHistory, undoHistory } from './history';

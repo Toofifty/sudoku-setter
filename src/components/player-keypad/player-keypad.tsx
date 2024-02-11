@@ -15,6 +15,11 @@ const PlayerKeypad = () => {
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('player'));
 
+    const preserveSelection = useSelector(
+        (state) => state.ui.preserveSelection
+    );
+    const togglePreserveSelection = useAction('ui/toggle-preserve-selection');
+
     const reset = useAction('player/reset');
 
     const setSelectionValue = useAction('shared/set-selection-value');
@@ -70,9 +75,9 @@ const PlayerKeypad = () => {
                     <i className="fa fa-redo" />
                 </Keypad.Button>
                 <Keypad.Button
+                    selected={preserveSelection}
                     tooltip="Preserve selection"
-                    disabled
-                    onClick={() => {}}
+                    onClick={() => togglePreserveSelection()}
                 >
                     <i className="fa fa-game-board-alt" />
                 </Keypad.Button>

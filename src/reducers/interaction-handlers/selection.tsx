@@ -1,19 +1,19 @@
-import React from 'react';
-
 import CellContextMenu from 'components/cell/cell-context-menu';
 
 import { InteractionHandler } from './types';
 import { isCorner } from './util';
 
 export const selectionInteractionHandler: InteractionHandler = {
-    onInteractStart({ dispatch }, { index, buttons, shiftKey }) {
+    onInteractStart({ state, dispatch }, { index, buttons, shiftKey }) {
         if (buttons !== 1) {
             return;
         }
 
+        const { preserveSelection } = state.ui;
+
         dispatch({
             type: 'ui/set-focus',
-            payload: { index, addToSelection: shiftKey },
+            payload: { index, addToSelection: shiftKey || preserveSelection },
         });
     },
     onInteractMove({ state, dispatch }, { index, buttons, subcell }) {

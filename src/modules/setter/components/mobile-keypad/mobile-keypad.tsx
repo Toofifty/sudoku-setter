@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router';
+
 import ArrowModal from 'components/arrow-modal';
 import { IconStack } from 'components/icon-stack';
 import { Keypad } from 'components/keypad';
@@ -14,6 +16,8 @@ import {
 import { canRedoSelector, canUndoSelector } from 'utils/selectors';
 
 export const MobileKeypad = () => {
+    const navigate = useNavigate();
+
     const selection = useSelector((state) => state.ui.selection);
     const createThermo = useAction('shared/create-thermo');
 
@@ -21,6 +25,11 @@ export const MobileKeypad = () => {
     const canUndo = useSelector(canUndoSelector('puzzle'));
     const redo = useAction('shared/redo');
     const canRedo = useSelector(canRedoSelector('puzzle'));
+
+    const preserveSelection = useSelector(
+        (state) => state.ui.preserveSelection
+    );
+    const togglePreserveSelection = useAction('ui/toggle-preserve-selection');
 
     const debugMode = useSelector((state) => state.ui.debugMode);
     const toggleDebugMode = useAction('ui/toggle-debug-mode');
@@ -52,7 +61,11 @@ export const MobileKeypad = () => {
     return (
         <Keypad>
             <Keypad.Column>
-                <Keypad.Button success tooltip="Test puzzle" onClick={() => {}}>
+                <Keypad.Button
+                    success
+                    tooltip="Test puzzle"
+                    onClick={() => navigate(`/puzzle/${window.location.hash}`)}
+                >
                     <i className="fad fa-play" />
                 </Keypad.Button>
                 <Keypad.Button
@@ -113,9 +126,9 @@ export const MobileKeypad = () => {
                     <i className="fa fa-redo" />
                 </Keypad.Button>
                 <Keypad.Button
+                    selected={preserveSelection}
                     tooltip="Preserve selection"
-                    disabled
-                    onClick={() => {}}
+                    onClick={() => togglePreserveSelection()}
                 >
                     <i className="fa fa-game-board-alt" />
                 </Keypad.Button>

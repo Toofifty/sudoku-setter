@@ -1,9 +1,7 @@
-import React from 'react';
-
 import useSelector from 'hooks/use-selector';
 import useAction from 'hooks/use-action';
 import Modal from 'components/modal';
-import Menu, { MenuDivider, MenuItem } from 'components/menu';
+import Menu, { MenuItem } from 'components/menu';
 import Toggle from 'components/toggle';
 import Button from 'components/button';
 import './player-settings-modal.scss';
